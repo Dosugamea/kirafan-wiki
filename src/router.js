@@ -9,157 +9,170 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: Home,
+  },
+  // AbilityTreeFruit
+  {
+    path: '/abilitytreefruit/:id',
+    name: 'AbilityTreeFruit',
+    props: true,
+    component: () => import('./views/AbilityTreeFruit'),
+  },
+  {
+    path: '/abilitytreefruits',
+    name: 'AbilityTreeFruits',
+    props: true,
+    component: () => import('./views/AbilityTreeFruits'),
   },
   {
     path: '/character/:id',
     name: 'Character',
     props: true,
-    component: () => import('./views/Character')
+    component: () => import('./views/Character'),
   },
   {
     path: '/characters',
     name: 'Characters',
     props: true,
-    component: () => import('./views/Characters')
+    component: () => import('./views/Characters'),
   },
   {
     path: '/item/:id',
     name: 'Item',
     props: true,
-    component: () => import('./views/Item')
+    component: () => import('./views/Item'),
   },
   {
     path: '/items',
     name: 'Items',
     props: true,
-    component: () => import('./views/Items')
+    component: () => import('./views/Items'),
   },
   {
     path: '/weapon/:id',
     name: 'Weapon',
     props: true,
-    component: () => import('./views/Weapon')
+    component: () => import('./views/Weapon'),
   },
   {
     path: '/weapons',
     name: 'Weapons',
     props: true,
-    component: () => import('./views/Weapons')
+    component: () => import('./views/Weapons'),
   },
   {
     path: '/master',
     name: 'Master',
     props: true,
-    component: () => import('./views/Master')
+    component: () => import('./views/Master'),
   },
   {
     path: '/masterorb/:id',
     name: 'Master Orb',
     props: true,
-    component: () => import('./views/MasterOrb')
+    component: () => import('./views/MasterOrb'),
   },
   {
     path: '/questlibraries',
     name: 'Quest Libraries',
     props: true,
-    component: () => import('./views/QuestLibraries')
+    component: () => import('./views/QuestLibraries'),
   },
   {
     path: '/questlibrary/:id',
     name: 'Quest Library',
     props: true,
-    component: () => import('./views/QuestLibrary')
+    component: () => import('./views/QuestLibrary'),
   },
   {
     path: '/quest/:id',
     name: 'Quest',
     props: true,
-    component: () => import('./views/Quest')
+    component: () => import('./views/Quest'),
   },
   {
     path: '/enemy/:id',
     name: 'Enemy',
     props: true,
-    component: () => import('./views/Enemy')
+    component: () => import('./views/Enemy'),
   },
   {
     path: '/roomobject/:id',
     name: 'Room Object',
     props: true,
-    component: () => import('./views/RoomObject')
+    component: () => import('./views/RoomObject'),
   },
   {
     path: '/roomobjects',
     name: 'Room Objects',
     props: true,
-    component: () => import('./views/RoomObjects')
+    component: () => import('./views/RoomObjects'),
   },
   {
     path: '/townobject/:id',
     name: 'Town Object',
     props: true,
-    component: () => import('./views/TownObject')
+    component: () => import('./views/TownObject'),
   },
   {
     path: '/townobjects',
     name: 'Town Objects',
     props: true,
-    component: () => import('./views/TownObjects')
+    component: () => import('./views/TownObjects'),
   },
   {
     path: '/scenario/:id',
     name: 'Scenario',
     props: true,
-    component: () => import('./views/Scenario')
+    component: () => import('./views/Scenario'),
   },
   {
     path: '/scenarioLibraries',
     name: 'Scenario Libraries',
     props: true,
-    component: () => import('./views/ScenarioLibraries')
+    component: () => import('./views/ScenarioLibraries'),
   },
   {
     path: '/scenarioLibrary/:id',
     name: 'Scenario Library',
     props: true,
-    component: () => import('./views/ScenarioLibrary')
+    component: () => import('./views/ScenarioLibrary'),
   },
   {
     path: '/standpic/:id',
     name: 'Standpic',
     props: true,
-    component: () => import('./views/Standpic')
+    component: () => import('./views/Standpic'),
   },
   {
     path: '/named/:id',
     name: 'Named',
     props: true,
-    component: () => import('./views/Named')
+    component: () => import('./views/Named'),
   },
   {
     path: '/title/:id',
     name: 'Title',
     props: true,
-    component: () => import('./views/Title')
+    component: () => import('./views/Title'),
   },
   {
     path: '/titles',
     name: 'Titles',
     props: true,
-    component: () => import('./views/Titles')
+    component: () => import('./views/Titles'),
   },
   {
     path: '/originalcharacter/:id',
     name: 'Original Character',
     props: true,
-    component: () => import('./views/OriginalCharacter/')
+    component: () => import('./views/OriginalCharacter/'),
   },
   {
     path: '/settings',
     name: 'Settings',
     props: true,
-    component: () => import('./views/Settings')
+    component: () => import('./views/Settings'),
   },
 ];
 
