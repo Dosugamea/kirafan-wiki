@@ -99,7 +99,14 @@ function conditions(conditions, execNums) {
         continue;
 
     }
-    contents.push(i18n.t(`AI Conditions.${content.type}`).format(content));
+    let content_text = i18n.t(`AI Conditions.${content.type}`).format(content)
+
+    // TODO:原因調査
+    let unknown_flag = condition.m_Args[5];
+    if (unknown_flag !== 0 && unknown_flag !== undefined) {
+      content_text += " & m_Args[5]:" + unknown_flag + " (unknown flag)";
+    }
+    contents.push(content_text);
   }
   if (execNums) {
     contents.push(i18n.t('AI Conditions.num').format(execNums));

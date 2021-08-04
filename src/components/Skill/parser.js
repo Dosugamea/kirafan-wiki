@@ -201,7 +201,6 @@ function isTargetAll(target) {
 }
 
 function parse(id, owner, level, sp) {
-  console.log(id);
   const skill = Object.assign({}, database[`SkillList_${owner}`][id], database[`SkillContentList_${owner}`][id]);
   const contents = [];
   function push(content) {
