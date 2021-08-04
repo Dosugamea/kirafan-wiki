@@ -4,10 +4,7 @@
         template(v-for="fruits in groupedFruits")
             v-divider
             fruit(:id="fruits" :key="'grouped-fruits-' + fruits")
-
-
-
-
+            PassiveSkill()
 
 </template>
 

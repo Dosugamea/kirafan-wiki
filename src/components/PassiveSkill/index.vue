@@ -11,7 +11,7 @@
           .d-flex
             .mr-2.d-flex.justify-center.flex-column
               v-img(:width="$size()", contain,
-                :src="$asset.commonuiatlas.format('CMD_SkillPassive')+'.png'")
+                :src="icon")
             .d-flex.justify-center.flex-column.small(
               :style="{'width': `calc(100% - ${$size()}px)`, 'min-height': `${$size()}px`}")
               div.d-flex(v-for="content, j in contents", :key="`passive-skill-${id}-content-${j}`")
@@ -50,6 +50,13 @@ export default {
     skillChangeIDs() {
       return parser.skillChangeIDs(this.id, this.owner);
     },
+    icon(){
+      if (this.owner === "ABL"){
+        return this.$asset.itemicon.format(this.id.replace(/00$/,"")) + ".png"
+      }else{
+        return this.$asset.commonuiatlas.format('CMD_SkillPassive')+'.png'
+      }
+    }
   },
 };
 </script>
