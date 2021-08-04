@@ -5,8 +5,13 @@ import Vue from 'vue';
 const databaseHost = 'https://database.kirafan.cn/database';
 
 const requiredDatabases = [
+  { name: 'AbilitySpheres', key: 'm_ID' },
   { name: 'AchievementList', key: 'id' },
-  { name: 'ADVCharacterList', key: 'm_ADVCharaID', uri: '../advdatabase/ADVCharacterList' },
+  {
+    name: 'ADVCharacterList',
+    key: 'm_ADVCharaID',
+    uri: '../advdatabase/ADVCharacterList',
+  },
   { name: 'ADVLibraryList', key: 'm_LibraryListID' },
   { name: 'ADVList', key: 'm_AdvID' },
   { name: 'ArousalLevels' },
@@ -25,6 +30,7 @@ const requiredDatabases = [
   { name: 'MasterOrbList', key: 'm_ID' },
   { name: 'NamedList', key: 'm_NamedType' },
   { name: 'OriginalCharaLibraryList', key: 'm_ID' },
+  { name: 'PassiveSkillList_ABL', key: 'm_ID' },
   { name: 'PassiveSkillList_WPN', key: 'm_ID' },
   { name: 'QuestEnemyList', key: 'm_ID' },
   { name: 'QuestLibraryList', key: 'id' },
@@ -33,7 +39,11 @@ const requiredDatabases = [
   { name: 'QuestWaveRandomList', key: 'm_ID' },
   { name: 'RoomObjectList', key: 'm_DBAccessID' },
   { name: 'ScheduleName', key: 'm_ID', uri: '../flddb/ScheduleName' },
-  { name: 'ScheduleNameReplace', key: 'm_CharaID', uri: '../flddb/ScheduleNameReplace' },
+  {
+    name: 'ScheduleNameReplace',
+    key: 'm_CharaID',
+    uri: '../flddb/ScheduleNameReplace',
+  },
   { name: 'SkillContentList_CARD', key: 'm_ID' },
   { name: 'SkillContentList_EN', key: 'm_ID' },
   { name: 'SkillContentList_MST', key: 'm_ID' },
@@ -67,7 +77,7 @@ async function fetch(version) {
         axios
           .get(
             `${databaseHost}/${requiredDatabase.uri ||
-            requiredDatabase.name}.json?t=${new Date().getTime()}`,
+              requiredDatabase.name}.json?t=${new Date().getTime()}`
           )
           .then((data) => {
             loaded += 1;
@@ -76,11 +86,11 @@ async function fetch(version) {
               total: requiredDatabases.length,
             });
             return data;
-          }),
-      ),
+          })
+      )
     )
     .then(
-      axios.spread(function () {
+      axios.spread(function() {
         requiredDatabases.forEach((requiredDatabase, i) => {
           const data = arguments[i].data;
           if (requiredDatabase.key) {
@@ -94,7 +104,7 @@ async function fetch(version) {
             database[requiredDatabase.name] = data;
           }
         });
-      }),
+      })
     );
   try {
     let date = Vue.prototype.$time.toJSON();
@@ -119,7 +129,7 @@ async function load() {
       Object.keys(localDatabase).forEach((name) => {
         database[name] = localDatabase[name];
         let requiredDatabase = requiredDatabases.find(
-          (requiredDatabase) => requiredDatabase.name == name,
+          (requiredDatabase) => requiredDatabase.name == name
         );
         if (requiredDatabase) {
           requiredDatabase.ok = true;
@@ -139,22 +149,27 @@ async function load() {
     return localVersion;
   } catch (e) {
     // eslint-disable-next-line
-    console.log('Error occurs when accessing indexedDB: ' + e);
+    console.log("Error occurs when accessing indexedDB: " + e);
   }
 }
 
 async function main() {
   // get server time
-  await axios.head(`${window.location.origin}/?t=${new Date().getTime()}`, {
-    headers: {
-      'Cache-Control': 'no-cache'
-    },
-  }).then(response => {
-    Vue.prototype.$time = new Date(response.headers.date);
-  }).catch(() => { });
+  await axios
+    .head(`${window.location.origin}/?t=${new Date().getTime()}`, {
+      headers: {
+        'Cache-Control': 'no-cache',
+      },
+    })
+    .then((response) => {
+      Vue.prototype.$time = new Date(response.headers.date);
+    })
+    .catch(() => {});
 
   let localVersion = await load();
-  let version = await axios.get(`${databaseHost}/../version?t=${new Date().getTime()}`);
+  let version = await axios.get(
+    `${databaseHost}/../version?t=${new Date().getTime()}`
+  );
 
   if (localVersion != version.data) {
     if (localVersion) {
