@@ -91,12 +91,9 @@
     "(src|public)/*.{js,jsx,vue,ts,tsx}": [
       "vue-cli-service lint",
       "git add "
+    ],
+    "*": [
+      "git add "
     ]
-      ,
-      "*":[
-        "git add "
-      ]
-  
-
   }
 }
