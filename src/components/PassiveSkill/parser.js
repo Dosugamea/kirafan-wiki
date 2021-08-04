@@ -172,6 +172,13 @@ function parse(id, owner) {
           push(content);
         }
         continue;
+
+      default:
+        push(skill.m_SkillDetail);
+        // push("m_Trigger:" + data.m_Trigger);
+        // push("m_Type:" + data.m_Type);
+        push("m_Args:" + JSON.stringify(data.m_Args));
+        break;
     }
     push(content);
   }
