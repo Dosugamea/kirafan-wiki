@@ -11,13 +11,13 @@
  * See https://goo.gl/2aRDsh
  */
 
-importScripts('https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js');
+importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  'precache-manifest.bd746ced556369d88822e68934dc90bf.js'
+  "precache-manifest.76b67b31774f95964b8cb8ac68447dfa.js"
 );
 
-workbox.core.setCacheNameDetails({prefix: 'wiki'});
+workbox.core.setCacheNameDetails({prefix: "wiki"});
 
 workbox.core.skipWaiting();
 
