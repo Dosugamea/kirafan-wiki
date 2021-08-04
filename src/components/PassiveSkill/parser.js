@@ -178,7 +178,7 @@ function parse(id, owner) {
         // push("m_Trigger:" + data.m_Trigger);
         // push("m_Type:" + data.m_Type);
         push("m_Args:" + JSON.stringify(data.m_Args));
-        break;
+        continue;
     }
     push(content);
   }
