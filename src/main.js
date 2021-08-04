@@ -25,6 +25,7 @@ import Voice from './components/Voice';
 import CharaIcon from './components/CharaIcon';
 import Ad from './components/Ad';
 import Clea from './components/Clea';
+import WIP from './components/WIP';
 
 import App from './App';
 
@@ -49,6 +50,7 @@ Vue.component(Voice.name, Voice);
 Vue.component(CharaIcon.name, CharaIcon);
 Vue.component(Ad.name, Ad);
 Vue.component(Clea.name, Clea);
+Vue.component(WIP.name, WIP);
 
 const vue = new Vue({
   vuetify,

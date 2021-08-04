@@ -89,6 +89,9 @@ const common = {
   },
   'Sort': 'ソート',
   'Reverse': '逆順',
+
+
+  'WIP': '作業中'
 };
 
 const home = {
