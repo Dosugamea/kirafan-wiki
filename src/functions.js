@@ -107,4 +107,4 @@ Vue.prototype.$questLock = function () {
   return false;
 };
 
-Vue.prototype.$version = 'Media 4.1.3';
+Vue.prototype.$version = 'Forked-version-0.01 Media 4.1.3';

@@ -3,7 +3,7 @@
     v-app-bar(app, clipped-left, clipped-right, color="secondary", height=56, elevation=0)
       
       v-btn.hidden-sm-and-up(icon, @click="navigation=!navigation"): v-icon mdi-menu
-      v-toolbar-title.px-2.px-sm-4 {{title}}
+      v-toolbar-title.px-2.px-sm-4 {{title}} 
       v-spacer
       .hidden-xs-only
         Theme
@@ -116,7 +116,7 @@ export default {
       return [
         this.$s.appTitleShowID && this.$route.params.id,
         this.$t(this.$route.name),
-        this.$vuetify.breakpoint.mdAndUp && this.$t('KiraFan Wiki'),
+        this.$vuetify.breakpoint.mdAndUp && (this.$t('KiraFan Wiki') + ' Forked'),
       ].filter(x => x).join(' — ');
     },
     font() {

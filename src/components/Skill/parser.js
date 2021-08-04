@@ -1,5 +1,6 @@
 import database from '@/database';
 import i18n from '@/i18n';
+import BigNumber from 'bignumber.js';
 
 function coef(level, index) {
   return database.SkillLvCoef[level].m_Coefs[index] || 1.0;
@@ -200,6 +201,7 @@ function isTargetAll(target) {
 }
 
 function parse(id, owner, level, sp) {
+  console.log(id);
   const skill = Object.assign({}, database[`SkillList_${owner}`][id], database[`SkillContentList_${owner}`][id]);
   const contents = [];
   function push(content) {
@@ -288,7 +290,7 @@ function parse(id, owner, level, sp) {
       case 1: // Recover
         content.amount = amount(data.m_Args[0], amounts[data.m_Type][isTargetAll(data.m_Target) ? 1 : 0]);
         content.amount = i18n.t(`Skill Amounts.${data.m_Type}.${content.amount}`);
-        content.power = Math.floor(data.m_Args[0] * coef(level, data.m_SkillLvCoef));
+        content.power = Math.floor(new BigNumber(data.m_Args[0]).times(coef(level, data.m_SkillLvCoef)));
         content.power = content.power.toFixed(1) + '%';
         break;
 
@@ -309,13 +311,13 @@ function parse(id, owner, level, sp) {
             content.coef = data.m_SkillLvCoef == 0 ?
               data.m_Args[i + 2] < 1 ? 1 : 2 :
               data.m_SkillLvCoef;
-            content.power = data.m_Args[i + 2] * coef(level, content.coef);
-            content.power = ((1 - content.power) * 100).toFixed(1) + '%';
+            content.power = new BigNumber(data.m_Args[i + 2]).times(coef(level, content.coef));
+            content.power = new BigNumber(new BigNumber(1).minus(content.power)).times(100) + '%';
             content.sign = Math.sign(1 - data.m_Args[i + 2]);
           }
           else {
-            content.power = data.m_Args[i + 2] * coef(level, data.m_SkillLvCoef);
-            content.power = content.power.toFixed(1) + '%';
+            content.power = new BigNumber(data.m_Args[i + 2]).times(coef(level, data.m_SkillLvCoef));
+            content.power = content.power + '%';
             content.sign = Math.sign(data.m_Args[i + 2]);
           }
           content.sign = i18n.t(`Skill Signs.${content.sign}`);
@@ -351,7 +353,7 @@ function parse(id, owner, level, sp) {
             push({
               type: data.m_Type,
               target: i18n.t(`Skill Targets.${data.m_Target}`),
-              power: data.m_Args[i].toFixed(0) + '%',
+              power: new BigNumber(data.m_Args[i]) + '%',
               abnormal: i18n.t(`Abnormals.${i}`),
               amount: i18n.t(`Skill Amounts.${data.m_Type}.${amount(data.m_Args[i], amounts[data.m_Type][isTargetAll(data.m_Target) ? 1 : 0])}`),
             });
@@ -386,7 +388,7 @@ function parse(id, owner, level, sp) {
         content.turnType = i18n.t(`Skill Turn Types.${data.m_Args[0]}`);
         content.turn = data.m_Args[1];
         content.power = -data.m_Args[2];
-        content.power = content.power.toFixed(1) + '%';
+        content.power = new BigNumber(content.power) + '%';
         content.sign = i18n.t(`Skill Signs.${Math.sign(-data.m_Args[2])}`);
         break;
 
@@ -403,8 +405,8 @@ function parse(id, owner, level, sp) {
           };
           content.amount = amount(data.m_Args[i + 2], amounts[data.m_Type]);
           content.amount = i18n.t(`Skill Amounts.${data.m_Type}.${content.amount}`);
-          content.power = data.m_Args[i + 2] * coef(level, data.m_SkillLvCoef);
-          content.power = content.power.toFixed(1) + '%';
+          content.power = new BigNumber(data.m_Args[i + 2] ).times(coef(level, data.m_SkillLvCoef));
+          content.power = content.power + '%';
           content.sign = i18n.t(`Skill Signs.${Math.sign(data.m_Args[i + 2])}`);
           content.element = i18n.t(`Elements.${i}`);
           push(content);
@@ -418,15 +420,15 @@ function parse(id, owner, level, sp) {
       case 10: // Weak Element Bonus
         content.turnType = i18n.t(`Skill Turn Types.${data.m_Args[0]}`);
         content.turn = data.m_Args[1];
-        content.power = data.m_Args[2].toFixed(1) + '%';
+        content.power = new BigNumber(data.m_Args[2]) + '%';
         break;
 
       case 11: // Next Attack Up
         content.damageType = i18n.t(`Skill Damage Types.${data.m_Args[0]}`);
         content.amount = amount(data.m_Args[1], amounts[data.m_Type]);
         content.amount = i18n.t(`Skill Amounts.${data.m_Type}.${content.amount}`);
-        content.power = data.m_Args[1] * coef(level, data.m_SkillLvCoef);
-        content.power = content.power.toFixed(1) + '%';
+        content.power = new BigNumber(data.m_Args[1]).times(coef(level, data.m_SkillLvCoef));
+        content.power = content.power + '%';
         break;
 
       case 12: // Next Attack Critical
@@ -435,24 +437,24 @@ function parse(id, owner, level, sp) {
       case 13: // Barrier
         content.amount = amount(data.m_Args[0], amounts[data.m_Type]);
         content.amount = i18n.t(`Skill Amounts.${data.m_Type}.${content.amount}`);
-        content.power = data.m_Args[0] * coef(level, data.m_SkillLvCoef);
-        content.power = content.power.toFixed(1) + '%';
+        content.power = new BigNumber(data.m_Args[0]).times(coef(level, data.m_SkillLvCoef));
+        content.power = content.power + '%';
         content.turn = data.m_Args[1];
         break;
 
       case 14: // Recast Change
         content.amount = amount(data.m_Args[0], amounts[data.m_Type]);
         content.amount = i18n.t(`Skill Amounts.${data.m_Type}.${content.amount}`);
-        content.power = data.m_Args[0] * 100;
-        content.power = content.power.toFixed(1) + '%';
+        content.power = new BigNumber(data.m_Args[0]).times(100);
+        content.power = content.power + '%';
         content.verb = i18n.t(`Skill Verbs.${Math.sign(data.m_Args[0])}`);
         break;
 
       case 15: // Kirara Jump Gauge Change
         content.amount = amount(data.m_Args[0], amounts[data.m_Type]);
         content.amount = i18n.t(`Skill Amounts.${data.m_Type}.${content.amount}`);
-        content.power = data.m_Args[0] * 100;
-        content.power = content.power.toFixed(0) + '%';
+        content.power = new BigNumber(data.m_Args[0]).times(100);
+        content.power = content.power + '%';
         content.verb = i18n.t(`Skill Verbs.${Math.sign(data.m_Args[0])}`);
         break;
 
@@ -467,8 +469,8 @@ function parse(id, owner, level, sp) {
         content.turn = data.m_Args[1];
         content.amount = amount(data.m_Args[2], amounts[data.m_Type]);
         content.amount = i18n.t(`Skill Amounts.${data.m_Type}.${content.amount}`);
-        content.power = data.m_Args[2];
-        content.power = content.power.toFixed(1) + '%';
+        content.power = new BigNumber(data.m_Args[2]);
+        content.power = content.power + '%';
         content.sign = i18n.t(`Skill Signs.${Math.sign(data.m_Args[2])}`);
         break;
 
@@ -490,7 +492,7 @@ function parse(id, owner, level, sp) {
 
       case 23: // Regene
         content.turn = data.m_Args[0];
-        content.power = Math.floor(data.m_Args[1] * coef(level, data.m_SkillLvCoef));
+        content.power = Math.floor(new BigNumber(data.m_Args[1]).times(coef(level, data.m_SkillLvCoef)));
         content.power = content.power.toFixed(1) + '%';
         break;
 
@@ -501,8 +503,8 @@ function parse(id, owner, level, sp) {
       case 25: // Load Factor Reduce
         content.turnType = i18n.t(`Skill Turn Types.${data.m_Args[0]}`);
         content.turn = data.m_Args[1];
-        content.power = data.m_Args[2] * coef(level, data.m_SkillLvCoef);
-        content.power = content.power.toFixed(1) + '%';
+        content.power = new BigNumber(data.m_Args[2]).times(coef(level, data.m_SkillLvCoef));
+        content.power = content.power + '%';
         break;
 
       case 26: // Critical Damage Change
@@ -510,8 +512,8 @@ function parse(id, owner, level, sp) {
         content.turn = data.m_Args[1];
         content.amount = amount(data.m_Args[2], amounts[data.m_Type]);
         content.amount = i18n.t(`Skill Amounts.${data.m_Type}.${content.amount}`);
-        content.power = data.m_Args[2] * coef(level, data.m_SkillLvCoef);
-        content.power = content.power.toFixed(1) + '%';
+        content.power = new BigNumber(data.m_Args[2]).times(coef(level, data.m_SkillLvCoef));
+        content.power = content.power + '%';
         content.sign = i18n.t(`Skill Signs.${Math.sign(data.m_Args[2])}`);
         break;
 
@@ -550,13 +552,16 @@ function parse(id, owner, level, sp) {
                 content.coef = data.m_SkillLvCoef == 0 ?
                   x < 1 ? 1 : 2 :
                   data.m_SkillLvCoef;
-                content.power = x * coef(level, content.coef);
-                content.power = ((1 - content.power) * 100).toFixed(1) + '%';
+                content.power = new BigNumber(x).times(coef(level, content.coef));
+                content.power =
+                  new BigNumber(
+                    new BigNumber(1).minus(content.power)
+                  ).times(100) + "%";
                 content.sign = Math.sign(1 - x);
               }
               else {
-                content.power = x * coef(level, data.m_SkillLvCoef);
-                content.power = content.power.toFixed(1) + '%';
+                content.power = new BigNumber(x).times(coef(level, data.m_SkillLvCoef));
+                content.power = content.power + '%';
                 content.sign = Math.sign(x);
               }
               content.sign = i18n.t(`Skill Signs.${content.sign}`);
@@ -570,7 +575,7 @@ function parse(id, owner, level, sp) {
       case 29: // Kirara Jump Gauge Up On Damage
         content.turnType = i18n.t(`Skill Turn Types.${data.m_Args[0]}`);
         content.turn = data.m_Args[1];
-        content.power = (data.m_Args[2] * 100).toFixed(0) + '%';
+        content.power = new BigNumber(data.m_Args[2]).times(100) + '%';
         break;
 
       case 30: // Status Change Disable

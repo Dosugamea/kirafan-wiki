@@ -55,7 +55,8 @@
           v-chip.mr-2.mb-2(:key="`enemy-pattern-condition-full-charge-${k}-${item}`",
             v-for="item in parser.conditions(command.m_Conditions, command.m_ExecNum)") {{item}}
         template(v-for="exec in command.m_ExecDatas")
-          Skill(:id="enemy.m_CharageSkillIDs[exec.m_CommandIndex]", owner="EN", sp
+          // TODO:根本的な原因を調べる #/enemy/90129005?level=90&qid=1203900 暫定対処
+          Skill(:id="enemy.m_CharageSkillIDs[exec.m_CommandIndex] === -1 ? enemy.m_CharageSkillIDs[0] : enemy.m_CharageSkillIDs[exec.m_CommandIndex]", owner="EN", sp
             :element="enemy.m_Element", max=1, :ratio="exec.m_Ratio")
             .d-flex.primary--text(slot="prepend", v-if="parser.singleConditions(exec.m_SingleConditions).length")
               .pr-1 ・
@@ -120,11 +121,11 @@
 </template>
 
 <script>
-import parser from './parser';
+import parser from "./parser";
 
 export default {
-  name: 'Enemy',
-  props: ['id'],
+  name: "Enemy",
+  props: ["id"],
   data() {
     return {
       showConfusion: false,
@@ -139,19 +140,28 @@ export default {
       let enemyIDs = [];
       if (this.quest) {
         for (let waveID of this.quest.waveIDs) {
-          enemyIDs = enemyIDs.concat(this.$db.QuestWaveList[waveID].m_QuestEnemyIDs.filter(id => id != -1));
-          for (let randomID of this.$db.QuestWaveList[waveID].m_QuestRandomIDs.filter(id => id != -1)) {
-            enemyIDs = enemyIDs.concat(this.$db.QuestWaveRandomList[randomID].m_QuestEnemyIDs.filter(id => id != -1));
+          enemyIDs = enemyIDs.concat(
+            this.$db.QuestWaveList[waveID].m_QuestEnemyIDs.filter(
+              (id) => id != -1
+            )
+          );
+          for (let randomID of this.$db.QuestWaveList[
+            waveID
+          ].m_QuestRandomIDs.filter((id) => id != -1)) {
+            enemyIDs = enemyIDs.concat(
+              this.$db.QuestWaveRandomList[randomID].m_QuestEnemyIDs.filter(
+                (id) => id != -1
+              )
+            );
           }
         }
       }
       return Array.from(new Set(enemyIDs));
     },
     enemy() {
-      if (this.enemyIDs.some(id => id == this.id))
+      if (this.enemyIDs.some((id) => id == this.id))
         return this.$db.QuestEnemyList[this.id];
-      else
-        return null;
+      else return null;
     },
     level() {
       return this.$route.query.level || 1;
@@ -170,28 +180,30 @@ export default {
     },
     elementIcon() {
       return {
-        0: 'ElementIconFire',
-        1: 'ElementIconWater',
-        2: 'ElementIconEarth',
-        3: 'ElementIconWind',
-        4: 'ElementIconMoon',
-        5: 'ElementIconSun',
+        0: "ElementIconFire",
+        1: "ElementIconWater",
+        2: "ElementIconEarth",
+        3: "ElementIconWind",
+        4: "ElementIconMoon",
+        5: "ElementIconSun",
       }[this.enemy.m_Element];
     },
     status() {
       return {
-        'HP': this.f(this.enemy.m_InitHp, this.enemy.m_MaxHp),
-        '': null,
-        'ATK': this.f(this.enemy.m_InitAtk, this.enemy.m_MaxAtk),
-        'MAT': this.f(this.enemy.m_InitMgc, this.enemy.m_MaxMgc),
-        'DEF': this.f(this.enemy.m_InitDef, this.enemy.m_MaxDef),
-        'MDF': this.f(this.enemy.m_InitMDef, this.enemy.m_MaxMDef),
-        'SPD': this.f(this.enemy.m_InitSpd, this.enemy.m_MaxSpd),
-        'LUK': this.f(this.enemy.m_InitLuck, this.enemy.m_MaxLuck),
+        HP: this.f(this.enemy.m_InitHp, this.enemy.m_MaxHp),
+        "": null,
+        ATK: this.f(this.enemy.m_InitAtk, this.enemy.m_MaxAtk),
+        MAT: this.f(this.enemy.m_InitMgc, this.enemy.m_MaxMgc),
+        DEF: this.f(this.enemy.m_InitDef, this.enemy.m_MaxDef),
+        MDF: this.f(this.enemy.m_InitMDef, this.enemy.m_MaxMDef),
+        SPD: this.f(this.enemy.m_InitSpd, this.enemy.m_MaxSpd),
+        LUK: this.f(this.enemy.m_InitLuck, this.enemy.m_MaxLuck),
       };
     },
     aiID() {
-      return `<a href="${this.$asset.battleai.format(this.enemy.m_AIID)}.json" target="_blank">
+      return `<a href="${this.$asset.battleai.format(
+        this.enemy.m_AIID
+      )}.json" target="_blank">
         ${this.enemy.m_AIID}
       </a>`;
     },
@@ -199,15 +211,18 @@ export default {
       if (this.questLibrary.category == 1) {
         let startTimes = [];
         for (let i in this.event.parts) {
-          if (this.event.parts[i] == '極' || this.event.parts[i] == '超高難易度') {
+          if (
+            this.event.parts[i] == "極" ||
+            this.event.parts[i] == "超高難易度"
+          ) {
             startTimes.push(this.event.startTimes[i]);
           }
         }
         let sections = Object.keys(this.questLibrary.quests);
-        let index = sections.findIndex(x => x == this.quest.section);
+        let index = sections.findIndex((x) => x == this.quest.section);
         return startTimes[startTimes.length - sections.length + index];
       } else if (this.questLibrary.category == 4) {
-        let badge = this.questLibrary.badge.split('.');
+        let badge = this.questLibrary.badge.split(".");
         let t = new Date(Date.UTC(badge[0], badge[1] - 1));
         while (t.getUTCDay() != 6) {
           t.setHours(t.getHours() + 24);
@@ -231,27 +246,30 @@ export default {
   },
   methods: {
     f(initStatus, maxStatus) {
-      const num = this.enemy.m_MaxLv <= this.enemy.m_InitLv ? 1.0 :
-        Math.fround(1 -
-          (this.enemy.m_MaxLv - this.level) /
-          (this.enemy.m_MaxLv - this.enemy.m_InitLv)
-        );
-      return initStatus + Math.ceil(Math.fround(
-        (maxStatus - initStatus) * num
-      ));
+      const num =
+        this.enemy.m_MaxLv <= this.enemy.m_InitLv
+          ? 1.0
+          : Math.fround(
+              1 -
+                (this.enemy.m_MaxLv - this.level) /
+                  (this.enemy.m_MaxLv - this.enemy.m_InitLv)
+            );
+      return (
+        initStatus + Math.ceil(Math.fround((maxStatus - initStatus) * num))
+      );
     },
   },
   mounted() {
-    if (this.$route.name == 'Enemy') {
-      this.$root.$emit('theme', this.enemy.m_Element);
+    if (this.$route.name == "Enemy") {
+      this.$root.$emit("theme", this.enemy.m_Element);
     }
   },
   watch: {
     $route(to) {
-      if (to.name == 'Enemy') {
-        this.$root.$emit('theme', this.enemy.m_Element);
+      if (to.name == "Enemy") {
+        this.$root.$emit("theme", this.enemy.m_Element);
       }
     },
-  }
+  },
 };
 </script>
