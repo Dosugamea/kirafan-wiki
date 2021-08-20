@@ -7,7 +7,7 @@ div
   p.display.px-4.primary--text {{ $t('Standpic') }}
 
   v-row(justify="center")
-    v-dialog(v-model="dialog", max-width="290" :persistent="isLoadingDb")
+    v-dialog(v-model="dialog", max-width="290")
       v-card(v-if="!isLoadingDb")
         // TODO:i18n
         v-card-title.text-h5 DBをダウンロードしますか?
@@ -71,9 +71,17 @@ div
     )
     v-btn.ml-2(v-else, icon, @click="downloadImg"): v-icon mdi-download
 
-  canvas.standpic(
-    style="width: 100%; overflow: hidden; position: relative"
+  div(style="width: 100%; overflow: hidden; position: relative",
+   :style="{ height: scale * 1200 + 'px' }"
   )
+    div(style="position: absolute; left: 50%; transform: translateX(-50%)")
+
+      div(
+          :style="{ transform: `scale(${scale}) translateY(${((scale - 1) * 50) / scale}%)` }",
+          :key="id"
+      )
+        .d-inline-block
+          canvas.standpic
   //- div(
   //-   style="width: 100%; overflow: hidden; position: relative",
   //-   :style="{ height: scale * 1200 + 'px' }"
@@ -257,6 +265,7 @@ export default {
       this.dialog = false;
     },
     async showImg() {
+      this.loading = 1;
       const chara = new Image();
       const face = new Image();
       const canvas = document.querySelector(".standpic");
@@ -284,6 +293,8 @@ export default {
           this.pose.m_FaceY - face.height / 2
         );
       }
+      this.loading = 0;
+
     },
     async downloadImg() {
       this.downloading = true;
