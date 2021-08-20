@@ -365,7 +365,6 @@ export default {
     } else {
       this.dialog = true;
     }
-    window.a = this;
   },
 };
 </script>
