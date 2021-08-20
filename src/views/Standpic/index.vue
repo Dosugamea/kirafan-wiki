@@ -82,25 +82,6 @@ div
       )
         .d-inline-block
           canvas.standpic
-  //- div(
-  //-   style="width: 100%; overflow: hidden; position: relative",
-  //-   :style="{ height: scale * 1200 + 'px' }"
-  //- )
-  //-   div(style="position: absolute; left: 50%; transform: translateX(-50%)")
-  //-     div(
-  //-       :style="{ transform: `scale(${scale}) translateY(${((scale - 1) * 50) / scale}%)` }",
-  //-       :key="id"
-  //-     )
-  //-       .d-inline-block(v-if="pose.m_FaceReferenceImageType == 0")
-  //-         div(style="position: relative")
-  //-           div(:style="style")
-  //-             v-img(
-  //-               :src="src.face",
-  //-               style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1"
-  //-             )
-  //-         v-img(:src="src.standpic")
-  //-       .d-inline-block(v-else-if="pose.m_FaceReferenceImageType == 1")
-  //-         v-img(:src="src.face")
 </template>
 
 <script>
@@ -118,7 +99,7 @@ export default {
       scale: 1,
       characterID: 0,
       downloading: false,
-      isLoadingDb:false,
+      isLoadingDb: false,
 
       dialog: false,
     };
@@ -155,16 +136,13 @@ export default {
       return this.character.m_ResourceBaseName;
     },
     faceContainerSize: () => 270,
-    
+
     src() {
       return {
         standpic:
           "https://bucket-" +
           this.standpicPath() +
           "-asset.kirafan.cn/adv/standpic/" +
-          // blend%EF%BD%93_mahuyu/blend%EF%BD%93_mahuyu_standpic_0/Blend%EF%BD%93_Mahuyu_StandPic_0.png
-
-          // "https://bucket-0-asset.kirafan.cn/adv/standpic/" +
           this.base.toLowerCase() +
           "/" +
           this.base.toLowerCase() +
@@ -194,10 +172,6 @@ export default {
             "undefined"
           ).replace(/^(.)/, (_, p1) => p1.toUpperCase()) +
           ".png",
-        // this.$asset.standpic.format(
-        //   this.base,
-        //   `${this.base}_face_${this.poseID}_${this.face && this.face.key[2]}`
-        // ) + ".png",
       };
     },
     style() {
@@ -211,10 +185,9 @@ export default {
     },
   },
   methods: {
-
-    load() {
+    async load() {
       this.loading += 1;
-      
+
       const db = this.standpicDB()[this.base];
       this.index = db.map((item) => {
         let key = item.img
@@ -226,16 +199,22 @@ export default {
 
       if (this.poseID >= this.poses.length) this.poseID = 0;
       if (this.faceID >= this.faces.length) this.faceID = 0;
+      await this.showImg();
       this.loading = 0;
-      this.showImg()
     },
     async loadAssetBundle() {
       this.isLoadingDb = true;
-      const assetBundle = (
-        await axios.get("https://database.kirafan.cn/assetBundle.json", {
-          responseType: "json",
-        })
-      ).data;
+
+      let assetBundle;
+      if (this.$s.loadAssetbundle) {
+        assetBundle = this.$db.assetBundle;
+      } else {
+        assetBundle = (
+          await axios.get("https://database.kirafan.cn/assetBundle.json", {
+            responseType: "json",
+          })
+        ).data;
+      }
       const standpicDB = {};
 
       assetBundle
@@ -268,7 +247,6 @@ export default {
       this.loading = 1;
       const chara = new Image();
       const face = new Image();
-      const canvas = document.querySelector(".standpic");
       const imgLoadPromise = [this.imgOnload(chara, this.src.standpic)];
 
       let useFaceImg;
@@ -282,19 +260,21 @@ export default {
 
       await Promise.all(imgLoadPromise);
 
-      canvas.width = chara.width;
-      canvas.height = chara.height;
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(chara, 0, 0);
-      if (useFaceImg) {
-        ctx.drawImage(
-          face,
-          this.pose.m_FaceX - face.width / 2,
-          this.pose.m_FaceY - face.height / 2
-        );
-      }
-      this.loading = 0;
-
+      await this.$nextTick(() => {
+        const canvas = document.querySelector(".standpic");
+        canvas.width = chara.width;
+        canvas.height = chara.height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(chara, 0, 0);
+        if (useFaceImg) {
+          ctx.drawImage(
+            face,
+            this.pose.m_FaceX - face.width / 2,
+            this.pose.m_FaceY - face.height / 2
+          );
+        }
+        this.loading = 0;
+      });
     },
     async downloadImg() {
       this.downloading = true;
@@ -327,12 +307,6 @@ export default {
         img.src = URL.createObjectURL(blob);
       });
     },
-    arrayBufferToBase64(buffer) {
-      let binary = "";
-      const bytes = new Uint8Array(buffer);
-      bytes.forEach((byte) => (binary += String.fromCharCode(byte)));
-      return btoa(binary);
-    },
     fileDownloadFromBlob(blob, fileName = "img.png") {
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
@@ -341,7 +315,6 @@ export default {
       link.click();
       URL.revokeObjectURL(url);
     },
-
     standpicDB() {
       return this.$db.standpicDB;
     },
@@ -367,10 +340,11 @@ export default {
   mounted() {
     if (this.standpicDB()) {
       this.load();
+    } else if (this.$s.loadAssetbundle) {
+      this.loadAssetBundle();
     } else {
       this.dialog = true;
     }
-    throw Error()
   },
 };
 </script>

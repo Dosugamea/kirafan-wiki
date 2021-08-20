@@ -21,6 +21,9 @@
     v-list-item(@click="$s.characterIconFramed=!$s.characterIconFramed")
       v-list-item-content: v-list-item-title {{$t('Character Icon Framed')}}
       v-list-item-action: v-switch(color="primary", readonly, v-model="$s.characterIconFramed")
+    v-list-item(@click="$s.loadAssetbundle=!$s.loadAssetbundle")
+      v-list-item-content: v-list-item-title {{$t('Load assetBundle.json')}}
+      v-list-item-action: v-switch(color="primary",  readonly,v-model="$s.loadAssetbundle")
 
     v-divider
     v-subheader {{$t('Quests')}}
@@ -91,13 +94,13 @@
 </template>
 
 <script>
-import settings from '@/settings';
-import translations from '@/translations';
-import { del } from 'idb-keyval';
-import { unregister } from 'register-service-worker';
+import settings from "@/settings";
+import translations from "@/translations";
+import { del } from "idb-keyval";
+import { unregister } from "register-service-worker";
 
 export default {
-  name: 'Settings',
+  name: "Settings",
   data() {
     return {
       settings: settings,
@@ -106,12 +109,12 @@ export default {
   },
   methods: {
     reloadDatabase() {
-      del('databaseVersion').then(() => {
+      del("databaseVersion").then(() => {
         location.reload();
       });
     },
     reloadTranslations() {
-      del('translationVersion').then(() => {
+      del("translationVersion").then(() => {
         location.reload();
       });
     },
@@ -121,8 +124,8 @@ export default {
     },
     reloadClea() {
       settings.showCleaOnStart = !settings.showCleaOnStart;
-      window.vue.$emit('cleaVisibility', settings.showCleaOnStart);
-    }
-  }
+      window.vue.$emit("cleaVisibility", settings.showCleaOnStart);
+    },
+  },
 };
 </script>

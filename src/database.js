@@ -14,6 +14,8 @@ const requiredDatabases = [
   },
   { name: 'ADVLibraryList', key: 'm_LibraryListID' },
   { name: 'ADVList', key: 'm_AdvID' },
+  // { name: "assetBundle", uri: "../assetBundle" },
+
   { name: 'ArousalLevels' },
   { name: 'BattleStatusRatioByHp', key: 'm_ID' },
   { name: 'BattleRandomStatusChange', key: 'm_ID' },
@@ -154,6 +156,23 @@ async function load() {
 }
 
 async function main() {
+  let localVersion = await load();
+  if ((await get('settings'))['loadAssetbundle']) {
+    if (!(await get('database'))['assetBundle']) {
+      localVersion = 'undefined';
+    }
+    requiredDatabases.unshift({ name: 'assetBundle', uri: '../assetBundle' });
+  } else {
+    set(
+      'database',
+      await (async () => {
+        let tmp = await get('database');
+        delete tmp['assetBundle'];
+        return tmp;
+      })()
+    );
+  }
+
   // get server time
   await axios
     .head(`${window.location.origin}/?t=${new Date().getTime()}`, {
@@ -166,7 +185,7 @@ async function main() {
     })
     .catch(() => {});
 
-  let localVersion = await load();
+  
   let version = await axios.get(
     `${databaseHost}/../version?t=${new Date().getTime()}`
   );

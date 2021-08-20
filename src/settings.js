@@ -11,6 +11,7 @@ const settings = {
     characterTalentShowLuck: false,
     characterShowMaxStatus: false,
     characterIconFramed: false,
+    loadAssetbundle: false,
     questDropsGrouped: false,
     appTitleShowID: false,
     advancedFilter: false,
