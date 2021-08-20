@@ -323,14 +323,8 @@ export default {
       return new Promise(async (resolve, reject) => {
         img.onload = () => resolve();
         img.onerror = (e) => reject(e);
-        // if (CORS) {
-        //   img.src = url;
-        // } else {
         const blob = (await axios.get(url, { responseType: "blob" })).data;
-        const arrayBuffer = await blob.arrayBuffer();
-        const base64 = this.arrayBufferToBase64(arrayBuffer);
-        img.src = "data:image/png;base64," + base64;
-        // }
+        img.src = URL.createObjectURL(blob);
       });
     },
     arrayBufferToBase64(buffer) {
@@ -376,6 +370,7 @@ export default {
     } else {
       this.dialog = true;
     }
+    throw Error()
   },
 };
 </script>
