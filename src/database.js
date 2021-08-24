@@ -167,7 +167,7 @@ async function main() {
       'database',
       await (async () => {
         let tmp = await get('database');
-        delete tmp['assetBundle'];
+        if (tmp['assetBundle']) delete tmp['assetBundle'];
         return tmp;
       })()
     );
