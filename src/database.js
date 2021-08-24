@@ -157,7 +157,7 @@ async function load() {
 
 async function main() {
   let localVersion = await load();
-  if ((await get('settings'))['loadAssetbundle']) {
+  if ((await get('settings'))['loadAssetbundle'] || false) {
     if (!(await get('database'))['assetBundle']) {
       localVersion = 'undefined';
     }
