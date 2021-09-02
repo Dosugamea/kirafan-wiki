@@ -171,7 +171,7 @@ async function main() {
     }
     requiredDatabases.unshift({ name: 'assetBundle', uri: '../assetBundle' });
   } else {
-    localforage.setItem(
+    await localforage.setItem(
       'database',
       await (async () => {
         let tmp = await localforage.getItem('database');
