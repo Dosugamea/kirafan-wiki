@@ -1,4 +1,6 @@
-import { set, get } from 'idb-keyval';
+// import { set, get } from 'idb-keyval';
+import { set, get } from '@/idb-localforage';
+
 import axios from 'axios';
 import i18n from '@/i18n';
 import Vue from 'vue';

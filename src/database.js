@@ -1,14 +1,8 @@
 // import { set, get } from "idb-keyval";
-import localforage from 'localforage';
+import { set, get } from '@/idb-localforage';
 import axios from 'axios';
 import Vue from 'vue';
 
-localforage.config({
-  storeName: 'keyval',
-  name: 'keyval-store',
-});
-const set = localforage.setItem;
-const get = localforage.getItem;
 
 const databaseHost = 'https://database.kirafan.cn/database';
 
@@ -164,17 +158,17 @@ async function load() {
 }
 
 async function main() {
-  let settings = await localforage.getItem('settings');
+  let settings = await get('settings');
   if (settings ? settings['loadAssetbundle'] : false) {
-    if (!(await localforage.getItem('database'))['assetBundle']) {
+    if (!(await get('database'))['assetBundle']) {
       localVersion = 'undefined';
     }
     requiredDatabases.unshift({ name: 'assetBundle', uri: '../assetBundle' });
   } else {
-    await localforage.setItem(
+    await set(
       'database',
       await (async () => {
-        let tmp = await localforage.getItem('database');
+        let tmp = await get('database');
         if (tmp && tmp['assetBundle']) delete tmp['assetBundle'];
         return tmp;
       })()

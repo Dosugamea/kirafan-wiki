@@ -1,4 +1,5 @@
-import { set, get } from 'idb-keyval';
+// import { set, get } from 'idb-keyval';
+import { set, get } from "@/idb-localforage";
 import { cleaTalkData } from './cleaTalk';
 
 const DBStoreName = 'cleaMemory';
