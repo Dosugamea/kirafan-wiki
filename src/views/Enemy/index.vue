@@ -2,11 +2,6 @@
   .pa-4(v-if="!enemy")
     KeyValue(:k="$t('No Enemy')")
 
-  div(v-else-if="!isOpen")
-    .text-center
-      .px-4.mb-4: v-icon(size=100) mdi-lock
-      .px-4.mb-4 {{openTime.toLocaleString()}}
-
   div(v-else)
     div.float-right.px-4(:key="`enemy-icon-${enemy.m_ID}`")
       a(:href="$asset.ordericon.format(enemy.m_ResourceID)+'.png'", target="_blank")
@@ -202,10 +197,7 @@ export default {
       return t;
     },
     isOpen() {
-      if (!this.$questLock()) {
-        return true;
-      }
-      return (this.$time || new Date(this.$db.date)) > this.openTime;
+      return true;
     },
   },
   methods: {
