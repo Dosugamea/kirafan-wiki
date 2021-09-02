@@ -3,7 +3,6 @@ import { set, get } from '@/idb-localforage';
 import axios from 'axios';
 import Vue from 'vue';
 
-
 const databaseHost = 'https://database.kirafan.cn/database';
 
 const requiredDatabases = [
@@ -193,16 +192,37 @@ async function main() {
 
   let localVersion = await load();
   if (localVersion != version.data) {
-    if (localVersion) {
+    let isUpdate = localVersion && !detectFirefoxPrivate();
+    if (isUpdate) {
       window.vue.$emit('databaseUpdating');
     }
     await fetch(version.data);
-    if (!localVersion) {
-      window.vue.$emit('databaseLoaded');
-    } else {
+    if (isUpdate) {
       window.vue.$emit('databaseUpdated');
+    } else {
+      window.vue.$emit('databaseLoaded');
     }
   }
+}
+
+// https://gist.github.com/jherax/a81c8c132d09cc354a0e2cb911841ff1
+function detectFirefoxPrivate() {
+  return new Promise(function detect(resolve) {
+    const isMozillaFirefox = 'MozAppearance' in document.documentElement.style;
+    if (isMozillaFirefox) {
+      if (indexedDB == null) resolve(true);
+      else {
+        const db = indexedDB.open('inPrivate');
+        db.onsuccess = function() {
+          resolve(false);
+        };
+        db.onerror = function() {
+          resolve(true);
+        };
+      }
+    }
+    return resolve(false); // ?
+  });
 }
 
 main();
