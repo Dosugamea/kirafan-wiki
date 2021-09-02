@@ -1,6 +1,14 @@
-import { set, get } from 'idb-keyval';
+// import { set, get } from "idb-keyval";
+import localforage from 'localforage';
 import axios from 'axios';
 import Vue from 'vue';
+
+localforage.config({
+  storeName: 'keyval',
+  name: 'keyval-store',
+});
+const set = localforage.setItem;
+const get = localforage.getItem;
 
 const databaseHost = 'https://database.kirafan.cn/database';
 
@@ -156,17 +164,17 @@ async function load() {
 }
 
 async function main() {
-  let localVersion = await load();
-  if ((await get('settings'))['loadAssetbundle'] || false) {
-    if (!(await get('database'))['assetBundle']) {
+  let settings = await localforage.getItem('settings');
+  if (settings ? settings['loadAssetbundle'] : false) {
+    if (!(await localforage.getItem('database'))['assetBundle']) {
       localVersion = 'undefined';
     }
     requiredDatabases.unshift({ name: 'assetBundle', uri: '../assetBundle' });
   } else {
-    set(
+    localforage.setItem(
       'database',
       await (async () => {
-        let tmp = await get('database');
+        let tmp = await localforage.getItem('database');
         if (tmp && tmp['assetBundle']) delete tmp['assetBundle'];
         return tmp;
       })()
@@ -185,11 +193,11 @@ async function main() {
     })
     .catch(() => {});
 
-  
   let version = await axios.get(
     `${databaseHost}/../version?t=${new Date().getTime()}`
   );
 
+  let localVersion = await load();
   if (localVersion != version.data) {
     if (localVersion) {
       window.vue.$emit('databaseUpdating');

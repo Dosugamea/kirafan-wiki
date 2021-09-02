@@ -206,7 +206,7 @@ export default {
       this.isLoadingDb = true;
 
       let assetBundle;
-      if (this.$s.loadAssetbundle) {
+      if (this.$s.loadAssetbundle || false) {
         assetBundle = this.$db.assetBundle;
       } else {
         assetBundle = (
@@ -340,7 +340,7 @@ export default {
   mounted() {
     if (this.standpicDB()) {
       this.load();
-    } else if (this.$s.loadAssetbundle) {
+    } else if (this.$s.loadAssetbundle || false) {
       this.loadAssetBundle();
     } else {
       this.dialog = true;
