@@ -136,47 +136,11 @@ export default {
     battleAI() {
       return this.$db.BattleAIDataList[this.enemy.m_AIID];
     },
-    enemyIDs() {
-      let enemyIDs = [];
-      if (this.quest) {
-        for (let waveID of this.quest.waveIDs) {
-          enemyIDs = enemyIDs.concat(
-            this.$db.QuestWaveList[waveID].m_QuestEnemyIDs.filter(
-              (id) => id != -1
-            )
-          );
-          for (let randomID of this.$db.QuestWaveList[
-            waveID
-          ].m_QuestRandomIDs.filter((id) => id != -1)) {
-            enemyIDs = enemyIDs.concat(
-              this.$db.QuestWaveRandomList[randomID].m_QuestEnemyIDs.filter(
-                (id) => id != -1
-              )
-            );
-          }
-        }
-      }
-      return Array.from(new Set(enemyIDs));
-    },
     enemy() {
-      if (this.enemyIDs.some((id) => id == this.id))
-        return this.$db.QuestEnemyList[this.id];
-      else return null;
+      return this.$db.QuestEnemyList[this.id];
     },
     level() {
       return this.$route.query.level || 1;
-    },
-    qid() {
-      return this.$route.query.qid;
-    },
-    quest() {
-      return this.$db.QuestList[this.qid];
-    },
-    questLibrary() {
-      return this.$db.QuestLibraryList[this.quest.questLibraryID];
-    },
-    event() {
-      return this.$db.Events[this.quest.questLibraryID];
     },
     elementIcon() {
       return {
