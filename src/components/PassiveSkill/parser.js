@@ -1,13 +1,15 @@
-import database from '@/database';
-import skillParser from '@/components/Skill/parser';
-import i18n from '@/i18n';
+import database from "@/database";
+import skillParser from "@/components/Skill/parser";
+import i18n from "@/i18n";
 
 function parse(id, owner) {
   const skill = database[`PassiveSkillList_${owner}`][id];
   const contents = [];
   function push(content) {
     if (content && content.constructor == Object) {
-      contents[contents.length - 1].push(i18n.t(`Passive Details.${content.type}`).format(content));
+      contents[contents.length - 1].push(
+        i18n.t(`Passive Details.${content.type}`).format(content)
+      );
     } else {
       contents[contents.length - 1].push(content);
     }
@@ -32,6 +34,12 @@ function parse(id, owner) {
       type: data.m_Type,
     };
 
+    const defaultSkill = () => {
+      push(skill.m_SkillDetail);
+      push("m_Type:" + data.m_Type);
+      push("m_Args:" + JSON.stringify(data.m_Args));
+    };
+
     switch (data.m_Type) {
       case 0: // Status Change
         for (let i = 0; i < 6; i++) {
@@ -41,14 +49,17 @@ function parse(id, owner) {
           content = {
             type: data.m_Type,
           };
-          content.amount = skillParser.amount(data.m_Args[i], skillParser.amounts[2][i]);
+          content.amount = skillParser.amount(
+            data.m_Args[i],
+            skillParser.amounts[2][i]
+          );
           content.amount = i18n.t(`Skill Amounts.${2}.${content.amount}`);
-          if (i == 4) { // SPD
-            content.power = ((1 - data.m_Args[i]) * 100).toFixed(1) + '%';
+          if (i == 4) {
+            // SPD
+            content.power = ((1 - data.m_Args[i]) * 100).toFixed(1) + "%";
             content.sign = Math.sign(1 - data.m_Args[i]);
-          }
-          else {
-            content.power = data.m_Args[i].toFixed(1) + '%';
+          } else {
+            content.power = data.m_Args[i].toFixed(1) + "%";
             content.sign = Math.sign(data.m_Args[i]);
           }
           content.sign = i18n.t(`Skill Signs.${content.sign}`);
@@ -59,9 +70,12 @@ function parse(id, owner) {
         continue;
 
       case 1: // Hate Change
-        content.amount = skillParser.amount(data.m_Args[0], skillParser.amounts[18]);
+        content.amount = skillParser.amount(
+          data.m_Args[0],
+          skillParser.amounts[18]
+        );
         content.amount = i18n.t(`Skill Amounts.${18}.${content.amount}`);
-        content.power = data.m_Args[0].toFixed(1) + '%';
+        content.power = data.m_Args[0].toFixed(1) + "%";
         content.sign = i18n.t(`Skill Signs.${Math.sign(data.m_Args[0])}`);
         break;
 
@@ -72,23 +86,26 @@ function parse(id, owner) {
         break;
 
       case 4: // Stun Coef
-        content.power = (data.m_Args[0] * 100).toFixed(1) + '%';
+        content.power = (data.m_Args[0] * 100).toFixed(1) + "%";
         break;
 
       case 5: // Kirara Jump Gauge Change
-        content.power = (data.m_Args[0] * 100).toFixed(0) + '%';
+        content.power = (data.m_Args[0] * 100).toFixed(0) + "%";
         content.verb = i18n.t(`Skill Verbs.${Math.sign(data.m_Args[0])}`);
         break;
 
       case 6: // Kirara Jump Gauge Coef
-        content.power = (data.m_Args[0] * 100).toFixed(0) + '%';
+        content.power = (data.m_Args[0] * 100).toFixed(0) + "%";
         content.sign = i18n.t(`Skill Signs.${Math.sign(data.m_Args[0])}`);
         break;
 
       case 7: // Critical Damage Change
-        content.amount = skillParser.amount(data.m_Args[0] * 100, skillParser.amounts[26]);
+        content.amount = skillParser.amount(
+          data.m_Args[0] * 100,
+          skillParser.amounts[26]
+        );
         content.amount = i18n.t(`Skill Amounts.${26}.${content.amount}`);
-        content.power = (data.m_Args[0] * 100).toFixed(0) + '%';
+        content.power = (data.m_Args[0] * 100).toFixed(0) + "%";
         content.sign = i18n.t(`Skill Signs.${Math.sign(data.m_Args[0])}`);
         break;
 
@@ -96,20 +113,22 @@ function parse(id, owner) {
         break;
 
       case 9: // Over Recover
-        content.power = data.m_Args[0].toFixed(0) + '%';
+        content.power = data.m_Args[0].toFixed(0) + "%";
         break;
 
       case 10: // Absorb Attack
         push(content);
         for (let i = 0; i < 4; i++) {
           let condition = i18n.t(`Passive Powers.${10}.${i}`);
-          let power = data.m_Args[i].toFixed(2) + '%';
+          let power = data.m_Args[i].toFixed(2) + "%";
           push(`${condition}: ${power}`);
         }
         continue;
 
       case 11: // Revive
-        content.power = i18n.t(`Passive Powers.${11}.${data.m_Args[0]}`).format(data.m_Args[1].toFixed(0));
+        content.power = i18n
+          .t(`Passive Powers.${11}.${data.m_Args[0]}`)
+          .format(data.m_Args[1].toFixed(0));
         break;
 
       case 12: // Card Turn Change
@@ -122,19 +141,26 @@ function parse(id, owner) {
         push(content);
         content.args = database.BattleStatusRatioByHp[data.m_Args[1]].m_Datas;
         for (let i in content.args) {
-          let condition = i != content.args.length - 1 ?
-            `${content.args[i].m_HPThreshold}% ≤ HP < ${content.args[parseInt(i) + 1].m_HPThreshold}%` :
-            `HP = ${content.args[i].m_HPThreshold}%`;
+          let condition =
+            i != content.args.length - 1
+              ? `${content.args[i].m_HPThreshold}% ≤ HP < ${
+                  content.args[parseInt(i) + 1].m_HPThreshold
+                }%`
+              : `HP = ${content.args[i].m_HPThreshold}%`;
 
           let power = {};
-          power.amount = skillParser.amount(content.args[i].m_Ratio, skillParser.amounts[2][data.m_Args[0]]);
+          power.amount = skillParser.amount(
+            content.args[i].m_Ratio,
+            skillParser.amounts[2][data.m_Args[0]]
+          );
           power.amount = i18n.t(`Skill Amounts.${2}.${power.amount}`);
-          if (data.m_Args[0] == 4) { // SPD
-            power.power = ((1 - content.args[i].m_Ratio) * 100).toFixed(1) + '%';
+          if (data.m_Args[0] == 4) {
+            // SPD
+            power.power =
+              ((1 - content.args[i].m_Ratio) * 100).toFixed(1) + "%";
             power.sign = Math.sign(1 - content.args[i].m_Ratio);
-          }
-          else {
-            power.power = content.args[i].m_Ratio.toFixed(1) + '%';
+          } else {
+            power.power = content.args[i].m_Ratio.toFixed(1) + "%";
             power.sign = Math.sign(content.args[i].m_Ratio);
           }
           power.sign = i18n.t(`Skill Signs.${power.sign}`);
@@ -156,14 +182,17 @@ function parse(id, owner) {
             turnType: i18n.t(`Skill Turn Types.${data.m_Args[1]}`),
             turn: data.m_Args[2],
           };
-          content.amount = skillParser.amount(data.m_Args[i + 3], skillParser.amounts[2][i]);
+          content.amount = skillParser.amount(
+            data.m_Args[i + 3],
+            skillParser.amounts[2][i]
+          );
           content.amount = i18n.t(`Skill Amounts.${2}.${content.amount}`);
-          if (i == 4) { // SPD
-            content.power = ((1 - data.m_Args[i + 3]) * 100).toFixed(1) + '%';
+          if (i == 4) {
+            // SPD
+            content.power = ((1 - data.m_Args[i + 3]) * 100).toFixed(1) + "%";
             content.sign = Math.sign(1 - data.m_Args[i + 3]);
-          }
-          else {
-            content.power = data.m_Args[i + 3].toFixed(1) + '%';
+          } else {
+            content.power = data.m_Args[i + 3].toFixed(1) + "%";
             content.sign = Math.sign(data.m_Args[i + 3]);
           }
           content.sign = i18n.t(`Skill Signs.${content.sign}`);
@@ -173,17 +202,63 @@ function parse(id, owner) {
         }
         continue;
 
+      case 15: //Increase in the rate of Abnomal
+        for (let i = 0; i < data.m_Args.length; i++) {
+          const arg = data.m_Args[i];
+          if (arg !== 0) {
+            content.abnomal = i18n.t("Abnormals")[i];
+            content.amount = arg + "%";
+            push(content);
+          }
+        }
+        continue;
+
+      case 16: //Add Element Resist
+        // push(content);
+        for (let i = 0; i < data.m_Args.length; i++) {
+          const arg = data.m_Args[i];
+          if (arg !== 0) {
+            content.element = i18n.t("Elements")[i];
+            content.amount = arg + "%";
+            push(content);
+          }
+        }
+        continue;
+
+      case 17: //Increase turn of buff/debuff
+        if (data.m_Args[0] === 0) {
+          content.buffType = i18n.t("Passive Powers")[data.m_Type][
+            data.m_Args[0]
+          ][data.m_Args[1]];
+          content.amount = data.m_Args[2];
+        } else {
+          if (
+            data.m_Args[1] !== 0 &&
+            !(data.m_Args[1] === 1 && data.m_Args[0] === 6)
+          ) {
+            defaultSkill();
+            continue;
+          }
+          var buffType = i18n.t("Passive Powers")[data.m_Type][data.m_Args[0]];
+          if (buffType) {
+            content.buffType = buffType;
+            content.amount = data.m_Args[2];
+          } else {
+            defaultSkill();
+            continue;
+          }
+        }
+        break;
+
       default:
-        push(skill.m_SkillDetail);
-        // push("m_Trigger:" + data.m_Trigger);
-        // push("m_Type:" + data.m_Type);
-        push("m_Args:" + JSON.stringify(data.m_Args));
+        defaultSkill();
         continue;
     }
+
     push(content);
   }
 
-  return contents.map(content => content.map(item => item.upper()));
+  return contents.map((content) => content.map((item) => item.upper()));
 }
 
 function skillChangeIDs(id, owner) {

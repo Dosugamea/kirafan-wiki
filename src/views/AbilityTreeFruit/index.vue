@@ -1,6 +1,6 @@
 <template lang="pug">
     div
-        WIP
+        //- WIP
         p.display.px-4.primary--text {{ name }}
         template(v-for="fruits in groupedItem")
             v-divider
@@ -27,12 +27,12 @@ export default {
     fruit() {
       return this.$db.AbilitySpheres[this.id];
     },
-    itemId(){
-      return this.fruit.m_ItemID
+    itemId() {
+      return this.fruit.m_ItemID;
     },
-    name(){
-      return this.$db.ItemList[this.itemId].m_Name.replace("[Grade1]","")
-    }
+    name() {
+      return this.$db.ItemList[this.itemId].m_Name.replace("[Grade1]", "");
+    },
   },
 };
 </script>

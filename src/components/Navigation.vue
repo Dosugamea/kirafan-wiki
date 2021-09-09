@@ -20,7 +20,7 @@
       v-list-item-content: v-list-item-title {{$t('Master')}}    
     v-list-item(to="/abilitytreefruits")
       v-list-item-icon: v-icon mdi-food-apple
-      v-list-item-content: v-list-item-title {{$t('AbilityTreeFruit')}}   
+      v-list-item-content: v-list-item-title {{$t('AbilityTreeFruits')}}   
 
     v-divider
     v-subheader.hidden-md-and-down {{$t('Items')}}
