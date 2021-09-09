@@ -5,7 +5,7 @@
     div(v-else)
       .px-4.mb-4
         v-row
-          v-col.py-0(cols=12, xl=9)
+          v-col.py-0(cols=12)
             KeyValue(:k="$t('Fruit Name')", :v="name", width="33%")
 
             .d-flex

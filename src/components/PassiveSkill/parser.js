@@ -206,7 +206,7 @@ function parse(id, owner) {
         for (let i = 0; i < data.m_Args.length; i++) {
           const arg = data.m_Args[i];
           if (arg !== 0) {
-            content.abnomal = i18n.t("Abnormals")[i];
+            content.abnomal = i18n.t(`Abnormals.${i}`);
             content.amount = arg + "%";
             push(content);
           }
@@ -218,7 +218,7 @@ function parse(id, owner) {
         for (let i = 0; i < data.m_Args.length; i++) {
           const arg = data.m_Args[i];
           if (arg !== 0) {
-            content.element = i18n.t("Elements")[i];
+            content.element = i18n.t(`Elements.${i}`);
             content.amount = arg + "%";
             push(content);
           }
@@ -227,9 +227,7 @@ function parse(id, owner) {
 
       case 17: //Increase turn of buff/debuff
         if (data.m_Args[0] === 0) {
-          content.buffType = i18n.t("Passive Powers")[data.m_Type][
-            data.m_Args[0]
-          ][data.m_Args[1]];
+          content.buffType = i18n.t(`Passive Powers.${data.m_Type}.${data.m_Args[0]}.${data.m_Args[1]}`)
           content.amount = data.m_Args[2];
         } else {
           if (
@@ -239,7 +237,9 @@ function parse(id, owner) {
             defaultSkill();
             continue;
           }
-          var buffType = i18n.t("Passive Powers")[data.m_Type][data.m_Args[0]];
+          var buffType = i18n.t(
+            `Passive Powers.${data.m_Type}.${data.m_Args[0]}`
+          );
           if (buffType) {
             content.buffType = buffType;
             content.amount = data.m_Args[2];
