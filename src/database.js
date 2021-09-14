@@ -160,7 +160,7 @@ async function main() {
   let settings = await get('settings');
   if (settings ? settings['loadAssetbundle'] : false) {
     if (!(await get('database'))['assetBundle']) {
-      localVersion = 'undefined';
+      // localVersion = 'undefined';
     }
     requiredDatabases.unshift({ name: 'assetBundle', uri: '../assetBundle' });
   } else {
@@ -192,7 +192,7 @@ async function main() {
 
   let localVersion = await load();
   if (localVersion != version.data) {
-    let isUpdate = localVersion && !detectFirefoxPrivate();
+    let isUpdate = localVersion && !await detectFirefoxPrivate();
     if (isUpdate) {
       window.vue.$emit('databaseUpdating');
     }
