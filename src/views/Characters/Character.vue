@@ -39,6 +39,7 @@
 
 <script>
 import functions from '../Character/functions';
+import define from '../../define';
 
 export default {
   name: 'Character',
@@ -53,7 +54,8 @@ export default {
       if (this.$s.characterShowMaxStatus || this.maxStatus) {
         const status = functions.status(
           this.id, [50, 90, 100][this.character.m_Rare - 2], 0,
-          5, 10, [10, 10, 10], 0);
+          define.maxFriendship || 5
+          , 10, [10, 10, 10], 0);
         return {
           HP: status.HP,
           ATK: status.ATK,

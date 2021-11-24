@@ -32,6 +32,7 @@ const requiredDatabases = [
   { name: 'MasterRank', key: 'm_Rank' },
   { name: 'MasterOrbList', key: 'm_ID' },
   { name: 'NamedList', key: 'm_NamedType' },
+  { name: 'NamedFriendshipExp', key: 'm_Lv' },
   { name: 'OriginalCharaLibraryList', key: 'm_ID' },
   { name: 'PassiveSkillList_ABL', key: 'm_ID' },
   { name: 'PassiveSkillList_WPN', key: 'm_ID' },

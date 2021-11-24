@@ -25,6 +25,25 @@
       v-list-item-content: v-list-item-title {{$t('Load assetBundle.json')}}
       v-list-item-action: v-switch(color="primary",  readonly,v-model="$s.loadAssetbundle")
 
+    //- v-list-item()
+        //- v-col(cols="4")
+        v-list-item-content
+          v-list-item-title {{$t('Set Max Frendship')}}
+          v-list-item-subtitle {{$t('Set Max Frendship Hint')}}
+        //- v-col(cols="8")
+        v-text-field(
+              :label="$t('Friendship')"
+              type="number"
+              filled
+              class="limit-width"
+              :value="$s.maxFriendship" 
+              @input="$s.maxFriendship = Number($event)"
+              )            
+          v-icon(slot="append" color="red")
+          v-icon(slot="append" color="red")
+    
+            
+            
     v-divider
     v-subheader {{$t('Quests')}}
     v-list-item(@click="$s.questDropsGrouped=!$s.questDropsGrouped")
@@ -92,6 +111,23 @@
     Credit(name="林檎アメ")
     
 </template>
+
+<style>
+/* Chrome/Safari */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.limit-width{
+  width:5px;
+}
+</style>
 
 <script>
 import settings from "@/settings";

@@ -68,7 +68,7 @@
       v-card
         v-card-title {{$t('Facilities')}}
         v-card-text
-          v-slider(v-model="friendship", max=5)
+          v-slider(v-model="friendship", :max="maxFriendship")
             template(v-slot:label): span.d-inline-block.slider-label(style="width: 128px")
               span {{$t('Friendship')}}:
               .float-right {{friendship}}
@@ -140,6 +140,9 @@ import Weapons from './Weapons';
 
 import functions from './functions';
 
+// eslint-disable-next-line no-unused-vars
+import define from '@/define';
+
 export default {
   name: 'Character',
   props: ['id'],
@@ -154,6 +157,7 @@ export default {
       classFacilities: [0, 0, 0],
       orb: 0,
       dialog: false,
+      maxFriendship: define.maxFriendship,
     };
   },
   computed: {
@@ -213,7 +217,7 @@ export default {
         .reduce((s, item) => (s + item.m_NextExp), 0));
     },
     facilitiesManual() {
-      return !(this.friendship == Math.ceil(this.facilities / 2) &&
+      return !(this.friendship == Math.ceil(this.maxFriendship / 10 * this.facilities) &&
         this.titleFacility == this.facilities &&
         this.classFacilities[0] == this.facilities &&
         this.classFacilities[1] == this.facilities &&
@@ -247,7 +251,7 @@ export default {
       }
     },
     facilities(to) {
-      this.friendship = Math.ceil(to / 2);
+      this.friendship = Math.ceil(this.maxFriendship / 10 * to);
       this.titleFacility = to;
       this.classFacilities[0] = to;
       this.classFacilities[1] = to;
