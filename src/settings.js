@@ -18,7 +18,7 @@ const settings = {
     questDropsGrouped: false,
     appTitleShowID: false,
     advancedFilter: false,
-    enemyAIPattern: false,
+    enemyAIPattern: true,
     alwaysShowJapanese: false,
     // cleaSettingsEnable: false,
     showCleaOnStart : false,
