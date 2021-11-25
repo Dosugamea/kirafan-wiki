@@ -143,7 +143,6 @@ async function load() {
       database.date = await get('databaseDate');
       window.vue.$emit('databaseLoaded');
     }
-    XXX_QuestLibrary();
     if (
       !requiredDatabases
         .map((requiredDatabase) => requiredDatabase.ok || false)
@@ -199,6 +198,7 @@ async function main() {
       window.vue.$emit('databaseUpdating');
     }
     await fetch(version.data);
+    XXX_QuestLibrary();
     if (isUpdate) {
       window.vue.$emit('databaseUpdated');
     } else {
