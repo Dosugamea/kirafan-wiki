@@ -126,6 +126,7 @@ async function load() {
   try {
     let localVersion = await get('databaseVersion');
     if (!localVersion) {
+
       return localVersion;
     }
     let localDatabase = await get('database');
@@ -138,11 +139,16 @@ async function load() {
         if (requiredDatabase) {
           requiredDatabase.ok = true;
         }
+
       });
+      XXX_QuestLibrary();
+
       database.version = localVersion;
       database.date = await get('databaseDate');
+      
       window.vue.$emit('databaseLoaded');
     }
+    
     if (
       !requiredDatabases
         .map((requiredDatabase) => requiredDatabase.ok || false)
@@ -192,7 +198,7 @@ async function main() {
   );
 
   let localVersion = await load();
-  XXX_QuestLibrary();
+  // XXX_QuestLibrary();
 
   if (localVersion != version.data) {
     let isUpdate = localVersion && !(await detectFirefoxPrivate());
@@ -200,9 +206,13 @@ async function main() {
       window.vue.$emit('databaseUpdating');
     }
     await fetch(version.data);
+    
     if (isUpdate) {
+      // XXX_QuestLibrary();
       window.vue.$emit('databaseUpdated');
     } else {
+      XXX_QuestLibrary();
+      
       window.vue.$emit('databaseLoaded');
     }
 
