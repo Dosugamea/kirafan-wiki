@@ -143,6 +143,7 @@ async function load() {
       database.date = await get('databaseDate');
       window.vue.$emit('databaseLoaded');
     }
+    XXX_QuestLibrary();
     if (
       !requiredDatabases
         .map((requiredDatabase) => requiredDatabase.ok || false)
@@ -193,7 +194,7 @@ async function main() {
 
   let localVersion = await load();
   if (localVersion != version.data) {
-    let isUpdate = localVersion && !await detectFirefoxPrivate();
+    let isUpdate = localVersion && !(await detectFirefoxPrivate());
     if (isUpdate) {
       window.vue.$emit('databaseUpdating');
     }
@@ -227,6 +228,44 @@ function detectFirefoxPrivate() {
 }
 
 main();
+
+function XXX_QuestLibrary() {
+  
+  const questList = {
+    badge: 'Normal',
+    category: 0,
+    icon:
+      'https://texture-asset.kirafan.cn/advlibraryicon/advlibraryicon_105.png',
+    id: 105,
+    name: '-5章-\nご注文はゲリラですか？',
+    quests: {},
+  };
+  database.QuestListArray.filter((x) => String(x.questID).startsWith('1205')).forEach(x => {
+    questList.quests[x.section] = x.questID;
+  });
+
+  const questList2 = {
+    category: 1,
+    icon:
+      '',
+    id: 1113,
+    name: '4周年カウントダウンクエスト！',
+    quests: {},
+  };
+  database.QuestListArray.filter((x) =>
+    String(x.questID).startsWith('6430')
+  ).forEach((x) => {
+    questList2.quests[x.section] = x.questID;
+  });
+
+  const db = [questList
+    // , questList2
+  ];
+  database.QuestLibraryListArray.push(...db);
+  db.forEach(x => {
+    database.QuestLibraryList[x.id] = x;
+  });
+}
 
 Vue.prototype.$db = database;
 export default database;

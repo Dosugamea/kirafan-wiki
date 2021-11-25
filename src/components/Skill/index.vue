@@ -86,7 +86,7 @@ export default {
     'from': {},
     'owner': {},
     'element': { default: () => undefined },
-    'sp': Boolean,
+    'sp': Boolean, // ?
     'exptable': { default: () => 0 },
     'min': { default: () => 1 },
     'max': { default: () => 1 },
