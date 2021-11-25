@@ -192,18 +192,20 @@ async function main() {
   );
 
   let localVersion = await load();
+  XXX_QuestLibrary();
+
   if (localVersion != version.data) {
     let isUpdate = localVersion && !(await detectFirefoxPrivate());
     if (isUpdate) {
       window.vue.$emit('databaseUpdating');
     }
     await fetch(version.data);
-    XXX_QuestLibrary();
     if (isUpdate) {
       window.vue.$emit('databaseUpdated');
     } else {
       window.vue.$emit('databaseLoaded');
     }
+
   }
 }
 
@@ -253,7 +255,7 @@ function XXX_QuestLibrary() {
     quests: {},
   };
   database.QuestListArray.filter((x) =>
-    String(x.questID).startsWith('6430')
+    String(x.questID).startsWith('2049')
   ).forEach((x) => {
     questList2.quests[x.section] = x.questID;
   });
