@@ -36,7 +36,9 @@ function conditions(conditions, execNums) {
         break;
 
       case 2: // Self Status Change
-        content.statusChange = i18n.t(`AI Condition Status Changes.${condition.m_Args[0]}`);
+        content.statusChange = i18n.t(
+          `AI Condition Status Changes.${condition.m_Args[0]}`
+        );
         content.positive = condition.m_Args[1];
         content.solo = 2;
         if (condition.m_Args.length > 2) {
@@ -74,30 +76,47 @@ function conditions(conditions, execNums) {
         content.num = condition.m_Args[1];
         content.op = i18n.t(`AI Condition Ops.${condition.m_Args[2]}`);
         if (condition.m_Args[3] !== undefined && condition.m_Args[3] != -1) {
-          content.extra = i18n.t(`Elements.${condition.m_Args[3]}`) + i18n.t('Element');
+          content.extra =
+            i18n.t(`Elements.${condition.m_Args[3]}`) + i18n.t("Element");
         }
         break;
 
       case 49: // Tgt Party Status Change
-        content.statusChange = i18n.t(`AI Condition Status Changes.${condition.m_Args[0]}`);
+        content.statusChange = i18n.t(
+          `AI Condition Status Changes.${condition.m_Args[0]}`
+        );
         content.num = condition.m_Args[1];
         content.op = i18n.t(`AI Condition Ops.${condition.m_Args[2]}`);
+        break;
+
+      case 50: // Tgt Party Falls Num
+        content.num = condition.m_Args[0];
+        content.op = i18n.t(`AI Condition Ops.${condition.m_Args[1]}`);
         break;
 
       case 68: // Flag
         content.ons = [];
         content.offs = [];
         for (let i = 0; i < condition.m_Args.length; i += 2) {
-          content[condition.m_Args[i + 1] ? 'ons' : 'offs'].push(condition.m_Args[i]);
+          content[condition.m_Args[i + 1] ? "ons" : "offs"].push(
+            condition.m_Args[i]
+          );
         }
         if (content.ons.length) {
-          contents.push(i18n.t('AI Conditions.68.1').format(content.ons.join(i18n.t('divider'))));
+          contents.push(
+            i18n
+              .t("AI Conditions.68.1")
+              .format(content.ons.join(i18n.t("divider")))
+          );
         }
         if (content.offs.length) {
-          contents.push(i18n.t('AI Conditions.68.0').format(content.offs.join(i18n.t('divider'))));
+          contents.push(
+            i18n
+              .t("AI Conditions.68.0")
+              .format(content.offs.join(i18n.t("divider")))
+          );
         }
         continue;
-
     }
     let content_text = i18n.t(`AI Conditions.${content.type}`).format(content)
 
