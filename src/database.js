@@ -126,7 +126,6 @@ async function load() {
   try {
     let localVersion = await get('databaseVersion');
     if (!localVersion) {
-
       return localVersion;
     }
     let localDatabase = await get('database');
@@ -139,16 +138,15 @@ async function load() {
         if (requiredDatabase) {
           requiredDatabase.ok = true;
         }
-
       });
       XXX_QuestLibrary();
 
       database.version = localVersion;
       database.date = await get('databaseDate');
-      
+
       window.vue.$emit('databaseLoaded');
     }
-    
+
     if (
       !requiredDatabases
         .map((requiredDatabase) => requiredDatabase.ok || false)
@@ -206,16 +204,15 @@ async function main() {
       window.vue.$emit('databaseUpdating');
     }
     await fetch(version.data);
-    
+
     if (isUpdate) {
       // XXX_QuestLibrary();
       window.vue.$emit('databaseUpdated');
     } else {
       XXX_QuestLibrary();
-      
+
       window.vue.$emit('databaseLoaded');
     }
-
   }
 }
 
@@ -242,7 +239,10 @@ function detectFirefoxPrivate() {
 main();
 
 function XXX_QuestLibrary() {
-  
+  // eslint-disable
+  return;
+
+  // eslint-disable-next-line no-unreachable
   const questList = {
     badge: 'Normal',
     category: 0,
@@ -252,14 +252,16 @@ function XXX_QuestLibrary() {
     name: '-5章-\nご注文はゲリラですか？',
     quests: {},
   };
-  database.QuestListArray.filter((x) => String(x.questID).startsWith('1205')).forEach(x => {
+  database.QuestListArray.filter((x) =>
+    String(x.questID).startsWith('1205')
+  ).forEach((x) => {
     questList.quests[x.section] = x.questID;
   });
 
+  // eslint-disable-next-line no-unreachable
   const questList2 = {
     category: 1,
-    icon:
-      '',
+    icon: '',
     id: 1113,
     name: '4周年カウントダウンクエスト！',
     quests: {},
@@ -270,11 +272,15 @@ function XXX_QuestLibrary() {
     questList2.quests[x.section] = x.questID;
   });
 
-  const db = [questList
+  // eslint-disable-next-line no-unreachable
+  const db = [
+    questList,
     // , questList2
   ];
+  // eslint-disable-next-line no-unreachable
   database.QuestLibraryListArray.push(...db);
-  db.forEach(x => {
+  // eslint-disable-next-line no-unreachable
+  db.forEach((x) => {
     database.QuestLibraryList[x.id] = x;
   });
 }

@@ -580,6 +580,7 @@ function parse(id, owner, level, sp) {
       case 30: // Status Change Disable
         content.turnType = i18n.t(`Skill Turn Types.${data.m_Args[0]}`);
         content.turn = data.m_Args[1];
+        content.sign = i18n.t(`Skill Signs2.${data.m_Args[2]}`);
         break;
 
       default:
