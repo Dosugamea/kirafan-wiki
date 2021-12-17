@@ -1,14 +1,20 @@
-const fs = require("fs");
+/* eslint-disable */
+// const fs = require("fs");
 const path = require("path");
 const util = require("util");
 // const crypto = require("crypto");
+ var fs = window.require("fs");
+console.log('fs :>> ', path);
+
+// const buffer = require("buffer/").Buffer;
+// console.log('buffer :>> ', buffer);
 
 const afs2 = require("./afs2");
 const hca = require("./hca");
 const utf = require("./utf");
 
 const readFile = util.promisify(fs.readFile);
-// const writeFile = util.promisify(fs.writeFile);
+const writeFile = util.promisify(fs.writeFile);
 const mkdir = util.promisify(fs.mkdir);
 
 async function parseAcb(acbPath) {
@@ -289,7 +295,7 @@ exports.acb2hcas = acb2hcas;
 
 async function acb2wavs(acbPath, key, wavDir, volume, mode, skip) {
   const pathInfo = path.parse(acbPath);
-  console.log(`Parsing ${pathInfo.base}...`);
+  // console.log(`Parsing ${pathInfo.base}...`);
   const acb = await parseAcb(acbPath);
   if (wavDir === undefined) wavDir = path.join(pathInfo.dir, acb.Name);
   if (!fs.existsSync(wavDir)) {
@@ -298,7 +304,7 @@ async function acb2wavs(acbPath, key, wavDir, volume, mode, skip) {
     console.log(`Skipped ${pathInfo.base}...`);
     return;
   }
-  console.log(`Extracting ${pathInfo.base}...`);
+  // console.log(`Extracting ${pathInfo.base}...`);
   // let memory = 0,
   //   stream = 0;
 
@@ -331,7 +337,7 @@ async function acb2wavs(acbPath, key, wavDir, volume, mode, skip) {
         : acb.streamHcas[Waveform.StreamAwbPortNo].config.key;
       // const name = isMemory ? `memory_${++memory}.wav` : `stream_${++stream}.wav`;
       const name =
-        acb.CueNameTable.find((x) => x.CueIndex === name_i)?.CueName +
+        acb.CueNameTable.find((x) => x.CueIndex === name_i).CueName +
         "_" +
         cue_num +
         ".wav";

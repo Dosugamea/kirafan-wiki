@@ -1,9 +1,9 @@
-const fs = require('fs');
-const path = require('path');
-const util = require('util');
+// const fs = require('fs');
+// const path = require('path');
+// const util = require('util');
 
-const readFile = util.promisify(fs.readFile);
-const writeFile = util.promisify(fs.writeFile);
+// const readFile = util.promisify(fs.readFile);
+// const writeFile = util.promisify(fs.writeFile);
 
 function findZero(buffer, start) {
   while (buffer[start] !== 0x0) start++;
@@ -87,14 +87,14 @@ function parseUtf(buffer, toString = false) {
 }
 exports.parseUtf = parseUtf;
 
-async function viewUtf(acbPath, outputPath) {
-  const pathInfo = path.parse(acbPath);
-  if (outputPath === undefined) outputPath = path.join(pathInfo.dir, pathInfo.name + '.json');
-  console.log(`Parsing ${pathInfo.base}...`);
-  const buffer = await readFile(acbPath);
-  const obj = parseUtf(buffer, true);
-  if (obj && obj.AwbFile && obj.AwbFile.length > 0x20) obj.AwbFile = obj.AwbFile.substring(0, 0x20);
-  console.log(`Writing ${path.parse(outputPath).base}...`);
-  await writeFile(outputPath, JSON.stringify(obj, null, 2));
-}
-exports.viewUtf = viewUtf;
+// async function viewUtf(acbPath, outputPath) {
+//   const pathInfo = path.parse(acbPath);
+//   if (outputPath === undefined) outputPath = path.join(pathInfo.dir, pathInfo.name + '.json');
+//   console.log(`Parsing ${pathInfo.base}...`);
+//   const buffer = await readFile(acbPath);
+//   const obj = parseUtf(buffer, true);
+//   if (obj && obj.AwbFile && obj.AwbFile.length > 0x20) obj.AwbFile = obj.AwbFile.substring(0, 0x20);
+//   console.log(`Writing ${path.parse(outputPath).base}...`);
+//   await writeFile(outputPath, JSON.stringify(obj, null, 2));
+// }
+// exports.viewUtf = viewUtf;

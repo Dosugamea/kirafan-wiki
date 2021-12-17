@@ -28,7 +28,30 @@
     src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <script
     src="./js/live2dcubismcore.min.js"></script>
+    <script type="text/javascript" src="browserfs.min.js"></script>
+<script type="text/javascript">
+  // Installs globals onto window:
+  // * Buffer
+  // * require (monkey-patches if already defined)
+  // * process
+  // You can pass in an arbitrary object if you do not wish to pollute
+  // the global namespace.
+  BrowserFS.install(window);
+  // Configures BrowserFS to use the LocalStorage file system.
+  BrowserFS.configure({
+    fs: "InMemory",
+  }, function(e) {
+    if (e) {
+      // An error happened!
+      throw e;
+    }
+    // Otherwise, BrowserFS is ready-to-use!
+  });
+  window.require = require
+</script>
+
 </head>
+
 
 <body>
   <noscript>

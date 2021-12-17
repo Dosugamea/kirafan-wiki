@@ -1,11 +1,11 @@
-const fs = require('fs');
-const path = require('path');
+const fs = window.require('fs');
+// const path = require('path');
 const util = require('util');
 
-const hca = require('./hca');
+// const hca = require('./hca');
 
 const readFile = util.promisify(fs.readFile);
-const writeFile = util.promisify(fs.writeFile);
+// const writeFile = util.promisify(fs.writeFile);
 // const mkdir = util.promisify(fs.mkdir);
 
 async function parseAFS2(buffer) {
@@ -104,17 +104,17 @@ async function awb2wavs(awbPath, key, wavDir, volume, mode, skip) {
 }
 exports.awb2wavs = awb2wavs;
 */
-async function decryptAwb(awbPath, key, type) {
-  const pathInfo = path.parse(awbPath);
-  console.log(`Parsing ${pathInfo.base}...`);
-  const list = await parseAFS2(awbPath);
-  console.log(`Decrypting ${pathInfo.base}...`);
-  for (let i = 0; i < list.length; i++) {
-    await hca.decryptHca(list[i], key, list.config.key, type);
-  }
-  const buffer = list.config.buffer;
-  buffer.writeUInt16BE(0, 0xE);
-  console.log(`Writing ${pathInfo.base}...`);
-  await writeFile(awbPath, buffer);
-}
-exports.decryptAwb = decryptAwb;
+// async function decryptAwb(awbPath, key, type) {
+//   const pathInfo = path.parse(awbPath);
+//   console.log(`Parsing ${pathInfo.base}...`);
+//   const list = await parseAFS2(awbPath);
+//   console.log(`Decrypting ${pathInfo.base}...`);
+//   for (let i = 0; i < list.length; i++) {
+//     await hca.decryptHca(list[i], key, list.config.key, type);
+//   }
+//   const buffer = list.config.buffer;
+//   buffer.writeUInt16BE(0, 0xE);
+//   console.log(`Writing ${pathInfo.base}...`);
+//   await writeFile(awbPath, buffer);
+// }
+// exports.decryptAwb = decryptAwb;

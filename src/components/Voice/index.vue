@@ -11,7 +11,7 @@ import voice from './voice';
 
 export default {
   name: 'Voice',
-  props: ['name', 'cue'],
+  props: ['name', 'cue', 'override_url'],
   data() {
     return {
       voice: voice
@@ -19,7 +19,7 @@ export default {
   },
   computed: {
     url() {
-      return this.$asset.voice.format(this.name, this.cue) + '.mp3';
+      return this.override_url || this.$asset.voice.format(this.name, this.cue) + '.mp3';
     }
   },
   methods: {

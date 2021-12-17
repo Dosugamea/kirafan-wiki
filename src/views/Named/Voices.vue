@@ -25,10 +25,10 @@ div
             v-for="t in types",
             :key="`character-voice-tab-item-${t}`",
             touchless
-          )
-            template(v-if="t == 0 || t == 3")
+           )
+            template(v-if="t === 0 || t === 3")
               div(
-                v-for="(n, cueID in cues[t])",
+                v-for="n, cueID in cues[t]",
                 :key="`character-voice-cue-${cueID}`"
               )
                 p.px-4.subtitle-1 {{ $t(`Character Voice Category.${cueID}`) }}
@@ -40,6 +40,7 @@ div
                     Voice.mr-2(
                       :name="named.m_ResouceBaseName",
                       :cue="`voice_${cueID}_${i - 1}`"
+                      :override_url="undefined"
                     )
                     .d-flex.justify-center.flex-column
                       .line(
@@ -49,14 +50,14 @@ div
                       .line(v-else) {{ `voice_${cueID}_${i - 1}` }}
                   .pl-4
 
-            template(v-else-if="t == 1 || t == 2")
+            template(v-else)
               div(
-                v-for="(item, cat in cues[t])",
+                v-for="item, cat in cues[t]",
                 :key="`character-voice-cue-${cat}`"
               )
                 p.px-4.subtitle-1 {{ $t(`Character Voice Category.${cat}`) }}
                 Scroller(icon=56)
-                  template(v-for="(n, cueID in item)")
+                  template(v-for="n, cueID in item")
                     .ml-4.d-flex(
                       v-for="i in n",
                       :key="`character-voice-cue-${cueID}-${i}`"
@@ -65,18 +66,24 @@ div
                         :name="named.m_ResouceBaseName",
                         :cue="`voice_${cueID}_${i - 1}`"
                       )
+
                       .d-flex.justify-center.flex-column
-                        .line(
-                          :v-if="i == 1 && tweets[`voice_${cueID}`]",
-                          v-html="tweets[`voice_${cueID}`].replace(/\\n/g, '<br>')"
-                        )
-                        .line(v-else) {{ `voice_${cueID}_${i - 1}` }}
+                        div(v-if="i === 1 && tweets[`voice_${cueID}`]")
+                          .line(
+                            v-html="tweets[`voice_${cueID}`].replace(/\\n/g, `<br>`)"
+                          )
+                        div(v-else)
+                          .line {{ `voice_${cueID}_${i - 1}` }}
                   .pl-4
 </template>
 
 <script>
 import axios from "axios";
-import cri from "@/components/cri";
+import cri from "../../components/cri/acb";
+import * as b64toArr from "base64-arraybuffer";
+const fs = window.require("fs");
+import define from "../../define";
+const Buffer = require("buffer/").Buffer;
 
 export default {
   name: "Voices",
@@ -87,6 +94,8 @@ export default {
       loading: 1,
       cues: null,
       type: 0,
+
+      config: true,
     };
   },
   computed: {
@@ -109,9 +118,58 @@ export default {
   },
   methods: {
     async get_index() {
-      return await axios.get(
-        this.$asset.voice.format(this.named.m_ResouceBaseName, "index.json")
-      );
+      if (this.config) {
+        const chara_name = this.named.m_ResouceBaseName;
+        const file_base_name = `Voice_${chara_name}`;
+        const proxy_url =
+          "https://script.google.com/macros/s/AKfycbybmAUWjnNpeHGJQVAaP5iz9t4Tmw1VJHmnyOPqNc9oDrvQ3dCAX_qgnB0l58RF4Btdyw/exec?raw_test=0&url=https://asset-krr-prd.star-api.com/";
+        const rvh = await axios
+          .get(`https://rvh.kirafan.cn/`)
+          .then((res) => res.data);
+
+        // https://script.google.com/macros/s/AKfycbybmAUWjnNpeHGJQVAaP5iz9t4Tmw1VJHmnyOPqNc9oDrvQ3dCAX_qgnB0l58RF4Btdyw/exec?raw_test=0&url=https://asset-krr-prd.star-api.com/8690a78b593ba983d054fa15ebe4954e/CRI/Voice_Gochiusa_Syaro.acb
+        const cri_audio_acb = await axios
+          .get(`${proxy_url}${rvh}/CRI/${file_base_name}.acb`)
+          .then((res) => res.data);
+
+        const cri_audio_awb = await axios
+          .get(`${proxy_url}${rvh}/CRI/${file_base_name}.awb`)
+          .then((res) => res.data);
+
+        await fs.writeFileSync(
+          `Voice_${this.named.m_ResouceBaseName}.acb`,
+          Buffer(b64toArr.decode(cri_audio_acb))
+        );
+        await fs.writeFileSync(
+          `Voice_${this.named.m_ResouceBaseName}.awb`,
+          Buffer(b64toArr.decode(cri_audio_awb))
+        );
+
+        const key = define.cri_key;
+        await cri.acb2wavs(`Voice_${this.named.m_ResouceBaseName}.acb`, key);
+
+        const output = fs
+          .readdirSync(`./${file_base_name}`)
+          .filter((x) => x.endsWith(".wav"))
+          .map((file) => {
+            // {"name": "voice_000_0", "type": "mp3", "new": false, "link": "https://cri-asset.kirafan.cn/Voice_Killme_Agiri/voice_000_0.mp3"},
+            const audio = fs.readFileSync(`./${file_base_name}/${file}`);
+            const url = URL.createObjectURL(
+              new Blob([audio], { type: "audio/wav" })
+            );
+            return {
+              name: file,
+              type: "wav",
+              new: false,
+              link: url,
+            };
+          });
+        return output;
+      } else {
+        return await axios.get(
+          this.$asset.voice.format(this.named.m_ResouceBaseName, "index.json")
+        ).then((res) => res.data);
+      }
     },
     load() {
       this.loading += 1;
@@ -121,7 +179,7 @@ export default {
           return;
         }
         const cues = {};
-        response.data.forEach((item) => {
+        response.forEach((item) => {
           let cueID = item.name.split("_")[1];
           if (cues[cueID]) {
             cues[cueID] += 1;
@@ -205,7 +263,8 @@ export default {
     },
   },
   mounted() {
-    console.log("cri :>> ", cri);
+    this.show = false;
+    window.c = this;
   },
 };
 </script>

@@ -1,10 +1,20 @@
-const fs = require('fs');
+// const fs = window.fs;
 const util = require('util');
 const path = require('path');
+const Buffer = require("buffer/").Buffer;
+
+// const require = window.require;
+const fs = window.require("fs")
+
+
+console.log('fs :>> ', fs);
 
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
 const appendFile = util.promisify(fs.appendFile);
+
+// for eslint
+const BigInt = window.BigInt;
 
 // DECRYPT START
 function initAthTable(table, type, key) {
@@ -280,10 +290,10 @@ function parseHCA(buffer, key, awbKey) {
   if (key) {
     key = BigInt(key);
     if (awbKey) {
-      key = (BigInt(key) * ((BigInt(awbKey) << 16n) | BigInt(((~awbKey & 0xFFFF) + 2) & 0xFFFF))) & 0xFFFFFFFFFFFFFFFFn;
+      key = (BigInt(key) * ((BigInt(awbKey) << BigInt("16")) | BigInt(((~awbKey & 0xFFFF) + 2) & 0xFFFF))) & BigInt("0xFFFFFFFFFFFFFFFF");
     }
-    key1 = Number(key & 0xFFFFFFFFn);
-    key2 = Number((key >> 32n) & 0xFFFFFFFFn);
+    key1 = Number(key & BigInt("0xFFFFFFFF"));
+    key2 = Number((key >> BigInt("32")) & BigInt("0xFFFFFFFF"));
   }
   hca.ciphTable = Buffer.alloc(0x100);
   if (!initCiphTable(hca.ciphTable, hca.ciphType, key1, key2)) return null;
@@ -346,7 +356,8 @@ function initDecode(hca) {
   hca.comp.r04 = hca.r04;
   hca.comp.r05 = isComp ? hca.r05 : hca.count1 + 1;
   hca.comp.r06 = isComp ? hca.r06 : hca.enableCount2 ? hca.count2 + 1 : hca.count1 + 1;
-  hca.comp.r07 = isComp ? hca.r07 : r05 - r06;
+  // r05-r06 ->   hca.r05 - hca.r06
+  hca.comp.r07 = isComp ? hca.r07 : hca.r05 - hca.r06;
   hca.comp.r08 = isComp ? hca.r08 : 0;
   if (!hca.comp.r03) hca.comp.r03 = 1;
   if (!(hca.comp.r01 === 1 && hca.comp.r02 === 15)) {
@@ -920,7 +931,7 @@ async function decodeHcaToWav(buffer, key, awbKey, wavPath, volume, mode) {
     if (wavPath === undefined) wavPath = path.join(pathInfo.dir, pathInfo.name + '.wav');
   }
   const hca = await decodeHca(buffer, key, awbKey, volume);
-  console.log(`Writing ${path.parse(wavPath).base}...`);
+  // console.log(`Writing ${path.parse(wavPath).base}...`);
   await writeWavFile(wavPath, mode, hca.channelCount, hca.samplingRate, hca.pcmData);
 }
 exports.decodeHcaToWav = decodeHcaToWav;
