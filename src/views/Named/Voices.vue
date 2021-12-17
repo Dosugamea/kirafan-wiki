@@ -71,11 +71,11 @@ div
                   )
                     Voice.mr-2(
                       :name="chara.charaname",
-                      :cue="data.fileName"
+                      :cue="data.fileName.replace('.wav','')"
                       :override_url="data.url"
                     )
                     .d-flex.justify-center.flex-column
-                      .line {{ data.fileName }}
+                      .line {{ data.fileName.replace(".wav","") }}
                   .pl-4
 
             template(v-else-if="t === 1 || t === 2")
@@ -112,7 +112,7 @@ import cri from "../../components/cri/acb";
 import * as b64toArr from "base64-arraybuffer";
 const fs = window.require("fs");
 import define from "../../define";
-const Buffer = require("buffer/").Buffer;
+const Buffer = window.require("buffer").Buffer;
 
 export default {
   name: "Voices",
@@ -220,27 +220,39 @@ export default {
         });
       return output;
     },
+    async get_response(url) {
+      // const proxy =
+      //   "https://script.google.com/macros/s/AKfycbxhB1lvbXgYT_Od06RFNwsRBXMY1-SI9wm4reim2s2KX-B4mstwrs_SEISV_C6k7a5M/exec?url=";
+      const target_url = url;
+      return (await fetch(target_url)).status;
+    },
+    async isLatestVersion(chara_name) {
+      const file_base_name = `Voice_${chara_name}`;
+      const version = this.$db.CRIFileVersion[file_base_name].m_Version;
+      const response = await this.get_response(
+        this.$asset.voice.format(chara_name, String(version))
+      );
+      return response === 200;
+    },
     async get_index() {
       if (this.config) {
         const chara_name = this.named.m_ResouceBaseName;
         const file_base_name = `Voice_${chara_name}`;
 
-        await this.get_acb_awb(file_base_name);
-
-        return await this.unpack_then_return_url(file_base_name);
-      } else {
-        try {
-          return await axios
-            .get(
-              this.$asset.voice.format(
-                this.named.m_ResouceBaseName,
-                "index.json"
-              )
-            )
-            .then((res) => res.data);
-        } catch {
-          this.dl_error = true;
+        const isLatestVersion = await this.isLatestVersion(chara_name);
+        if (!isLatestVersion) {
+          await this.get_acb_awb(file_base_name);
+          return await this.unpack_then_return_url(file_base_name);
         }
+      }
+      try {
+        return await axios
+          .get(
+            this.$asset.voice.format(this.named.m_ResouceBaseName, "index.json")
+          )
+          .then((res) => res.data);
+      } catch {
+        this.dl_error = true;
       }
     },
     load() {
@@ -340,30 +352,39 @@ export default {
       const charas = this.$db.CRIFileVersionArray.filter((x) =>
         x.m_FileName.startsWith("Voice_" + this.named.m_ResouceBaseName + "_")
       ).map((x) => x.m_FileName);
-      let db;
-      if (this.config) {
-        db = await Promise.all(
-          charas.map((file_base_name) => {
-            const name = file_base_name.replace("Voice_", "");
-            return this.get_acb_awb(file_base_name)
-              .then(() => this.unpack_then_return_url(file_base_name))
-              .then((res) => {
-                return { name, data: res };
-              });
-          })
-        );
-      } else {
-        db = await Promise.all(
-          charas.map(async (x) => {
-            const name = x.replace("Voice_", "");
-            return axios
-              .get(this.$asset.voice.format(name, "index.json"))
-              .then((res) => {
-                return { name, data: res.data };
-              });
-          })
-        );
-      }
+      const db = await Promise.all(
+        charas.map(async (file_base_name) => {
+          const name = file_base_name.replace("Voice_", "");
+
+          if (this.config) {
+            const isLatestVersion = await this.isLatestVersion(name);
+            if (!isLatestVersion) {
+              return this.get_acb_awb(file_base_name)
+                .then(() => this.unpack_then_return_url(file_base_name))
+                .then((res) => {
+                  return { name, data: res };
+                });
+            }
+          }
+          return axios
+            .get(this.$asset.voice.format(name, "index.json"))
+            .then((res) => {
+              return { name, data: res.data };
+            });
+        })
+      );
+      // } else {
+      //   db = await Promise.all(
+      //     charas.map(async (x) => {
+      //       const name = x.replace("Voice_", "");
+      //       return axios
+      //         .get(this.$asset.voice.format(name, "index.json"))
+      //         .then((res) => {
+      //           return { name, data: res.data };
+      //         });
+      //     })
+      //   );
+      // }
       // [{name:string , data:[{fileName:string , url:string}]}]
       const cue = db.map((x) => {
         const charaname = x.name.replace("Voice_", "");

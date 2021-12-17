@@ -1,13 +1,3 @@
-$grid-breakpoints: (
-    'xs': 0,
-    'sm': 512px,
-    'md': 768px,
-    'lg': 1024px,
-    'xl': 1280px,
-);
-
-
-
 @import '~vuetify/src/styles/styles.sass';
 
 @import '~vuetify/src/styles/settings/_colors.scss';
@@ -123,5 +113,12 @@ $material-dark: (
         'divider-percent': 0.12,
         'active-icon-percent': 1,
         'inactive-icon-percent': 0.5
-)
+);
 
+$grid-breakpoints: (
+    'xs': 0,
+    'sm': 512px,
+    'md': 768px,
+    'lg': 1024px,
+    'xl': 1280px,
+);

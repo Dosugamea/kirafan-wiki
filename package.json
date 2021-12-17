@@ -14,7 +14,6 @@
     "base64-arraybuffer": "^1.0.1",
     "bignumber.js": "^9.0.2",
     "browserify": "^17.0.0",
-    "buffer": "^6.0.3",
     "core-js": "^3.20.0",
     "echarts": "^4.9.0",
     "idb-keyval": "^3.2.0",

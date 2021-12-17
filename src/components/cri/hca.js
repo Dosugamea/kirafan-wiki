@@ -1,7 +1,7 @@
 // const fs = window.fs;
 const util = require('util');
 const path = window.require("path");
-const Buffer = require("buffer/").Buffer;
+const Buffer =  window.require("buffer").Buffer;
 
 // const require = window.require;
 const fs = window.require("fs")
