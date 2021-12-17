@@ -25,6 +25,7 @@ const requiredDatabases = [
   { name: 'CharacterFlavorText', key: 'm_CharaID' },
   { name: 'CharacterList', key: 'm_CharaID' },
   { name: 'CharacterParamGrowthList', key: 'm_Lv' },
+  { name: 'CRIFileVersion', key: 'm_FileName' },
   { name: 'EventQuestDropExt' },
   { name: 'Events', key: 'm_EventType' },
   { name: 'Flavors', key: 'm_Id' },

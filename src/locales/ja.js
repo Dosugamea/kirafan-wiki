@@ -162,6 +162,7 @@ const named = {
     1: 'シナリオ',
     2: '里',
     3: 'バトル',
+    4: 'カード',
   },
   'Character Voice Category': {
     '000': 'タイトルコール',

@@ -52,7 +52,33 @@ div
                       .line(v-else) {{ `voice_${cueID}_${i - 1}` }}
                   .pl-4
 
-            template(v-else)
+            template(v-else-if="t === 4")
+              .py-4.text-center(v-if="!isCardVoiceLoaded") 
+                v-progress-circular(indeterminate, color="primary")
+                div(v-if="config" v-html="$t('Hint:Download audio files directly')") 
+                div(v-if="dl_error") {{ $t("failed download audio data") }}
+
+              div(
+                v-else
+                v-for="chara, index in cues[t]",
+                :key="`character-voice-cue-${chara.charaname + index}`"
+              )
+                p.px-4.subtitle-1 {{ getCharaName(chara.charaname) }}
+                Scroller(icon=56)
+                  .ml-4.d-flex(
+                    v-for="data in chara.data",
+                    :key="`character-voice-cue-${data.fileName}`"
+                  )
+                    Voice.mr-2(
+                      :name="chara.charaname",
+                      :cue="data.fileName"
+                      :override_url="data.url"
+                    )
+                    .d-flex.justify-center.flex-column
+                      .line {{ data.fileName }}
+                  .pl-4
+
+            template(v-else-if="t === 1 || t === 2")
               div(
                 v-for="item, cat in cues[t]",
                 :key="`character-voice-cue-${cat}`"
@@ -90,16 +116,34 @@ const Buffer = require("buffer/").Buffer;
 
 export default {
   name: "Voices",
-  props: ["id"],
+  props: ["id", "characterList"],
   data() {
     return {
       show: false,
       loading: 1,
-      cues: null,
+      cues: {
+        0: {},
+        1: {
+          Default: {},
+        },
+        2: {
+          Room1: {},
+          Room2: {},
+          RoomAction: {},
+          Town1: {},
+          Town2: {},
+          TownAction: {},
+          Home: {},
+        },
+        3: {},
+        4: {},
+      },
       type: 0,
       cue_url: {},
       config: this.$s.downloadAudioFilesDirectly,
       dl_error: false,
+      isCardVoiceLoaded: false,
+      isCardVoiceLoading: false,
     };
   },
   computed: {
@@ -107,7 +151,7 @@ export default {
       return this.$db.NamedList[this.id];
     },
     types() {
-      return [0, 1, 2, 3];
+      return [0, 1, 2, 3, 4];
     },
     tweets() {
       const tweets = {};
@@ -121,60 +165,69 @@ export default {
     },
   },
   methods: {
+    getCharaName(charaname) {
+      // Gochiusa_Syaro _  Alchemist4   _  A
+      // {named}        _ {Class}{rare} _ {voice_number}
+      const named = this.named.m_ResouceBaseName;
+      const id = charaname.slice(-1);
+      const rare = charaname.slice(-3, -2);
+      const Class = charaname.replace(named + "_", "").slice(0, -3);
+      return this.$t(`Star ${rare}`) + " " + this.$t(Class) + " " + id;
+    },
+    async get_audiobuffer_then_write(file_name) {
+      const proxy_url =
+        "https://script.google.com/macros/s/AKfycbybmAUWjnNpeHGJQVAaP5iz9t4Tmw1VJHmnyOPqNc9oDrvQ3dCAX_qgnB0l58RF4Btdyw/exec?raw_test=0&url=https://asset-krr-prd.star-api.com/";
+      const rvh = await axios
+        .get(`https://rvh.kirafan.cn/`)
+        .then((res) => res.data);
+
+      await axios
+        .get(`${proxy_url}${rvh}/CRI/${file_name}`)
+        .then((res) => res.data)
+        .then((data) => {
+          fs.writeFileSync(file_name, Buffer(b64toArr.decode(data)));
+        });
+    },
+    async get_acb_awb(file_base_name) {
+      const cri_audio_acb = this.get_audiobuffer_then_write(
+        `${file_base_name}.acb`
+      );
+      const cri_audio_awb = this.get_audiobuffer_then_write(
+        `${file_base_name}.awb`
+      );
+      await Promise.all([cri_audio_acb, cri_audio_awb]);
+    },
+    async unpack_then_return_url(file_base_name) {
+      const key = define.cri_key;
+      await cri.acb2wavs(`${file_base_name}.acb`, key);
+
+      const output = fs
+        .readdirSync(`./${file_base_name}`)
+        .filter((x) => x.endsWith(".wav"))
+        .map((file) => {
+          // {"name": "voice_000_0", "type": "mp3", "new": false, "link": "https://cri-asset.kirafan.cn/Voice_Killme_Agiri/voice_000_0.mp3"},
+          const audio = fs.readFileSync(`./${file_base_name}/${file}`);
+          const url = URL.createObjectURL(
+            new Blob([audio], { type: "audio/wav" })
+          );
+          this.cue_url[file] = url;
+          return {
+            name: file,
+            type: "wav",
+            new: false,
+            link: url,
+          };
+        });
+      return output;
+    },
     async get_index() {
       if (this.config) {
         const chara_name = this.named.m_ResouceBaseName;
         const file_base_name = `Voice_${chara_name}`;
-        const proxy_url =
-          "https://script.google.com/macros/s/AKfycbybmAUWjnNpeHGJQVAaP5iz9t4Tmw1VJHmnyOPqNc9oDrvQ3dCAX_qgnB0l58RF4Btdyw/exec?raw_test=0&url=https://asset-krr-prd.star-api.com/";
-        const rvh = await axios
-          .get(`https://rvh.kirafan.cn/`)
-          .then((res) => res.data);
 
-        // https://script.google.com/macros/s/AKfycbybmAUWjnNpeHGJQVAaP5iz9t4Tmw1VJHmnyOPqNc9oDrvQ3dCAX_qgnB0l58RF4Btdyw/exec?raw_test=0&url=https://asset-krr-prd.star-api.com/8690a78b593ba983d054fa15ebe4954e/CRI/Voice_Gochiusa_Syaro.acb
-        const cri_audio_acb = axios
-          .get(`${proxy_url}${rvh}/CRI/${file_base_name}.acb`)
-          .then((res) => res.data)
-          .then((data) => {
-            fs.writeFileSync(
-              `Voice_${this.named.m_ResouceBaseName}.acb`,
-              Buffer(b64toArr.decode(data))
-            );
-          });
+        await this.get_acb_awb(file_base_name);
 
-        const cri_audio_awb = axios
-          .get(`${proxy_url}${rvh}/CRI/${file_base_name}.awb`)
-          .then((res) => res.data)
-          .then((data) => {
-            fs.writeFileSync(
-              `Voice_${this.named.m_ResouceBaseName}.awb`,
-              Buffer(b64toArr.decode(data))
-            );
-          });
-
-        await Promise.all([cri_audio_acb, cri_audio_awb]);
-
-        const key = define.cri_key;
-        await cri.acb2wavs(`Voice_${this.named.m_ResouceBaseName}.acb`, key);
-
-        const output = fs
-          .readdirSync(`./${file_base_name}`)
-          .filter((x) => x.endsWith(".wav"))
-          .map((file) => {
-            // {"name": "voice_000_0", "type": "mp3", "new": false, "link": "https://cri-asset.kirafan.cn/Voice_Killme_Agiri/voice_000_0.mp3"},
-            const audio = fs.readFileSync(`./${file_base_name}/${file}`);
-            const url = URL.createObjectURL(
-              new Blob([audio], { type: "audio/wav" })
-            );
-            this.cue_url[file] = url;
-            return {
-              name: file,
-              type: "wav",
-              new: false,
-              link: url,
-            };
-          });
-        return output;
+        return await this.unpack_then_return_url(file_base_name);
       } else {
         try {
           return await axios
@@ -206,22 +259,7 @@ export default {
             cues[cueID] = 1;
           }
         });
-        const cueCategory = {
-          0: {},
-          1: {
-            Default: {},
-          },
-          2: {
-            Room1: {},
-            Room2: {},
-            RoomAction: {},
-            Town1: {},
-            Town2: {},
-            TownAction: {},
-            Home: {},
-          },
-          3: {},
-        };
+        const cueCategory = this.cues;
         for (let cueID in cues) {
           if (cueID[0] == "0") {
             if (cueID >= 14) {
@@ -261,7 +299,9 @@ export default {
             cueCategory[3][cueID] = cues[cueID];
           }
         }
+        const tmp = this.cues[4];
         this.cues = cueCategory;
+        this.cues[4] = tmp;
         this.loading = 0;
       });
     },
@@ -269,24 +309,94 @@ export default {
       this.show = false;
       this.config = this.$s.downloadAudioFilesDirectly;
       this.loading = 1;
-      this.cues = null;
+      this.cues = {
+        0: {},
+        1: {
+          Default: {},
+        },
+        2: {
+          Room1: {},
+          Room2: {},
+          RoomAction: {},
+          Town1: {},
+          Town2: {},
+          TownAction: {},
+          Home: {},
+        },
+        3: {},
+        4: {},
+      };
       this.type = 0;
       this.cue_url = {};
       this.dl_error = false;
+      this.isCardVoiceLoaded = false;
+      this.isCardVoiceLoading = false;
+    },
+    async loadCardVoice() {
+      // this.isCardVoiceLoaded = true;
+      // this.load();
+      if (this.isCardVoiceLoaded || this.isCardVoiceLoading) return;
+      this.isCardVoiceLoading = true;
+      const charas = this.$db.CRIFileVersionArray.filter((x) =>
+        x.m_FileName.startsWith("Voice_" + this.named.m_ResouceBaseName + "_")
+      ).map((x) => x.m_FileName);
+      let db;
+      if (this.config) {
+        db = await Promise.all(
+          charas.map((file_base_name) => {
+            const name = file_base_name.replace("Voice_", "");
+            return this.get_acb_awb(file_base_name)
+              .then(() => this.unpack_then_return_url(file_base_name))
+              .then((res) => {
+                return { name, data: res };
+              });
+          })
+        );
+      } else {
+        db = await Promise.all(
+          charas.map(async (x) => {
+            const name = x.replace("Voice_", "");
+            return axios
+              .get(this.$asset.voice.format(name, "index.json"))
+              .then((res) => {
+                return { name, data: res.data };
+              });
+          })
+        );
+      }
+      // [{name:string , data:[{fileName:string , url:string}]}]
+      const cue = db.map((x) => {
+        const charaname = x.name.replace("Voice_", "");
+        const data = x.data.map((y) => {
+          const fileName = y.name;
+          const url = y.link;
+          return { fileName, url };
+        });
+        return { charaname, data };
+      });
+      this.cues[4] = cue;
+
+      this.isCardVoiceLoading = false;
+      this.isCardVoiceLoaded = true;
     },
   },
   watch: {
     show() {
-      if (this.show && !this.cues) {
+      if (this.show) {
         this.load();
       }
     },
     id() {
       this.reset();
     },
+    type() {
+      if (this.type === 4) {
+        this.loadCardVoice();
+      }
+    },
     $route: function(to, from) {
       if (to.path !== from.path) {
-        if(!fs.existsSync(`./Voice_${this.named.m_ResouceBaseName}`)){
+        if (!fs.existsSync(`./Voice_${this.named.m_ResouceBaseName}`)) {
           this.reset();
         }
       }
@@ -294,6 +404,7 @@ export default {
   },
   mounted() {
     this.show = false;
+    window.d = this;
   },
 };
 </script>

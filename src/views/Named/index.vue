@@ -36,7 +36,7 @@
 
     Profile(:id="id")
     
-    Voices(:id="id")
+    Voices(:id="id" :characterList="characters")
     
     Talent(:id="id")
 
