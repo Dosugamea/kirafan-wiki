@@ -1,9 +1,9 @@
 /* eslint-disable */
 // const fs = require("fs");
-const path = require("path");
+const path = window.require("path");
 const util = require("util");
 // const crypto = require("crypto");
- var fs = window.require("fs");
+const fs = window.require("fs");
 // console.log('fs :>> ', path);
 
 // const buffer = require("buffer/").Buffer;

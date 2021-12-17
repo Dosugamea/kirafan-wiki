@@ -1,5 +1,5 @@
 const fs = require('fs');
-const path = require('path');
+const path = window.require("path");
 const util = require('util');
 
 const utf = require('./utf');
