@@ -21,6 +21,11 @@
     v-list-item(@click="$s.characterIconFramed=!$s.characterIconFramed")
       v-list-item-content: v-list-item-title {{$t('Character Icon Framed')}}
       v-list-item-action: v-switch(color="primary", readonly, v-model="$s.characterIconFramed")
+    v-list-item(@click="$s.downloadAudioFilesDirectly=!$s.downloadAudioFilesDirectly")
+      v-list-item-content
+        v-list-item-title {{$t('Download Audio Files Directly')}}
+        v-list-item-subtitle {{$t('Setting Hint:Download Audio Files Directly')}}
+      v-list-item-action: v-switch(color="primary", readonly, v-model="$s.downloadAudioFilesDirectly")
     v-list-item(@click="$s.loadAssetbundle=!$s.loadAssetbundle")
       v-list-item-content: v-list-item-title {{$t('Load assetBundle.json')}}
       v-list-item-action: v-switch(color="primary",  readonly,v-model="$s.loadAssetbundle")

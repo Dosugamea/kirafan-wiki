@@ -30,7 +30,8 @@ export default {
       if (voice.name == this.name && voice.cue == this.cue && (voice.loading || voice.playing)) {
         voice.loading = false;
         voice.playing = false;
-        window.open(this.url, '_blank');
+        this.fileDownload(this.url,`${this.name}_${this.cue}.${this.override_url ? "wav" :this.url.split('.').pop()}`);
+        // window.open(this.url, '_blank');
       }
       else {
         voice.name = this.name;
@@ -50,6 +51,12 @@ export default {
         voice.audio.play();
       }
     },
+    fileDownload(url, fileName = "download.wav") {
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = fileName;
+      link.click();
+    }
   }
 };
 </script>

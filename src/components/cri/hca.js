@@ -7,7 +7,7 @@ const Buffer = require("buffer/").Buffer;
 const fs = window.require("fs")
 
 
-console.log('fs :>> ', fs);
+// console.log('fs :>> ', fs);
 
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);

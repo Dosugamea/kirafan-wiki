@@ -4,7 +4,7 @@ const path = require("path");
 const util = require("util");
 // const crypto = require("crypto");
  var fs = window.require("fs");
-console.log('fs :>> ', path);
+// console.log('fs :>> ', path);
 
 // const buffer = require("buffer/").Buffer;
 // console.log('buffer :>> ', buffer);
@@ -14,7 +14,7 @@ const hca = require("./hca");
 const utf = require("./utf");
 
 const readFile = util.promisify(fs.readFile);
-const writeFile = util.promisify(fs.writeFile);
+// const writeFile = util.promisify(fs.writeFile);
 const mkdir = util.promisify(fs.mkdir);
 
 async function parseAcb(acbPath) {

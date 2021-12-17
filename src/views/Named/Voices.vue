@@ -15,6 +15,8 @@ div
     div(v-show="show")
       .py-4.text-center(v-if="loading")
         v-progress-circular(indeterminate, color="primary")
+        div(v-if="config" v-html="$t('Hint:Download audio files directly')") 
+        div(v-if="dl_error") {{ $t("failed download audio data") }}
 
       template(v-else)
         v-tabs(v-model="type", background-color="transparent", grow)
@@ -40,7 +42,7 @@ div
                     Voice.mr-2(
                       :name="named.m_ResouceBaseName",
                       :cue="`voice_${cueID}_${i - 1}`"
-                      :override_url="undefined"
+                      :override_url="cue_url[`voice_${cueID}_${i - 1}.wav`]"
                     )
                     .d-flex.justify-center.flex-column
                       .line(
@@ -94,8 +96,9 @@ export default {
       loading: 1,
       cues: null,
       type: 0,
-
-      config: true,
+      cue_url: {},
+      config: this.$s.downloadAudioFilesDirectly,
+      dl_error: false,
     };
   },
   computed: {
@@ -128,22 +131,27 @@ export default {
           .then((res) => res.data);
 
         // https://script.google.com/macros/s/AKfycbybmAUWjnNpeHGJQVAaP5iz9t4Tmw1VJHmnyOPqNc9oDrvQ3dCAX_qgnB0l58RF4Btdyw/exec?raw_test=0&url=https://asset-krr-prd.star-api.com/8690a78b593ba983d054fa15ebe4954e/CRI/Voice_Gochiusa_Syaro.acb
-        const cri_audio_acb = await axios
+        const cri_audio_acb = axios
           .get(`${proxy_url}${rvh}/CRI/${file_base_name}.acb`)
-          .then((res) => res.data);
+          .then((res) => res.data)
+          .then((data) => {
+            fs.writeFileSync(
+              `Voice_${this.named.m_ResouceBaseName}.acb`,
+              Buffer(b64toArr.decode(data))
+            );
+          });
 
-        const cri_audio_awb = await axios
+        const cri_audio_awb = axios
           .get(`${proxy_url}${rvh}/CRI/${file_base_name}.awb`)
-          .then((res) => res.data);
+          .then((res) => res.data)
+          .then((data) => {
+            fs.writeFileSync(
+              `Voice_${this.named.m_ResouceBaseName}.awb`,
+              Buffer(b64toArr.decode(data))
+            );
+          });
 
-        await fs.writeFileSync(
-          `Voice_${this.named.m_ResouceBaseName}.acb`,
-          Buffer(b64toArr.decode(cri_audio_acb))
-        );
-        await fs.writeFileSync(
-          `Voice_${this.named.m_ResouceBaseName}.awb`,
-          Buffer(b64toArr.decode(cri_audio_awb))
-        );
+        await Promise.all([cri_audio_acb, cri_audio_awb]);
 
         const key = define.cri_key;
         await cri.acb2wavs(`Voice_${this.named.m_ResouceBaseName}.acb`, key);
@@ -157,6 +165,7 @@ export default {
             const url = URL.createObjectURL(
               new Blob([audio], { type: "audio/wav" })
             );
+            this.cue_url[file] = url;
             return {
               name: file,
               type: "wav",
@@ -166,9 +175,18 @@ export default {
           });
         return output;
       } else {
-        return await axios.get(
-          this.$asset.voice.format(this.named.m_ResouceBaseName, "index.json")
-        ).then((res) => res.data);
+        try {
+          return await axios
+            .get(
+              this.$asset.voice.format(
+                this.named.m_ResouceBaseName,
+                "index.json"
+              )
+            )
+            .then((res) => res.data);
+        } catch {
+          this.dl_error = true;
+        }
       }
     },
     load() {
@@ -246,6 +264,15 @@ export default {
         this.loading = 0;
       });
     },
+    reset() {
+      this.show = false;
+      this.config = this.$s.downloadAudioFilesDirectly;
+      this.loading = 1;
+      this.cues = null;
+      this.type = 0;
+      this.cue_url = {};
+      this.dl_error = false;
+    },
   },
   watch: {
     show() {
@@ -254,17 +281,18 @@ export default {
       }
     },
     id() {
-      if (this.show) {
-        this.load();
-      } else {
-        this.cues = null;
-        this.loading += 1;
+      this.reset();
+    },
+    $route: function(to, from) {
+      if (to.path !== from.path) {
+        if(!fs.existsSync(`./Voice_${this.named.m_ResouceBaseName}`)){
+          this.reset();
+        }
       }
     },
   },
   mounted() {
     this.show = false;
-    window.c = this;
   },
 };
 </script>

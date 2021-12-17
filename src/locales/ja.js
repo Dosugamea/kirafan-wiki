@@ -200,6 +200,8 @@ const named = {
 
     'Default': 'デフォルト',
   },
+  'Hint:Download audio files directly': '直接音声ファイルをダウンロードしています<br>この処理には時間がかかります',
+  'failed download audio data': '音声データのダウンロードに失敗しました',
 
   'Talent': 'タレント',
   'Adv Standpic': 'シナリオ立ち絵',
@@ -789,6 +791,8 @@ const settings = {
   'Character Show Max Status': 'リストで最大ステータスを表示',
   'Character Show Max Status Hint': '覚醒ボーナスは加算しない',
   'Set Max Frendship': '最大仲良し度の変更',
+  'Download Audio Files Directly': '音声をきらファンサーバーからダウンロード',
+  'Setting Hint:Download Audio Files Directly': '最新の音声が反映されますが時間がかかります',
   'Set Max Frendship Hint': '空欄で5',
   'Character Talent Show Luck': 'タレントの LUK を表示',
   'Character Icon Framed': 'アイコンの枠を表示',

@@ -13,6 +13,7 @@ const settings = {
     characterTalentShowLuck: false,
     characterShowMaxStatus: false,
     characterIconFramed: false,
+    downloadAudioFilesDirectly:false,
     // maxFriendship: undefined,
     loadAssetbundle: false,
     questDropsGrouped: false,
