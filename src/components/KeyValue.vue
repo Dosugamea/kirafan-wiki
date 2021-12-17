@@ -53,7 +53,6 @@ export default {
   .key {
     color: rgba(0, 0, 0, 0.6);
   }
-  background-color: #303030;
 }
 
 .key {
