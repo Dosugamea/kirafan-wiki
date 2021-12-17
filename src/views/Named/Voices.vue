@@ -67,6 +67,7 @@ div
                       Voice.mr-2(
                         :name="named.m_ResouceBaseName",
                         :cue="`voice_${cueID}_${i - 1}`"
+                        :override_url="cue_url[`voice_${cueID}_${i - 1}.wav`]"
                       )
 
                       .d-flex.justify-center.flex-column
