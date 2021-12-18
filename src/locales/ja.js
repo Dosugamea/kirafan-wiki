@@ -202,7 +202,8 @@ const named = {
     'Default': 'デフォルト',
   },
   'Hint:Download audio files directly': '直接音声ファイルをダウンロードしています<br>この処理には時間がかかります',
-  'failed download audio data': '音声データのダウンロードに失敗しました',
+  // 'failed download audio data': '音声データのダウンロードに失敗しました',
+  'failed download audio data': '音声データの更新が止まっているため一部または全ての音声のダウンロードに失敗しました。設定の[音声をきらファンサーバーからダウンロード]を有効にすると読み込まれます',
 
   'Talent': 'タレント',
   'Adv Standpic': 'シナリオ立ち絵',

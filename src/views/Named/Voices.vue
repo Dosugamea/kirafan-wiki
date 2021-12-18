@@ -53,10 +53,12 @@ div
                   .pl-4
 
             template(v-else-if="t === 4")
+              .py-4.text-center(v-if="dl_error")
+                div {{ $t("failed download audio data") }}
               .py-4.text-center(v-if="!isCardVoiceLoaded") 
                 v-progress-circular(indeterminate, color="primary")
                 div(v-if="config" v-html="$t('Hint:Download audio files directly')") 
-                div(v-if="dl_error") {{ $t("failed download audio data") }}
+                //- div(v-if="dl_error") {{ $t("failed download audio data") }}
 
               div(
                 v-else
@@ -235,8 +237,9 @@ export default {
       return response === 200;
     },
     async get_index() {
+      const chara_name = this.named.m_ResouceBaseName;
+
       if (this.config) {
-        const chara_name = this.named.m_ResouceBaseName;
         const file_base_name = `Voice_${chara_name}`;
 
         const isLatestVersion = await this.isLatestVersion(chara_name);
@@ -245,15 +248,17 @@ export default {
           return await this.unpack_then_return_url(file_base_name);
         }
       }
-      try {
-        return await axios
-          .get(
-            this.$asset.voice.format(this.named.m_ResouceBaseName, "index.json")
-          )
-          .then((res) => res.data);
-      } catch {
-        this.dl_error = true;
-      }
+      return await axios
+        .get(
+          this.$asset.voice.format(this.named.m_ResouceBaseName, "index.json")
+        )
+        .then((res) => res.data)
+        .catch(async () => {
+          const isLatestVersion = await this.isLatestVersion(chara_name);
+          if (!isLatestVersion) {
+            this.dl_error = true;
+          }
+        });
     },
     load() {
       this.loading += 1;
@@ -352,27 +357,45 @@ export default {
       const charas = this.$db.CRIFileVersionArray.filter((x) =>
         x.m_FileName.startsWith("Voice_" + this.named.m_ResouceBaseName + "_")
       ).map((x) => x.m_FileName);
-      const db = await Promise.all(
-        charas.map(async (file_base_name) => {
-          const name = file_base_name.replace("Voice_", "");
+      const db = (
+        await Promise.allSettled(
+          charas.map(async (file_base_name) => {
+            const name = file_base_name.replace("Voice_", "");
 
-          if (this.config) {
-            const isLatestVersion = await this.isLatestVersion(name);
-            if (!isLatestVersion) {
-              return this.get_acb_awb(file_base_name)
-                .then(() => this.unpack_then_return_url(file_base_name))
-                .then((res) => {
-                  return { name, data: res };
-                });
+            if (this.config) {
+              const isLatestVersion = await this.isLatestVersion(name);
+              if (!isLatestVersion) {
+                return this.get_acb_awb(file_base_name)
+                  .then(() => this.unpack_then_return_url(file_base_name))
+                  .then((res) => {
+                    return { name, data: res };
+                  });
+              }
             }
-          }
-          return axios
-            .get(this.$asset.voice.format(name, "index.json"))
-            .then((res) => {
-              return { name, data: res.data };
-            });
+            return axios
+              .get(this.$asset.voice.format(name, "index.json"))
+              .then((res) => {
+                return { name, data: res.data };
+              })
+              .catch(async () => {
+                const isLatestVersion = await this.isLatestVersion(name);
+                if (!isLatestVersion) {
+                  this.dl_error = true;
+                }
+
+                throw new Error(`failed download`);
+              });
+          })
+        )
+      )
+        .filter((x) => {
+          const output = x.status === "fulfilled";
+          // if (!output) {
+          //   this.dl_error = true;
+          // }
+          return output;
         })
-      );
+        .map((x) => x.value);
       // } else {
       //   db = await Promise.all(
       //     charas.map(async (x) => {
