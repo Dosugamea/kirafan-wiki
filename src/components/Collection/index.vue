@@ -1,7 +1,7 @@
 <template lang="pug">
   div
     .hidden-sm-only
-      v-tabs(v-model="c.current", background-color="transparent", grow, mobile-break-point=9999)
+      v-tabs(v-model="c.current", background-color="transparent", grow, mobile-breakpoint=9999)
         v-tab.px-0(v-for="i in 3", :key="`collection-tab-${i}`") {{i}}
     .hidden-xs-only.hidden-md-and-up
       v-list-item(@click="c.current=(c.current+1)%3")

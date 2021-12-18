@@ -19,7 +19,7 @@
       v-btn.hidden-sm-and-up(icon, @click="collection=!collection"): v-icon mdi-star
 
     v-navigation-drawer(app, clipped,
-      v-model="navigation", mobile-break-point=512,
+      v-model="navigation", mobile-breakpoint=512,
       :mini-variant="$vuetify.breakpoint.smOnly||$vuetify.breakpoint.mdOnly", mini-variant-width=64)
 
       v-toolbar.hidden-sm-and-up(color="secondary", elevation=0)
@@ -39,7 +39,7 @@
       Navigation(:style="{height: `calc(100vh - 56px)`}")
 
     v-navigation-drawer(app, clipped, right
-      v-model="collection", mobile-break-point=512, touchless,
+      v-model="collection", mobile-breakpoint=512, touchless,
       :mini-variant="$vuetify.breakpoint.smOnly", mini-variant-width=64)
 
       v-toolbar.hidden-sm-and-up(color="secondary", elevation=0)
@@ -52,7 +52,7 @@
           v-progress-circular(indeterminate=true, color="primary")
       Collection(v-else)
 
-    v-content
+    v-main
       .pa-8.text-center(v-if="databaseStatus==0")
         v-progress-circular(color="primary", rotate=-90,
           :indeterminate="!databaseProgress", :value="databaseProgress.loaded / databaseProgress.total * 100")
@@ -76,7 +76,7 @@
         :style="{right: `${fixedPosition(true)}px`}", @click="$vuetify.goTo(0)")
         v-icon mdi-chevron-up
 
-    v-snackbar(v-model="snackbar", :timeout="0")
+    v-snackbar(v-model="snackbar", :timeout="-1")
       .d-block.py-2(style="width: 100%")
         .text-center(v-if="databaseStatus==2")
           v-progress-circular(color="primary", rotate=-90,
