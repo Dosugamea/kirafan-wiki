@@ -41,6 +41,8 @@
     Talent(:id="id")
 
     Scenarios(:id="id")
+
+    RoomObject(:id="id")
     
     v-divider
     Ad(:key="`named-ad-${id}-1`")
@@ -54,11 +56,12 @@ import Voices from './Voices';
 import Talent from './Talent';
 import Related from './Related';
 import Scenarios from './Scenarios';
+import RoomObject from "./RoomObject";
 
 export default {
   name: 'Named',
   props: ['id'],
-  components: { Profile, Voices, Talent, Related, Scenarios },
+  components: { Profile, Voices, Talent, Related, Scenarios, RoomObject },
   computed: {
     named() { return this.$db.NamedList[this.id]; },
     characters() {

@@ -89,6 +89,7 @@
 
 <script>
 import Action from './Action';
+import define from '@/define';
 
 export default {
   name: 'RoomObject',
@@ -105,21 +106,7 @@ export default {
       return this.$db.TweetList.filter(tweet => tweet.m_ID == this.tweetID);
     },
     categoryName() {
-      return {
-        0: 'Desk',
-        1: 'Chair',
-        2: 'Storage',
-        3: 'Bedding',
-        4: 'Appliances',
-        5: 'Goods',
-        6: 'Hobby',
-        7: 'WallDecoration',
-        8: 'Carpet',
-        9: 'Screen',
-        10: 'Floor',
-        11: 'Wall',
-        12: 'Background',
-      }[this.item.m_Category];
+      return define.roomIDtoStr[this.item.m_Category];
     },
   },
   methods: {
