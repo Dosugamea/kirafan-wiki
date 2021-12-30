@@ -137,7 +137,7 @@ input[type="number"] {
 <script>
 import settings from "@/settings";
 import translations from "@/translations";
-import { del } from "idb-keyval";
+import { del } from '@/idb-localforage';
 import { unregister } from "register-service-worker";
 
 export default {

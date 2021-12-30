@@ -1,8 +1,17 @@
 <template lang="pug">
   .text-center.float-right(style="width: 160px; overflow: hidden")
     div(style="transform:rotateX(45deg) rotateY(0deg) rotateZ(315deg);")
+      //- y <=2   0~4
       div(v-for="y in item.m_SizeY+2", :key="`room-object-action-row-${y}`")
+        //- x <=1   0~3
         span(v-for="x in item.m_SizeX+2", :key="`room-object-action-row-${y}-col-${x}`")
+          //- y == 1 幅開けた部分
+          //-    v!
+          //- OOOOO
+          //- OXXXO  <---- y == 1
+          //- OXXXO  
+          //- OXXXO
+          //- OOOOO
           span(v-if="y==1 && x!=item.m_SizeX+2")
             v-icon(color="primary") {{search('Up', item.m_SizeX+2-x) ? 'mdi-square-outline' : null}}
           span(v-else-if="x==item.m_SizeX+2 && y!=item.m_SizeY+2")

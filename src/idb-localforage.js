@@ -5,5 +5,6 @@ localforage.config({
 });
 const set = localforage.setItem;
 const get = localforage.getItem;
+const del = localforage.removeItem;
 
-export { set, get };
+export { set, get, del };

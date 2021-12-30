@@ -179,9 +179,7 @@ export default {
     async get_audiobuffer_then_write(file_name) {
       const proxy_url =
         "https://script.google.com/macros/s/AKfycbybmAUWjnNpeHGJQVAaP5iz9t4Tmw1VJHmnyOPqNc9oDrvQ3dCAX_qgnB0l58RF4Btdyw/exec?raw_test=0&url=https://asset-krr-prd.star-api.com/";
-      const rvh = await axios
-        .get(`https://rvh.kirafan.cn/`)
-        .then((res) => res.data);
+      const rvh = await this.$lazy.rvh;
 
       await axios
         .get(`${proxy_url}${rvh}/CRI/${file_name}`)
