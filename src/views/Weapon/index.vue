@@ -40,8 +40,8 @@
       KeyValue(:k="$t('Sale Amount')", :v="evolvedWeapon.m_SaleAmount", width="33%", v-if="evolvedWeapon.m_CanSell")
 
     v-list-item(v-show="$i18n.locale=='ja'", target="_blank", v-if="equipableCharaID",
-      :href="$const.wikiwiki.character.format($db.NamedList[$db.CharacterList[equipableCharaID].m_NamedType].m_FullName)")
-      v-list-item-title.primary--text {{$db.NamedList[$db.CharacterList[equipableCharaID].m_NamedType].m_FullName}} - {{$t('Wikiwiki.Title')}}
+      :href="$const.wikiwiki.character.format($store.state.$db.NamedList[$store.state.$db.CharacterList[equipableCharaID].m_NamedType].m_FullName)")
+      v-list-item-title.primary--text {{$store.state.$db.NamedList[$store.state.$db.CharacterList[equipableCharaID].m_NamedType].m_FullName}} - {{$t('Wikiwiki.Title')}}
       v-list-item-action.ma-0: v-icon mdi-open-in-new
 
     v-divider
@@ -122,10 +122,10 @@ export default {
   },
   computed: {
     weapon() {
-      return this.$db.WeaponList[this.id];
+      return this.$store.state.$db.WeaponList[this.id];
     },
     characterSkillIDs() {
-      let character = this.$db.CharacterList[this.weapon.m_EquipableCharaID];
+      let character = this.$store.state.$db.CharacterList[this.weapon.m_EquipableCharaID];
       return character ? [
         character.m_Class + 1,
         character.m_ClassSkillIDs[0],
@@ -136,23 +136,23 @@ export default {
       if (!this.weapon.maxEvolution || this.evolution == 0) {
         return 1;
       }
-      return this.$db.WeaponList[this.id - this.id % 10 + this.evolution - 1].m_SkillLimitLv;
+      return this.$store.state.$db.WeaponList[this.id - this.id % 10 + this.evolution - 1].m_SkillLimitLv;
     },
     skillLimitLv() {
       return this.evolvedWeapon.m_SkillLimitLv;
     },
     evolvedWeapon() {
       if (this.weapon.maxEvolution && this.evolution <= this.weapon.maxEvolution) {
-        return this.$db.WeaponList[this.id - this.id % 10 + this.evolution];
+        return this.$store.state.$db.WeaponList[this.id - this.id % 10 + this.evolution];
       } else {
         return this.weapon;
       }
     },
     evolutionRecipe() {
-      return this.$db.WeaponEvolutionList[this.evolvedWeapon.m_ID];
+      return this.$store.state.$db.WeaponEvolutionList[this.evolvedWeapon.m_ID];
     },
     recipe() {
-      return this.$db.WeaponRecipeList[this.id];
+      return this.$store.state.$db.WeaponRecipeList[this.id];
     },
     status() {
       const status = {};
@@ -163,7 +163,7 @@ export default {
       return status;
     },
     exp() {
-      return this.$4(this.$db.WeaponExp
+      return this.$4(this.$store.state.$db.WeaponExp
         .filter(item =>
           item.m_ID == this.weapon.m_ExpTableID &&
           item.m_Lv < this.level)

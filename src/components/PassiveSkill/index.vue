@@ -42,7 +42,7 @@ export default {
   props: ['id', 'owner', 'characterSkillIDs'],
   computed: {
     skill() {
-      return this.$db[`PassiveSkillList_${this.owner}`][this.id];
+      return this.$store.state.$db[`PassiveSkillList_${this.owner}`][this.id];
     },
     contents() {
       return parser.parse(this.id, this.owner);

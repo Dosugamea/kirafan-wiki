@@ -105,7 +105,7 @@ export default {
         if (t == 9 && maxRare == 2) {
           rare = 3;
         }
-        let characterList = this.$db.CharacterListArray.filter(character =>
+        let characterList = this.$store.state.$db.CharacterListArray.filter(character =>
           character.m_CharaID % 10 == 0 &&
           character.m_Rare == rare);
 

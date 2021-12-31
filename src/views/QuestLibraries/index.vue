@@ -24,7 +24,7 @@ export default {
   },
   computed: {
     questLibraries() {
-      const questLibraries = this.$db.QuestLibraryListArray.filter(questLibrary =>
+      const questLibraries = this.$store.state.$db.QuestLibraryListArray.filter(questLibrary =>
         questLibrary.category == this.category
       );
       if (this.category == 1 || this.category == 4) {

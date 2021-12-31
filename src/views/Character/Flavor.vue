@@ -47,14 +47,14 @@ export default {
   },
   computed: {
     flavor() {
-      return this.$db.CharacterFlavorText[this.id];
+      return this.$store.state.$db.CharacterFlavorText[this.id];
     },
     flavors() {
-      return this.$db.FlavorsArray.filter(flavor => flavor.m_CharaID == this.id);
+      return this.$store.state.$db.FlavorsArray.filter(flavor => flavor.m_CharaID == this.id);
     },
-    character() { return this.$db.CharacterList[this.id]; },
+    character() { return this.$store.state.$db.CharacterList[this.id]; },
     index() {
-      return 'ABCDEFG'[this.$db.CharacterListArray
+      return 'ABCDEFG'[this.$store.state.$db.CharacterListArray
         .filter(character =>
           character.m_CharaID % 10 == 0 &&
           character.m_NamedType == this.character.m_NamedType &&
@@ -66,7 +66,7 @@ export default {
       return ['Fighter', 'Magician', 'Priest', 'Knight', 'Alchemist'][this.character.m_Class];
     },
     name() {
-      return `${this.$db.NamedList[this.character.m_NamedType].m_ResouceBaseName}_${this.class}${this.character.m_Rare + 1}_${this.index}`;
+      return `${this.$store.state.$db.NamedList[this.character.m_NamedType].m_ResouceBaseName}_${this.class}${this.character.m_Rare + 1}_${this.index}`;
     },
   }
 };

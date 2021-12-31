@@ -12,7 +12,8 @@ export default new Vuex.Store({
   //   mutations: {},
   actions: {},
   mutations: {
-    setdb: function(state, name, db) {
+    setdb: function (state, [name, db]) {
+      //   console.log('name :>> ', name);
       state.$db[name] = db;
     },
   },

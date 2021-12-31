@@ -82,41 +82,58 @@ let loaded = 0;
 // }
 
 async function fetch(version) {
-  await axios
-    .all(
-      requiredDatabases.map((requiredDatabase) =>
-        axios
-          .get(
-            `${databaseHost}/${requiredDatabase.uri ||
-              requiredDatabase.name}.json?t=${new Date().getTime()}`
-          )
-          .then((data) => {
-            loaded += 1;
-            window.vue.$emit('databaseLoading', {
-              loaded: loaded,
-              total: requiredDatabases.length,
-            });
-            return data;
-          })
-      )
-    )
-    .then(
-      axios.spread(function() {
-        requiredDatabases.forEach((requiredDatabase, i) => {
-          const data = arguments[i].data;
+  await axios.all(
+    requiredDatabases.map((requiredDatabase) =>
+      axios
+        .get(
+          `${databaseHost}/${requiredDatabase.uri ||
+            requiredDatabase.name}.json?t=${new Date().getTime()}`
+        )
+        .then((data) => {
+          loaded += 1;
+          window.vue.$emit('databaseLoading', {
+            loaded: loaded,
+            total: requiredDatabases.length,
+          });
+          // console.log('data :>> ', data);
+
+          return data;
+        })
+        .then((data) => {
+          // (requiredDatabase) => {
+          // const data = data;
+          data = data.data;
           if (requiredDatabase.key) {
             database[requiredDatabase.name] = {};
             for (let j in data) {
               database[requiredDatabase.name][data[j][requiredDatabase.key]] =
                 data[j];
             }
-            database[`${requiredDatabase.name}Array`] = data;
+
+            window.vue.$store.commit('setdb', [
+              requiredDatabase.name,
+              database[requiredDatabase.name],
+            ]);
+
+            // database[`${requiredDatabase.name}Array`] = data;
+            setdb(`${requiredDatabase.name}Array`, data);
           } else {
-            database[requiredDatabase.name] = data;
+            setdb(requiredDatabase.name, data);
+            // database[requiredDatabase.name] = data;
+
+            // window.vue.$store.commit("setdb",requiredDatabase.name,data);
           }
-        });
-      })
-    );
+          // };
+        })
+    )
+  );
+  // .then(
+  //   axios.spread(function() {
+  //     requiredDatabases.forEach(
+
+  //     );
+  //   })
+  // );
   try {
     let date = Vue.prototype.$time.toJSON();
     database.version = version;
@@ -129,16 +146,25 @@ async function fetch(version) {
   }
 }
 
+function setdb(name, val) {
+  database[name] = val;
+  window.vue.$store.commit('setdb', [name, val]);
+}
+
 async function load() {
   try {
-    let localVersion = await get('databaseVersion');
-    if (!localVersion) {
-      return localVersion;
-    }
+    let localVersion = await get_version();
+    // if (!localVersion) {
+    //   return localVersion;
+    // }
     let localDatabase = await get('database');
     if (localDatabase) {
       Object.keys(localDatabase).forEach((name) => {
-        database[name] = localDatabase[name];
+        // database[name] = localDatabase[name];
+        // window.vue.$store.state.setdb(name, localDatabase[name]);
+
+        setdb(name, localDatabase[name]);
+
         let requiredDatabase = requiredDatabases.find(
           (requiredDatabase) => requiredDatabase.name == name
         );
@@ -148,10 +174,15 @@ async function load() {
       });
       // XXX_QuestLibrary();
 
-      database.version = localVersion;
-      database.date = await get('databaseDate');
+      // database.version = localVersion;
+      // database.date = await get('databaseDate');
 
-      window.vue.$emit('databaseLoaded');
+      setdb('version', localVersion);
+      setdb('date', await get('databaseDate'));
+
+      // window.vue.$emit("databaseLoaded");
+    } else {
+      throw new Error('no local database');
     }
 
     if (
@@ -166,6 +197,10 @@ async function load() {
     // eslint-disable-next-line
     console.log("Error occurs when accessing indexedDB: " + e);
   }
+}
+
+async function get_version() {
+  return await get('databaseVersion');
 }
 
 async function main() {
@@ -201,45 +236,52 @@ async function main() {
 
   let version = await axios.get('https://database.kirafan.cn/version');
 
-  let localVersion = await load();
+  let localVersion = await get_version();
+
   // XXX_QuestLibrary();
 
   if (localVersion != version.data) {
-    let isUpdate = localVersion && !(await detectFirefoxPrivate());
-    if (isUpdate) {
-      window.vue.$emit('databaseUpdating');
-    }
+    // let isUpdate = localVersion && !(await detectFirefoxPrivate());
+    // if (isUpdate) {
+    //   window.vue.$emit("databaseUpdating");
+    // }
+    window.vue.$emit('databaseLoaded');
+
     await fetch(version.data);
 
-    if (isUpdate) {
-      window.vue.$emit('databaseUpdated');
-    } else {
-      // XXX_QuestLibrary();
+    window.vue.$emit('allLoaded');
 
-      window.vue.$emit('databaseLoaded');
-    }
+    // if (isUpdate) {
+    //   window.vue.$emit("databaseUpdated");
+    // } else {
+    // XXX_QuestLibrary();
+    // }/
+  } else {
+    await load();
+    window.vue.$emit('databaseLoaded');
+    window.vue.$emit('allLoaded');
   }
 }
 
 // https://gist.github.com/jherax/a81c8c132d09cc354a0e2cb911841ff1
-function detectFirefoxPrivate() {
-  return new Promise(function detect(resolve) {
-    const isMozillaFirefox = 'MozAppearance' in document.documentElement.style;
-    if (isMozillaFirefox) {
-      if (indexedDB == null) resolve(true);
-      else {
-        const db = indexedDB.open('inPrivate');
-        db.onsuccess = function() {
-          resolve(false);
-        };
-        db.onerror = function() {
-          resolve(true);
-        };
-      }
-    }
-    return resolve(false); // ?
-  });
-}
+// function detectFirefoxPrivate() {
+//   return new Promise(function detect(resolve) {
+//     const isMozillaFirefox = "MozAppearance" in document.documentElement.style;
+//     if (isMozillaFirefox) {
+//       if (indexedDB == null) resolve(true);
+//       else {
+//         const db = indexedDB.open("inPrivate");
+//         db.onsuccess = function() {
+//           resolve(false);
+//         };
+//         db.onerror = function() {
+//           resolve(true);
+//         };
+//       }
+//     }
+//     return resolve(false); // ?
+//   });
+// }
 
 main();
 
@@ -290,5 +332,6 @@ main();
 //   });
 // }
 
-// Vue.prototype.$db = database;
+// Vue.prototype.$store.state.$db = database;
+
 export default database;

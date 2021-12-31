@@ -10,7 +10,7 @@
         template(v-if="adv.m_ScriptTextName")
           span {{$t('Section').format(parseInt(adv.m_ScriptTextName.slice(-2)))}}
           span  — 
-        span {{$name($db.ADVLibraryList[adv.m_LibraryID].m_ListName)}}
+        span {{$name($store.state.$db.ADVLibraryList[adv.m_LibraryID].m_ListName)}}
       .px-4.mb-4
         .float-right
           v-btn(icon, :disabled="!scenarios[index+1]",
@@ -65,7 +65,7 @@ export default {
   },
   computed: {
     adv() {
-      return this.$db.ADVList[this.id];
+      return this.$store.state.$db.ADVList[this.id];
     },
     categories() {
       return {
@@ -80,7 +80,7 @@ export default {
     },
     scenarios() {
       let scenarios = this.adv.m_LibraryID == -1 ? [] :
-        this.$db.ADVListArray.filter(item => item.m_LibraryID == this.adv.m_LibraryID);
+        this.$store.state.$db.ADVListArray.filter(item => item.m_LibraryID == this.adv.m_LibraryID);
       for (let i = 0; i < scenarios.length; i++) {
         if (i > 0 && scenarios[i].m_ScriptTextName &&
           scenarios[i].m_ScriptTextName == scenarios[i - 1].m_ScriptTextName) {

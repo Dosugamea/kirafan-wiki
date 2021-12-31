@@ -129,10 +129,10 @@ export default {
   computed: {
     parser: () => parser,
     battleAI() {
-      return this.$db.BattleAIDataList[this.enemy.m_AIID];
+      return this.$store.state.$db.BattleAIDataList[this.enemy.m_AIID];
     },
     enemy() {
-      return this.$db.QuestEnemyList[this.id];
+      return this.$store.state.$db.QuestEnemyList[this.id];
     },
     level() {
       return this.$route.query.level || 1;

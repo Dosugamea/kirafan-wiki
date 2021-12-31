@@ -1,6 +1,6 @@
 class x {
   get maxFriendship() {
-    return window.vue.$db.NamedFriendshipExpArray.length;
+    return window.vue.$store.state.$db.NamedFriendshipExpArray.length;
   }
   cri_key = '51408295487268137';
   cri_class = ['Fighter', 'Magician', 'Priest', 'Knight', 'Alchemist'];

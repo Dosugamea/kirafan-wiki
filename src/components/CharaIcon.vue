@@ -49,10 +49,10 @@ export default {
       };
     },
     character() {
-      return this.$db.CharacterList[this.id];
+      return this.$store.state.$db.CharacterList[this.id];
     },
     namedCharacter() {
-      return this.$db.NamedList[this.id];
+      return this.$store.state.$db.NamedList[this.id];
     },
     frameIcon() {
       return {

@@ -32,7 +32,7 @@ export default {
   },
   computed: {
     fruit() {
-      return this.$db.AbilitySpheres[this.id];
+      return this.$store.state.$db.AbilitySpheres[this.id];
     },
     itemId() {
       return this.fruit.m_ItemID;
@@ -41,7 +41,7 @@ export default {
       return this.fruit.m_Type;
     },
     name() {
-      return this.$db.ItemList[this.itemId].m_Name;
+      return this.$store.state.$db.ItemList[this.itemId].m_Name;
     },
     icon() {
       return this.$asset.itemicon.format(this.id.replace(/0$/, "")) + ".png";

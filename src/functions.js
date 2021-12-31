@@ -151,18 +151,18 @@ Vue.prototype.$lazy = lazy_load([
 ]);
 
 
-// Vue.prototype.$db = {
+// Vue.prototype.$store.state.$db = {
 //   get () => window.vue.$root.$children[0].ddd,
 //   set (val) => window.vue.$root.$children[0].ddd = val
 // }
 
 Object.defineProperty(Vue.prototype, '$db', {
   get: function () {
-    return window.vue.$root.$children[0].db;
+    return window.vue.$store.state.$db;
   },
-  set: function (value) {
-    window.vue.$root.$children[0].db = value;
-  },
+  // set: function (value) {
+  //   window.vue.$root.$children[0].db = value;
+  // },
 });
 
-// Vue.prototype.
+// Vue.prototype.db = $store.state.$db;

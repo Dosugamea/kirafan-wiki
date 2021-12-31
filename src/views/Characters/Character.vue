@@ -49,7 +49,7 @@ export default {
     collection: Boolean,
   },
   computed: {
-    character() { return this.$db.CharacterList[this.id]; },
+    character() { return this.$store.state.$db.CharacterList[this.id]; },
     status() {
       if (this.$s.characterShowMaxStatus || this.maxStatus) {
         const status = functions.status(

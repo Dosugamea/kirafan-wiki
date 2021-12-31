@@ -9,7 +9,7 @@
     p.display.px-4.primary--text {{orb.m_Name}}
 
     p.px-4.primary--text(v-if="orb.m_TitleType!=-1 && $i18n.locale!='ja'")
-      | {{$name($db.TitleList[orb.m_TitleType].m_DisplayName)}} — {{$t('Master Orb')}}
+      | {{$name($store.state.$db.TitleList[orb.m_TitleType].m_DisplayName)}} — {{$t('Master Orb')}}
     p.px-4.primary--text(v-if="orb.m_Class!=-1 && $i18n.locale!='ja'")
       | {{$t(`Classes.${orb.m_Class}`)}} — {{$t('Master Orb')}}
 
@@ -34,7 +34,7 @@ export default {
   props: ['id'],
   computed: {
     orb() {
-      return this.$db.MasterOrbList[this.id];
+      return this.$store.state.$db.MasterOrbList[this.id];
     }
   }
 };

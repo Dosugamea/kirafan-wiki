@@ -30,7 +30,7 @@ export default {
   props: ['id'],
   computed: {
     item() {
-      return this.$db.RoomObjectList[this.id];
+      return this.$store.state.$db.RoomObjectList[this.id];
     },
   },
   methods: {

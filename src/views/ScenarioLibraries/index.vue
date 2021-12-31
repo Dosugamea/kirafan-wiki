@@ -23,7 +23,7 @@ export default {
   computed: {
     scenarioLibraries() {
       const scenarioLibraries = [];
-      this.$db.ADVLibraryListArray.forEach(item => {
+      this.$store.state.$db.ADVLibraryListArray.forEach(item => {
         scenarioLibraries.push({
           id: item.m_LibraryListID,
           category: item.m_Category,
@@ -31,7 +31,7 @@ export default {
           icon: this.$asset.advlibraryicon.format(item.m_LibraryListID) + '.png',
         });
       });
-      this.$db.TitleListArray.forEach(item => {
+      this.$store.state.$db.TitleListArray.forEach(item => {
         scenarioLibraries.push({
           id: 5000 + item.m_TitleType,
           category: 5,

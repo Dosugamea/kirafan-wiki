@@ -40,13 +40,13 @@ export default {
   props: ['id'],
   computed: {
     item() {
-      return this.$db.ItemList[this.id];
+      return this.$store.state.$db.ItemList[this.id];
     },
     type() {
       return Math.floor(this.item.category / 100);
     },
     event() {
-      return this.$db.ADVLibraryList[this.item.category];
+      return this.$store.state.$db.ADVLibraryList[this.item.category];
     },
   },
 };

@@ -106,7 +106,7 @@ export default {
   },
   computed: {
     characters() {
-      return this.$db.ADVCharacterListArray.filter((character) =>
+      return this.$store.state.$db.ADVCharacterListArray.filter((character) =>
         character.m_ResourceBaseName
           .toLowerCase()
           .startsWith(this.id.toLowerCase())
@@ -207,7 +207,7 @@ export default {
 
       let assetBundle;
       if (this.$s.loadAssetbundle || false) {
-        assetBundle = this.$db.assetBundle;
+        assetBundle = this.$store.state.$db.assetBundle;
       } else {
         assetBundle = (
           await axios.get("https://database.kirafan.cn/assetBundle.json", {
@@ -238,7 +238,7 @@ export default {
           }
           standpicDB[name].push({ img, path });
         });
-      this.$db.standpicDB = standpicDB;
+      this.$store.state.$db.standpicDB = standpicDB;
       this.load();
       this.isLoadingDb = false;
       this.dialog = false;
@@ -316,7 +316,7 @@ export default {
       URL.revokeObjectURL(url);
     },
     standpicDB() {
-      return this.$db.standpicDB;
+      return this.$store.state.$db.standpicDB;
     },
     standpicPath() {
       try {

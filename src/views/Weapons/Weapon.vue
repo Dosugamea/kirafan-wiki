@@ -2,12 +2,12 @@
   v-list-item(:to="`/weapon/${weapon.m_ID}`")
     template(v-if="collection")
       v-list-item-avatar(:size="48", tile)
-        v-img(:src="$asset.weaponicon.format($db.WeaponList[id].m_ResourceID_R)+'.jpg'")
+        v-img(:src="$asset.weaponicon.format($store.state.$db.WeaponList[id].m_ResourceID_R)+'.jpg'")
       v-list-item-subtitle {{$name(weapon.m_WeaponName)}}
 
     template(v-else)
       v-list-item-avatar.mx-auto.mr-2.mr-md-4(:size="$size()", tile)
-        v-img(:src="$asset.weaponicon.format($db.WeaponList[id].m_ResourceID_R)+'.jpg'")
+        v-img(:src="$asset.weaponicon.format($store.state.$db.WeaponList[id].m_ResourceID_R)+'.jpg'")
       
       v-list-item-content.mr-auto.ml-0(style="max-width: 384px")
         v-list-item-title.d-flex.align-center
@@ -33,7 +33,7 @@ export default {
     collection: Boolean,
   },
   computed: {
-    weapon() { return this.$db.WeaponList[this.id]; },
+    weapon() { return this.$store.state.$db.WeaponList[this.id]; },
     status() {
       const status = {};
       if (this.weapon.m_InitAtk) status.ATK = this.weapon.m_InitAtk;

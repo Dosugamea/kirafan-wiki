@@ -103,7 +103,7 @@ export default {
   },
   computed: {
     character() {
-      return this.$db.CharacterList[this.id];
+      return this.$store.state.$db.CharacterList[this.id];
     },
   },
   methods: {

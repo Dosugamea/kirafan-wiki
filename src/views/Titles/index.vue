@@ -44,11 +44,11 @@ export default {
   },
   computed: {
     characterList() {
-      return this.$db.CharacterListArray
+      return this.$store.state.$db.CharacterListArray
         .filter(character => character.m_CharaID % 10 == 0);
     },
     titleList() {
-      let titleList = this.$db.TitleListArray.slice();
+      let titleList = this.$store.state.$db.TitleListArray.slice();
       if (this.sort == 'rare') {
         titleList.sort((t2, t1) => (
           (this.count(t1.m_TitleType, 4) * 1 + this.count(t1.m_TitleType, 3) * 1e-3 + this.count(t1.m_TitleType, 2) * 1e-6) -
@@ -67,7 +67,7 @@ export default {
     count(title, rare) {
       return this.characterList.filter(character =>
         (rare ? character.m_Rare == rare : true) &&
-        this.$db.NamedList[character.m_NamedType].m_TitleType == title &&
+        this.$store.state.$db.NamedList[character.m_NamedType].m_TitleType == title &&
         true).length;
     }
   }

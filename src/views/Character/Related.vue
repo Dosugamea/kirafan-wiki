@@ -17,11 +17,11 @@ export default {
   name: 'Related',
   props: ['id'],
   computed: {
-    character() { return this.$db.CharacterList[this.id]; },
-    named() { return this.$db.NamedList[this.character.m_NamedType]; },
+    character() { return this.$store.state.$db.CharacterList[this.id]; },
+    named() { return this.$store.state.$db.NamedList[this.character.m_NamedType]; },
     event() { return this.character.m_Name.match(/【.*】/); },
     characterList() {
-      return this.$db.CharacterListArray
+      return this.$store.state.$db.CharacterListArray
         .filter(character => character.m_CharaID % 10 == 0);
     },
     sameRareClassElement() {
@@ -46,18 +46,18 @@ export default {
           character.m_NamedType == this.character.m_NamedType);
     },
     sameTitle() {
-      return this.$db.NamedListArray
+      return this.$store.state.$db.NamedListArray
         .filter(named =>
           named.m_NamedType != this.named.m_NamedType &&
           named.m_TitleType == this.named.m_TitleType)
-        .map(named => this.$db.CharacterList[named.primaryCharacterID]);
+        .map(named => this.$store.state.$db.CharacterList[named.primaryCharacterID]);
     },
     sameCV() {
-      return this.$db.NamedListArray
+      return this.$store.state.$db.NamedListArray
         .filter(named =>
           named.m_NamedType != this.named.m_NamedType &&
           named.m_CVText == this.named.m_CVText)
-        .map(named => this.$db.CharacterList[named.primaryCharacterID]);
+        .map(named => this.$store.state.$db.CharacterList[named.primaryCharacterID]);
     },
     related() {
       return [

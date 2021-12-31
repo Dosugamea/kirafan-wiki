@@ -17,7 +17,7 @@ export default {
   props: ['id'],
   computed: {
     named() {
-      return this.$db.NamedList[this.id];
+      return this.$store.state.$db.NamedList[this.id];
     },
     width() {
       return this.$vuetify.breakpoint.lgAndUp ? 192 : 128;

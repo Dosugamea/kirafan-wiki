@@ -43,9 +43,9 @@ export default {
     props: ['id'],
   computed: {
     list() {
-      return this.$db.TweetList.filter((tweet) => tweet.m_NamedType === Number(this.id))
+      return this.$store.state.$db.TweetList.filter((tweet) => tweet.m_NamedType === Number(this.id))
         .map((x) => [
-          this.$db.RoomObjectListArray.find(
+          this.$store.state.$db.RoomObjectListArray.find(
             (item) => x.m_ID === item.m_ObjEventArgs[1]
           ),
           x,
@@ -58,7 +58,7 @@ export default {
       return define.roomIDtoStr[id];
     },
     name(namedType) {
-      return this.$db.NamedList[namedType].m_ResouceBaseName;
+      return this.$store.state.$db.NamedList[namedType].m_ResouceBaseName;
     },
   },
 };

@@ -25,13 +25,13 @@ export default {
       });
     },
     fruit() {
-      return this.$db.AbilitySpheres[this.id];
+      return this.$store.state.$db.AbilitySpheres[this.id];
     },
     itemId() {
       return this.fruit.m_ItemID;
     },
     name() {
-      return this.$db.ItemList[this.itemId].m_Name.replace("[Grade1]", "");
+      return this.$store.state.$db.ItemList[this.itemId].m_Name.replace("[Grade1]", "");
     },
   },
 };

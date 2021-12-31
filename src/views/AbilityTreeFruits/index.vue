@@ -17,7 +17,7 @@ export default {
   computed: {
     groupedFruits() {
       const output = [];
-      this.$db.AbilitySpheresArray.forEach((element) => {
+      this.$store.state.$db.AbilitySpheresArray.forEach((element) => {
         const id = element.m_ID;
         const id_str = String(id);
         if (id_str[2] === "0") {

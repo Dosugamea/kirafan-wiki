@@ -150,14 +150,14 @@ export default {
   },
   computed: {
     named() {
-      return this.$db.NamedList[this.id];
+      return this.$store.state.$db.NamedList[this.id];
     },
     types() {
       return [0, 1, 2, 3, 4];
     },
     tweets() {
       const tweets = {};
-      const tweetList = this.$db.TweetList.filter(
+      const tweetList = this.$store.state.$db.TweetList.filter(
         (tweet) => tweet.m_NamedType == this.id
       );
       for (let tweet of tweetList) {
@@ -228,7 +228,7 @@ export default {
     },
     async isLatestVersion(chara_name) {
       const file_base_name = `Voice_${chara_name}`;
-      const version = this.$db.CRIFileVersion[file_base_name].m_Version;
+      const version = this.$store.state.$db.CRIFileVersion[file_base_name].m_Version;
       const response = await this.get_response(
         this.$asset.voice.format(chara_name, String(version))
       );
@@ -352,7 +352,7 @@ export default {
       // this.load();
       if (this.isCardVoiceLoaded || this.isCardVoiceLoading) return;
       this.isCardVoiceLoading = true;
-      const charas = this.$db.CRIFileVersionArray.filter((x) =>
+      const charas = this.$store.state.$db.CRIFileVersionArray.filter((x) =>
         x.m_FileName.startsWith("Voice_" + this.named.m_ResouceBaseName + "_")
       ).map((x) => x.m_FileName);
       const db = (

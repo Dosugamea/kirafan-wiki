@@ -20,7 +20,7 @@
               template(v-else-if="key=='element'")
                 span {{$t(`Elements.${value}`)}}
               template(v-else-if="key=='title'")
-                span {{$name($db.TitleList[value].m_DisplayName)}}
+                span {{$name($store.state.$db.TitleList[value].m_DisplayName)}}
               template(v-else-if="key=='skill'")
                 span.primary--text(style="font-weight: 550") skill
               template(v-else-if="key=='name'")
@@ -63,7 +63,7 @@
               v-list-item-action.ma-0
                 v-icon mdi-chevron-right
           v-list.overflow-y-auto(dense, max-height="calc(100vh - 24px)")
-            v-list-item(v-for="title in $db.TitleListArray", :key="`characters-filter-title-${title.m_TitleType}`", @click="q('title', title.m_TitleType)")
+            v-list-item(v-for="title in $store.state.$db.TitleListArray", :key="`characters-filter-title-${title.m_TitleType}`", @click="q('title', title.m_TitleType)")
               v-list-item-content
                 v-list-item-title {{$name(title.m_DisplayName)}}
         
@@ -151,14 +151,14 @@ export default {
   },
   computed: {
     _characterList() {
-      let characterList = this.$db.CharacterListArray
+      let characterList = this.$store.state.$db.CharacterListArray
         .filter(character => character.m_CharaID % 10 == 0);
       return characterList;
     },
     characterList() {
       let characterList = this._characterList.filter(character => {
         try {
-          let named = this.$db.NamedList[character.m_NamedType];
+          let named = this.$store.state.$db.NamedList[character.m_NamedType];
           return (
             !this.query.name || !this.query.name.length || this.query.name
               .map(name => RegExp(name.replace(/\s/g, ''), 'i'))
@@ -173,7 +173,7 @@ export default {
               ].some(name => r.test(name && name.replace(/\s/g, ''))))
           ) && (
             !this.query.title || !this.query.title.length || this.query.title
-              .some(title => this.$db.NamedList[character.m_NamedType].m_TitleType == title)
+              .some(title => this.$store.state.$db.NamedList[character.m_NamedType].m_TitleType == title)
           ) && (
             !this.query.rare || !this.query.rare.length || this.query.rare
               .some(rare => character.m_Rare == rare)
@@ -188,8 +188,8 @@ export default {
               .some(skillEval => Array(character.m_CharaSkillID, ...character.m_ClassSkillIDs)
                 .some(skillID => {
                   const skill = Object.assign({},
-                    this.$db.SkillList_PL[skillID],
-                    this.$db.SkillContentList_PL[skillID]);
+                    this.$store.state.$db.SkillList_PL[skillID],
+                    this.$store.state.$db.SkillContentList_PL[skillID]);
                   return skill.m_Datas
                     .some(data => {
                       const amount = parser.amount;

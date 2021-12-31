@@ -43,7 +43,7 @@ export default {
   },
   computed: {
     enemy() {
-      return this.$db.QuestEnemyList[this.id];
+      return this.$store.state.$db.QuestEnemyList[this.id];
     },
     elementIcon() {
       return {

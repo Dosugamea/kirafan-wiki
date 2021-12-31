@@ -18,7 +18,7 @@
 
     p.px-4.primary--text
       span(v-if="questLibrary.category==5")
-        | {{$name($db.CharacterList[quest.section].m_Name)}} — {{$t('Quest Library Categories.5')}}
+        | {{$name($store.state.$db.CharacterList[quest.section].m_Name)}} — {{$t('Quest Library Categories.5')}}
       span(v-else-if="questLibrary.category==6")
         | {{$t('Section').format(quest.section)}} — {{$t('Quest Library Categories.6')}}
       span(v-else)
@@ -61,13 +61,13 @@ export default {
   components: { Wave },
   computed: {
     quest() {
-      return this.$db.QuestList[this.id];
+      return this.$store.state.$db.QuestList[this.id];
     },
     questLibrary() {
-      return this.$db.QuestLibraryList[this.quest.questLibraryID];
+      return this.$store.state.$db.QuestLibraryList[this.quest.questLibraryID];
     },
     event() {
-      return this.$db.Events[this.quest.questLibraryID];
+      return this.$store.state.$db.Events[this.quest.questLibraryID];
     },
     startTime() {
       if (this.questLibrary.category == 1) {
@@ -100,14 +100,14 @@ export default {
       if (!this.$questLock()) {
         return true;
       }
-      return (this.$time || new Date(this.$db.date)) > this.openTime;
+      return (this.$time || new Date(this.$store.state.$db.date)) > this.openTime;
     },
     itemOrder() {
       return this.quest.itemIDs
         .slice()
         .sort(
           (itemID0, itemID1) =>
-            this.$db.ItemList[itemID1].type - this.$db.ItemList[itemID0].type
+            this.$store.state.$db.ItemList[itemID1].type - this.$store.state.$db.ItemList[itemID0].type
         )
         .map((itemID) => this.quest.itemIDs.indexOf(itemID));
     },
@@ -135,7 +135,7 @@ export default {
   },
   methods: {
     isEventBonus(itemID) {
-      return this.$db.ItemList[itemID].isEventBonus;
+      return this.$store.state.$db.ItemList[itemID].isEventBonus;
     },
   },
 };

@@ -30,7 +30,7 @@
     v-divider
     Ad(:key="`master-ad-${id}`")
 
-    template(v-for="orb in $db.MasterOrbListArray")
+    template(v-for="orb in $store.state.$db.MasterOrbListArray")
       v-divider
       Orb(:id="orb.m_ID", :key="`master-orb-${orb.m_ID}`")
     
@@ -49,10 +49,10 @@ export default {
   },
   computed: {
     master() {
-      return this.$db.MasterRank[this.level];
+      return this.$store.state.$db.MasterRank[this.level];
     },
     exp() {
-      return this.$4(this.$db.MasterRankArray
+      return this.$4(this.$store.state.$db.MasterRankArray
         .filter(item => item.m_Rank < this.level)
         .reduce((sum, item) => (sum + item.m_NextExp), 0));
     },

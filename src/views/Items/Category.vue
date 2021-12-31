@@ -21,7 +21,7 @@ export default {
   },
   computed: {
     items() {
-      return this.$db.ItemListArray.filter(item => item.category == this.id);
+      return this.$store.state.$db.ItemListArray.filter(item => item.category == this.id);
     },
     name() {
       if (this.questLibrary) {
@@ -29,7 +29,7 @@ export default {
       }
       if (Math.floor(this.id / 100) == 10) {
         return this.$t('Item Category Event').format({
-          event: this.$name(this.$db.ADVLibraryList[this.id].m_ListName),
+          event: this.$name(this.$store.state.$db.ADVLibraryList[this.id].m_ListName),
         });
       } else {
         return this.$t(`Item Category.${this.id}`);

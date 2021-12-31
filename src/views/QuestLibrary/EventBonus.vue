@@ -19,7 +19,7 @@ export default {
   props: ['id'],
   computed: {
     characters() {
-      return this.$db.EventQuestDropExt.filter(item =>
+      return this.$store.state.$db.EventQuestDropExt.filter(item =>
         item.m_EventType == this.id &&
         item.m_CharaID % 10 == 0);
     },

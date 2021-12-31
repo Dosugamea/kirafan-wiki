@@ -20,7 +20,7 @@
               template(v-else-if="key=='element'")
                 span {{$t(`Elements.${value}`)}}
               template(v-else-if="key=='title'")
-                span {{$name($db.TitleList[value].m_DisplayName)}}
+                span {{$name($store.state.$db.TitleList[value].m_DisplayName)}}
               template(v-else-if="key=='skill'")
                 span.primary--text(style="font-weight: 550") skill
               template(v-else-if="key=='name'")
@@ -64,7 +64,7 @@
               v-list-item-action.ma-0
                 v-icon mdi-chevron-right
           v-list.overflow-y-auto(dense, max-height="calc(100vh - 24px)")
-            v-list-item(v-for="title in $db.TitleListArray", :key="`weapons-filter-title-${title.m_TitleType}`", @click="q('title', title.m_TitleType)")
+            v-list-item(v-for="title in $store.state.$db.TitleListArray", :key="`weapons-filter-title-${title.m_TitleType}`", @click="q('title', title.m_TitleType)")
               v-list-item-content
                 v-list-item-title {{$name(title.m_DisplayName)}}
           
@@ -109,14 +109,14 @@ export default {
   },
   computed: {
     _weaponList() {
-      return this.$db.WeaponListArray
+      return this.$store.state.$db.WeaponListArray
         .filter(weapon => weapon.m_EvolvedCount == 0 && !weapon.default);
     },
     weaponList() {
       let weaponList = this._weaponList.filter(weapon => {
         try {
-          let character = weapon.m_EquipableCharaID == -1 ? {} : this.$db.CharacterList[weapon.m_EquipableCharaID - weapon.m_EquipableCharaID % 10];
-          let named = character.m_NamedType == undefined ? {} : this.$db.NamedList[character.m_NamedType];
+          let character = weapon.m_EquipableCharaID == -1 ? {} : this.$store.state.$db.CharacterList[weapon.m_EquipableCharaID - weapon.m_EquipableCharaID % 10];
+          let named = character.m_NamedType == undefined ? {} : this.$store.state.$db.NamedList[character.m_NamedType];
           return true && (
             !this.query.name || !this.query.name.length || this.query.name
               .map(name => RegExp(name.replace(/\s/g, ''), 'i'))
@@ -133,7 +133,7 @@ export default {
               ].some(name => r.test(name && name.replace(/\s/g, ''))))
           ) && (
             !this.query.title || !this.query.title.length || this.query.title
-              .some(title => this.$db.NamedList[character.m_NamedType].m_TitleType == title)
+              .some(title => this.$store.state.$db.NamedList[character.m_NamedType].m_TitleType == title)
           ) && (
             !this.query.rare || !this.query.rare.length || this.query.rare
               .some(rare => weapon.m_Rare == rare)
@@ -147,10 +147,10 @@ export default {
             !this.query.skill || !this.query.skill.length || this.query.skill
               .some(skillEval => [
                 weapon.m_SkillID,
-                this.$db.WeaponList[weapon.m_ID + weapon.maxEvolution].m_SkillID,
+                this.$store.state.$db.WeaponList[weapon.m_ID + weapon.maxEvolution].m_SkillID,
               ]
                 .filter(id => id && id != -1)
-                .some(skillID => this.$db.SkillContentList_WPN[skillID].m_Datas
+                .some(skillID => this.$store.state.$db.SkillContentList_WPN[skillID].m_Datas
                   .some(data => {
                     const amount = parser.amount;
                     const amounts = parser.amounts;

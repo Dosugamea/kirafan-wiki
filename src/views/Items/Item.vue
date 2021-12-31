@@ -15,7 +15,7 @@ export default {
   },
   computed: {
     item() {
-      return this.$db.ItemList[this.id];
+      return this.$store.state.$db.ItemList[this.id];
     }
   }
 };

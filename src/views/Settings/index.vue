@@ -75,10 +75,10 @@
     v-subheader {{$t('Database')}}
     v-list-item(@click="")
       v-list-item-content: v-list-item-title {{$t('Database Fetch Time')}}
-      v-list-item-action: v-list-item-action-text {{new Date($db.date).toLocaleString()}}
+      v-list-item-action: v-list-item-action-text {{new Date($store.state.$db.date).toLocaleString()}}
     v-list-item(@click="")
       v-list-item-content: v-list-item-title {{$t('Hash')}}
-      v-list-item-action: v-list-item-action-text {{$db.version}}
+      v-list-item-action: v-list-item-action-text {{$store.state.$db.version}}
     v-list-item(@click="reloadDatabase")
       v-list-item-content: v-list-item-title {{$t('Reload Database')}}
       v-list-item-action: v-icon mdi-refresh

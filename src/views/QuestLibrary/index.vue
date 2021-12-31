@@ -80,17 +80,17 @@ export default {
   },
   computed: {
     questLibrary() {
-      return this.$db.QuestLibraryList[this.id];
+      return this.$store.state.$db.QuestLibraryList[this.id];
     },
     event() {
       if (this.questLibrary.category == 1) {
-        return this.$db.Events[this.id] || {};
+        return this.$store.state.$db.Events[this.id] || {};
       } else {
         return {};
       }
     },
     eventBonus() {
-      return this.$db.EventQuestDropExt.filter(
+      return this.$store.state.$db.EventQuestDropExt.filter(
         (item) => item.m_EventType == this.id
       ).length;
     },

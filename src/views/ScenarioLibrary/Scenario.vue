@@ -31,7 +31,7 @@ export default {
   props: ['id'],
   computed: {
     scenario() {
-      return this.$db.ADVList[this.id];
+      return this.$store.state.$db.ADVList[this.id];
     },
   }
 };

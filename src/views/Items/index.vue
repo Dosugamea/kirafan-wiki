@@ -23,7 +23,7 @@ export default {
   computed: {
     categorys() {
       const categorys = {};
-      this.$db.ItemListArray.forEach(item => categorys[item.category] = true);
+      this.$store.state.$db.ItemListArray.forEach(item => categorys[item.category] = true);
       return Object.keys(categorys).filter(category => Math.floor(category / 100) == this.filter);
     },
     types() {

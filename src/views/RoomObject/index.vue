@@ -97,13 +97,13 @@ export default {
   components: { Action },
   computed: {
     item() {
-      return this.$db.RoomObjectList[this.id];
+      return this.$store.state.$db.RoomObjectList[this.id];
     },
     tweetID() {
       return this.item.m_ObjEventArgs[1];
     },
     tweets() {
-      return this.$db.TweetList.filter(tweet => tweet.m_ID == this.tweetID);
+      return this.$store.state.$db.TweetList.filter(tweet => tweet.m_ID == this.tweetID);
     },
     categoryName() {
       return define.roomIDtoStr[this.item.m_Category];
@@ -111,19 +111,19 @@ export default {
   },
   methods: {
     name(namedType) {
-      return this.$db.NamedList[namedType].m_ResouceBaseName;
+      return this.$store.state.$db.NamedList[namedType].m_ResouceBaseName;
     },
     primaryCharacterID(namedType) {
-      return this.$db.NamedList[namedType].primaryCharacterID;
+      return this.$store.state.$db.NamedList[namedType].primaryCharacterID;
     },
     characterName(characterID) {
-      return this.$name(this.$db.CharacterList[characterID].m_Name);
+      return this.$name(this.$store.state.$db.CharacterList[characterID].m_Name);
     },
     namedName(namedType) {
-      return this.$name(this.$db.NamedList[namedType].fullName);
+      return this.$name(this.$store.state.$db.NamedList[namedType].fullName);
     },
     titleNames(titleType) {
-      return this.$db.NamedListArray.filter(named => named.m_TitleType == titleType);
+      return this.$store.state.$db.NamedListArray.filter(named => named.m_TitleType == titleType);
     }
   }
 };

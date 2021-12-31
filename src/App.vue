@@ -12,6 +12,9 @@
     v-app-bar(app, clipped-left, clipped-right, color="secondary", height=56, elevation=0)
       
       v-btn.hidden-sm-and-up(icon, @click="navigation=!navigation"): v-icon mdi-menu
+      v-toolbar-title(style="font-size: 1rem" v-if="!allLoaded && databaseProgress.total > 0") 
+        | {{ databaseProgress.loaded }} / {{ databaseProgress.total }}  Loading...
+      
       v-toolbar-title.px-2.px-sm-4 {{title}} 
       v-spacer
       .hidden-xs-only
@@ -69,7 +72,8 @@
           span Loading Database...
           span(v-show="databaseProgress")  {{databaseProgress.loaded}} / {{databaseProgress.total}}
       div(v-else, style="max-width: 768px; margin: auto; padding: 32px 0 80px 0")
-        keep-alive: router-view
+        span(v-if="!allLoaded"): router-view
+        span(v-else): keep-alive: router-view
         //- v-divider
         //- Ad(:key="$router.toString()", type="display")
 
@@ -103,7 +107,7 @@
 </template>
 
 <script>
-import database from '@/database';
+// import database from '@/database';
 
 export default {
   name: 'App',
@@ -114,6 +118,7 @@ export default {
       databaseStatus: 0, // 0: no db; 1: ok, 2: updating, 3: updated
       databaseProgress: 0,
       applicationStatus: false,
+      allLoaded:false,
 
       navigationMini: true,
       navigation: this.$vuetify.breakpoint.smAndUp,
@@ -121,7 +126,7 @@ export default {
       cleaVisibility: false,
       magic: 0,
 
-      db: database,
+      
     };
   },
   computed: {
@@ -217,6 +222,9 @@ export default {
       this.applicationStatus = true;
       this.snackbar = true;
       this.refresh = true;
+    });
+    this.$root.$on('allLoaded', () => {
+      this.allLoaded = true;
     });
     this.$root.$on('cleaVisibility', (x) => {
       this.cleaVisibility = x;

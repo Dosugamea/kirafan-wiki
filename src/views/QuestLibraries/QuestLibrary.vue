@@ -37,7 +37,7 @@ export default {
       }
     },
     questLibrary() {
-      return this.$db.QuestLibraryList[this.id];
+      return this.$store.state.$db.QuestLibraryList[this.id];
     },
   }
 };

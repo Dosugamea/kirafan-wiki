@@ -16,7 +16,7 @@ export default {
   props: ['id'],
   computed: {
     achievements() {
-      return this.$db.AchievementListArray.filter(achievement =>
+      return this.$store.state.$db.AchievementListArray.filter(achievement =>
         achievement.type == 2 && achievement.trigger == this.id);
     }
   }

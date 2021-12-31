@@ -35,7 +35,7 @@ export default {
   },
   computed: {
     named() {
-      return this.$db.NamedList[this.id];
+      return this.$store.state.$db.NamedList[this.id];
     },
     formalStatus() {
       return this.$s.characterTalentShowLuck

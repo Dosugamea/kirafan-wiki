@@ -112,13 +112,13 @@ export default {
     },
     skill() {
       return Object.assign({},
-        this.$db[`SkillList_${this.owner}`][this.id],
-        this.$db[`SkillContentList_${this.owner}`][this.id]);
+        this.$store.state.$db[`SkillList_${this.owner}`][this.id],
+        this.$store.state.$db[`SkillContentList_${this.owner}`][this.id]);
     },
     fromSkill() {
       return this.from ? Object.assign({},
-        this.$db[`SkillList_${this.owner}`][this.from],
-        this.$db[`SkillContentList_${this.owner}`][this.from]) : {};
+        this.$store.state.$db[`SkillList_${this.owner}`][this.from],
+        this.$store.state.$db[`SkillContentList_${this.owner}`][this.from]) : {};
     },
     skillSpriteFilter() {
       return {
@@ -165,11 +165,11 @@ export default {
       if (this.owner == 'MST') return 0;
       let charge = (this.sp ? -1 :
         this.skill.m_Datas
-          .map(data => this.$db.TogetherChargeDefine[data.m_Type].m_Value)
+          .map(data => this.$store.state.$db.TogetherChargeDefine[data.m_Type].m_Value)
           .reduce((x, y) => (x > y ? x : y))) * 100;
       let fromCharge = this.from && (this.sp ? -1 :
         this.fromSkill.m_Datas
-          .map(data => this.$db.TogetherChargeDefine[data.m_Type].m_Value)
+          .map(data => this.$store.state.$db.TogetherChargeDefine[data.m_Type].m_Value)
           .reduce((x, y) => (x > y ? x : y))) * 100;
       let sign = { '-1': '↓', 0: '', 1: '↑' }[Math.sign(charge - fromCharge)];
       return `${charge}%${this.from ? sign : ''}`;
@@ -198,7 +198,7 @@ export default {
       return this.from ? parser.parse(this.from, this.owner, this.level, this.sp) : [];
     },
     exp() {
-      return this.$4(this.$db.SkillExp
+      return this.$4(this.$store.state.$db.SkillExp
         .filter(item =>
           item.m_ID == (this.exptable || 0) &&
           item.m_Lv < this.level)

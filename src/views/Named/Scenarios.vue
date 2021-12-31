@@ -15,10 +15,10 @@ export default {
   components: { Scenario },
   computed: {
     scenarios() {
-      let scenarios = this.$db.ADVListArray.filter(item =>
+      let scenarios = this.$store.state.$db.ADVListArray.filter(item =>
         item.m_NamedType[0] == this.id ||
         item.m_NamedType[1] == this.id ||
-        !this.$isMoe() && item.m_CharaID >= 0 && this.$db.CharacterList[item.m_CharaID].m_NamedType == this.id ||
+        !this.$isMoe() && item.m_CharaID >= 0 && this.$store.state.$db.CharacterList[item.m_CharaID].m_NamedType == this.id ||
         false);
       for (let i = 0; i < scenarios.length; i++) {
         if (i > 0 && scenarios[i].m_ScriptTextName == scenarios[i - 1].m_ScriptTextName) {

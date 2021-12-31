@@ -34,7 +34,7 @@
       v-divider.mb-4
       p.title.px-4.primary--text {{$t('Names')}}
       Scroller(:icon="$size(64)")
-        .ml-4(v-for="character in $db.OriginalCharaLibraryListArray", v-if="character.namedType"
+        .ml-4(v-for="character in $store.state.$db.OriginalCharaLibraryListArray", v-if="character.namedType"
           :key="`title-original-character-${character.m_ID}`",
           :style="{width: $size(64)+'px'}")
           router-link(:to="`/named/${character.namedType}`")
@@ -44,7 +44,7 @@
 
       p.px-4.subtitle-1 {{$t('Non-Player Characters')}}
       Scroller(:icon="$size(64)")
-        .ml-4(v-for="character in $db.OriginalCharaLibraryListArray", v-if="!character.namedType && character.m_CondAdvID==-1"
+        .ml-4(v-for="character in $store.state.$db.OriginalCharaLibraryListArray", v-if="!character.namedType && character.m_CondAdvID==-1"
           :key="`title-original-character-${character.m_ID}`",
           :style="{width: $size(64)+'px'}")
           router-link(:to="`/originalcharacter/${character.m_ID}`")
@@ -54,7 +54,7 @@
 
       p.px-4.subtitle-1 {{$t('Event Characters')}}
       Scroller(:icon="$size(64)")
-        .ml-4(v-for="character in $db.OriginalCharaLibraryListArray", v-if="!character.namedType && character.m_CondAdvID!=-1"
+        .ml-4(v-for="character in $store.state.$db.OriginalCharaLibraryListArray", v-if="!character.namedType && character.m_CondAdvID!=-1"
           :key="`title-original-character-${character.m_ID}`",
           :style="{width: $size(64)+'px'}")
           router-link(:to="`/originalcharacter/${character.m_ID}`")
@@ -120,30 +120,30 @@ export default {
   components: { Orb, TownObject, Achievements },
   computed: {
     title() {
-      return this.$db.TitleList[this.id];
+      return this.$store.state.$db.TitleList[this.id];
     },
     icon() {
       return this.$asset.contentslogo.format(this.id) + '.png';
     },
     names() {
-      return this.$db.NamedListArray.filter(name =>
+      return this.$store.state.$db.NamedListArray.filter(name =>
         name.m_TitleType == this.id);
     },
     orbs() {
-      return this.$db.MasterOrbListArray.filter(orb =>
+      return this.$store.state.$db.MasterOrbListArray.filter(orb =>
         orb.m_TitleType == this.id);
     },
     townObjects() {
-      return this.$db.TownObjectListArray.filter(item =>
+      return this.$store.state.$db.TownObjectListArray.filter(item =>
         item.m_TitleType == this.id);
     }
   },
   methods: {
     count(rare) {
-      return this.$db.CharacterListArray.filter(character =>
+      return this.$store.state.$db.CharacterListArray.filter(character =>
         character.m_CharaID % 10 == 0 &&
         (rare ? character.m_Rare == rare : true) &&
-        this.$db.NamedList[character.m_NamedType].m_TitleType == this.id &&
+        this.$store.state.$db.NamedList[character.m_NamedType].m_TitleType == this.id &&
         true).length;
     }
   }

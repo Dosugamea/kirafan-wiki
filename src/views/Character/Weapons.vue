@@ -15,10 +15,10 @@ export default {
   components: { Weapon },
   computed: {
     character() {
-      return this.$db.CharacterList[this.id];
+      return this.$store.state.$db.CharacterList[this.id];
     },
     weapons() {
-      return this.$db.WeaponListArray.filter(weapon =>
+      return this.$store.state.$db.WeaponListArray.filter(weapon =>
         weapon.m_EvolvedCount == 0 && weapon.m_EquipableCharaID == this.id ||
         // weapon.m_EvolvedCount == 0 && weapon.m_EquipableCharaID == -1 && weapon.m_ClassType == this.character.m_Class && !weapon.default || 
         false);

@@ -20,7 +20,7 @@
       p.px-4(v-html="item.m_DetailText.replace('\\n', '<br>')", :class="{small: $vuetify.breakpoint.xsOnly}")
 
     .px-4.mb-4
-      KeyValue(:k="$t('Title')", :v="$name($db.TitleList[item.m_TitleType].m_DisplayName)", width="33%", v-if="item.m_TitleType!=-1")
+      KeyValue(:k="$t('Title')", :v="$name($store.state.$db.TitleList[item.m_TitleType].m_DisplayName)", width="33%", v-if="item.m_TitleType!=-1")
       KeyValue(:k="$t('Max Num')", :v="item.m_MaxNum", width="33%")
 
     v-divider
@@ -56,20 +56,20 @@ export default {
   props: ['id'],
   computed: {
     item() {
-      return this.$db.TownObjectList[this.id];
+      return this.$store.state.$db.TownObjectList[this.id];
     },
     schedules() {
-      return this.$db.ScheduleNameArray.filter(schedule => schedule.m_BuildMoveCode == this.item.m_ResourceID);
+      return this.$store.state.$db.ScheduleNameArray.filter(schedule => schedule.m_BuildMoveCode == this.item.m_ResourceID);
     },
   },
   methods: {
     scheduleReplaces(scheduleID) {
       const schedules = {};
-      this.$db.ScheduleNameReplaceArray.forEach(schedule => {
+      this.$store.state.$db.ScheduleNameReplaceArray.forEach(schedule => {
         let index = schedule.m_ScheduleID.indexOf(scheduleID);
         if (index == -1) return;
         let text = schedule.m_ReplaceScheduleName[index];
-        let namedType = this.$db.CharacterList[schedule.m_CharaID].m_NamedType;
+        let namedType = this.$store.state.$db.CharacterList[schedule.m_CharaID].m_NamedType;
         if (schedules[text]) {
           if (schedules[text].indexOf(namedType) == -1) {
             schedules[text].push(namedType);

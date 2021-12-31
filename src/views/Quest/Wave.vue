@@ -19,7 +19,7 @@ export default {
   components: { Enemy, Random },
   computed: {
     wave() {
-      return this.$db.QuestWaveList[this.id];
+      return this.$store.state.$db.QuestWaveList[this.id];
     },
     noEnemy() {
       if (!this.wave) {

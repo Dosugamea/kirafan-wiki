@@ -28,7 +28,7 @@ export default {
       return this.item.m_charaName.split('$')[1] || this.item.m_charaName;
     },
     character() {
-      return this.$db.ADVCharacterList[this.id];
+      return this.$store.state.$db.ADVCharacterList[this.id];
     },
     name() {
       return this.item.m_charaName.indexOf('$') == -1 ?

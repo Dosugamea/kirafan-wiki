@@ -21,28 +21,28 @@ export default {
     hideTitle: Boolean,
   },
   computed: {
-    named() { return this.$db.NamedList[this.id]; },
+    named() { return this.$store.state.$db.NamedList[this.id]; },
     sameTitle() {
-      return this.$db.NamedListArray
+      return this.$store.state.$db.NamedListArray
         .filter(named =>
           named.m_NamedType != this.named.m_NamedType &&
           named.m_TitleType == this.named.m_TitleType);
     },
     sameCV() {
-      return this.$db.NamedListArray
+      return this.$store.state.$db.NamedListArray
         .filter(named =>
           named.m_NamedType != this.named.m_NamedType &&
           named.m_CVText.replace(/\s/g, '') == this.named.m_CVText.replace(/\s/g, ''));
     },
     crossAdv() {
       return this.named.crossAdvList
-        .map(crossAdv => this.$db.NamedList[crossAdv.m_NamedType]);
+        .map(crossAdv => this.$store.state.$db.NamedList[crossAdv.m_NamedType]);
     },
     related() {
       return [
         {
           name: this.$t('Same Title').format({
-            title: this.$name(this.$db.TitleList[this.named.m_TitleType].m_DisplayName),
+            title: this.$name(this.$store.state.$db.TitleList[this.named.m_TitleType].m_DisplayName),
           }),
           items: this.sameTitle
         },

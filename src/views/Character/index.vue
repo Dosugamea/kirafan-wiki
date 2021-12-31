@@ -94,8 +94,8 @@
       v-list-item-action.ma-0: v-icon mdi-chevron-right
 
     v-list-item(v-show="$i18n.locale=='ja'", target="_blank",
-      :href="$const.wikiwiki.character.format($db.NamedList[this.character.m_NamedType].m_FullName)")
-      v-list-item-title.primary--text {{$db.NamedList[this.character.m_NamedType].m_FullName}} - {{$t('Wikiwiki.Title')}}
+      :href="$const.wikiwiki.character.format($store.state.$db.NamedList[this.character.m_NamedType].m_FullName)")
+      v-list-item-title.primary--text {{$store.state.$db.NamedList[this.character.m_NamedType].m_FullName}} - {{$t('Wikiwiki.Title')}}
       v-list-item-action.ma-0: v-icon mdi-open-in-new
 
     v-list-item(v-show="$i18n.locale=='ja'", target="_blank", v-if="character.isDistributed"
@@ -161,20 +161,20 @@ export default {
     };
   },
   computed: {
-    character() { return this.$db.CharacterList[this.id]; },
+    character() { return this.$store.state.$db.CharacterList[this.id]; },
     evolvedCharacter() {
-      return this.$db.CharacterList[this.evolvedID(this.evolution)];
+      return this.$store.state.$db.CharacterList[this.evolvedID(this.evolution)];
     },
     evolution() {
       return this.level >= [undefined, 60, 70][this.character.m_Rare - 2];
     },
     arousalLevel() {
-      return this.$db.ArousalLevels.filter(item =>
+      return this.$store.state.$db.ArousalLevels.filter(item =>
         item.m_Rare == this.character.m_Rare &&
         item.m_Lv == this.arousal)[0] || {};
     },
     arousalExp() {
-      return this.$db.ArousalLevels
+      return this.$store.state.$db.ArousalLevels
         .filter(item =>
           item.m_Rare == this.character.m_Rare &&
           item.m_Lv < this.arousal)
@@ -212,7 +212,7 @@ export default {
       return 10;
     },
     exp() {
-      return this.$4(this.$db.CharacterExp
+      return this.$4(this.$store.state.$db.CharacterExp
         .slice(0, this.level - 1)
         .reduce((s, item) => (s + item.m_NextExp), 0));
     },

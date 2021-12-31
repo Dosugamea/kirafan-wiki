@@ -10,8 +10,8 @@ export default {
   components: { Character },
   computed: {
     character() {
-      let index = Math.floor(Math.random() * this.$db.CharacterListArray.length);
-      return this.$db.CharacterListArray[index];
+      let index = Math.floor(Math.random() * this.$store.state.$db.CharacterListArray.length);
+      return this.$store.state.$db.CharacterListArray[index];
     }
   }
 };

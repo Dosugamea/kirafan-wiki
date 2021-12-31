@@ -23,7 +23,7 @@ export default {
   props: ['id'],
   computed: {
     character() {
-      return this.$db.OriginalCharaLibraryList[this.id];
+      return this.$store.state.$db.OriginalCharaLibraryList[this.id];
     }
   }
 };

@@ -63,14 +63,14 @@ export default {
   props: ['id'],
   components: { Profile, Voices, Talent, Related, Scenarios, RoomObject },
   computed: {
-    named() { return this.$db.NamedList[this.id]; },
+    named() { return this.$store.state.$db.NamedList[this.id]; },
     characters() {
-      return this.$db.CharacterListArray.filter(character =>
+      return this.$store.state.$db.CharacterListArray.filter(character =>
         character.m_CharaID % 10 == 0 &&
         character.m_NamedType == this.id);
     },
     character() {
-      return this.named.originalCharaID && this.$db.OriginalCharaLibraryList[this.named.originalCharaID];
+      return this.named.originalCharaID && this.$store.state.$db.OriginalCharaLibraryList[this.named.originalCharaID];
     },
   },
 };

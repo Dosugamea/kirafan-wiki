@@ -29,7 +29,7 @@ export default {
       }));
     },
     items() {
-      return this.$db.RoomObjectListArray.filter(item => item.m_Category == this.category);
+      return this.$store.state.$db.RoomObjectListArray.filter(item => item.m_Category == this.category);
     },
   },
 };
