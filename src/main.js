@@ -31,11 +31,15 @@ import App from './App';
 
 import AsyncComputed from 'vue-async-computed';
 
+import store from './store';
+
 
 Vue.config.productionTip = false;
 Vue.use(infiniteScroll);
 Vue.use(require('vue-script2'));
 Vue.use(AsyncComputed);
+
+
 
 Vue.use(Ads.Adsense);
 Vue.use(Ads.InFeedAdsense);
@@ -60,7 +64,8 @@ const vue = new Vue({
   vuetify,
   router,
   i18n,
-  render: h => h(App)
+  render: (h) => h(App),
+  store,
 }).$mount('#app');
 
 window.vue = vue;

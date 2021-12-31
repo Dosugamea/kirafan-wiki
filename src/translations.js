@@ -44,7 +44,7 @@ async function load() {
 
 async function main() {
   let localVersion = await load();
-  let version = await axios.get(`${translationHost}/version?t=${new Date().getTime()}`);
+  let version = await axios.get(`${translationHost}/version`);
   if (localVersion != version.data) {
     await fetch(version.data);
   }

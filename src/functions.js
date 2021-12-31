@@ -149,3 +149,20 @@ const rvh_url = 'https://y52en.github.io/test/rvh.txt';
 Vue.prototype.$lazy = lazy_load([
   ['rvh', () => axios.get(rvh_url).then((res) => res.data)],
 ]);
+
+
+// Vue.prototype.$db = {
+//   get () => window.vue.$root.$children[0].ddd,
+//   set (val) => window.vue.$root.$children[0].ddd = val
+// }
+
+Object.defineProperty(Vue.prototype, '$db', {
+  get: function () {
+    return window.vue.$root.$children[0].db;
+  },
+  set: function (value) {
+    window.vue.$root.$children[0].db = value;
+  },
+});
+
+// Vue.prototype.

@@ -75,6 +75,12 @@ const database = {};
 // const progresses = {};
 let loaded = 0;
 
+// async function rm_database() {
+//   await set("databaseVersion", null);
+//   await set("database", null);
+//   await set("databaseDate", null);
+// }
+
 async function fetch(version) {
   await axios
     .all(
@@ -140,7 +146,7 @@ async function load() {
           requiredDatabase.ok = true;
         }
       });
-      XXX_QuestLibrary();
+      // XXX_QuestLibrary();
 
       database.version = localVersion;
       database.date = await get('databaseDate');
@@ -165,36 +171,35 @@ async function load() {
 async function main() {
   let settings = await get('settings');
   if (settings ? settings['loadAssetbundle'] : false) {
-    if (!(await get('database'))['assetBundle']) {
-      // localVersion = 'undefined';
-    }
+    // if (!(await get('database'))['assetBundle']) {
+    // localVersion = 'undefined';
+    // }
     requiredDatabases.unshift({ name: 'assetBundle', uri: '../assetBundle' });
-  } else {
-    await set(
-      'database',
-      await (async () => {
-        let tmp = await get('database');
-        if (tmp && tmp['assetBundle']) delete tmp['assetBundle'];
-        return tmp;
-      })()
-    );
   }
+  // else {
+  //   (async () => {
+  //     const db = await get("database");
+  //     if (db["assetBundle"]) {
+  //       delete db["assetBundle"];
+  //       set("database", db);
+  //     }
+  //   })();
+  // }
 
   // get server time
-  await axios
-    .head(`${window.location.origin}/?t=${new Date().getTime()}`, {
-      headers: {
-        'Cache-Control': 'no-cache',
-      },
-    })
-    .then((response) => {
-      Vue.prototype.$time = new Date(response.headers.date);
-    })
-    .catch(() => {});
+  // await axios
+  //   .head(`${window.location.origin}/?t=${new Date().getTime()}`, {
+  //     headers: {
+  //       'Cache-Control': 'no-cache',
+  //     },
+  //   })
+  //   .then((response) => {
+  //     Vue.prototype.$time = new Date(response.headers.date);
+  //   })
+  //   .catch(() => {});
+  Vue.prototype.$time = new Date();
 
-  let version = await axios.get(
-    `${databaseHost}/../version?t=${new Date().getTime()}`
-  );
+  let version = await axios.get('https://database.kirafan.cn/version');
 
   let localVersion = await load();
   // XXX_QuestLibrary();
@@ -207,10 +212,9 @@ async function main() {
     await fetch(version.data);
 
     if (isUpdate) {
-      // XXX_QuestLibrary();
       window.vue.$emit('databaseUpdated');
     } else {
-      XXX_QuestLibrary();
+      // XXX_QuestLibrary();
 
       window.vue.$emit('databaseLoaded');
     }
@@ -239,52 +243,52 @@ function detectFirefoxPrivate() {
 
 main();
 
-function XXX_QuestLibrary() {
-  // eslint-disable
-  return;
+// function XXX_QuestLibrary() {
+//   // eslint-disable
+//   return;
 
-  // eslint-disable-next-line no-unreachable
-  const questList = {
-    badge: 'Normal',
-    category: 0,
-    icon:
-      'https://texture-asset.kirafan.cn/advlibraryicon/advlibraryicon_105.png',
-    id: 105,
-    name: '-5章-\nご注文はゲリラですか？',
-    quests: {},
-  };
-  database.QuestListArray.filter((x) =>
-    String(x.questID).startsWith('1205')
-  ).forEach((x) => {
-    questList.quests[x.section] = x.questID;
-  });
+//   // eslint-disable-next-line no-unreachable
+//   const questList = {
+//     badge: 'Normal',
+//     category: 0,
+//     icon:
+//       'https://texture-asset.kirafan.cn/advlibraryicon/advlibraryicon_105.png',
+//     id: 105,
+//     name: '-5章-\nご注文はゲリラですか？',
+//     quests: {},
+//   };
+//   database.QuestListArray.filter((x) =>
+//     String(x.questID).startsWith('1205')
+//   ).forEach((x) => {
+//     questList.quests[x.section] = x.questID;
+//   });
 
-  // eslint-disable-next-line no-unreachable
-  const questList2 = {
-    category: 1,
-    icon: '',
-    id: 1113,
-    name: '4周年カウントダウンクエスト！',
-    quests: {},
-  };
-  database.QuestListArray.filter((x) =>
-    String(x.questID).startsWith('2049')
-  ).forEach((x) => {
-    questList2.quests[x.section] = x.questID;
-  });
+//   // eslint-disable-next-line no-unreachable
+//   const questList2 = {
+//     category: 1,
+//     icon: '',
+//     id: 1113,
+//     name: '4周年カウントダウンクエスト！',
+//     quests: {},
+//   };
+//   database.QuestListArray.filter((x) =>
+//     String(x.questID).startsWith('2049')
+//   ).forEach((x) => {
+//     questList2.quests[x.section] = x.questID;
+//   });
 
-  // eslint-disable-next-line no-unreachable
-  const db = [
-    questList,
-    // , questList2
-  ];
-  // eslint-disable-next-line no-unreachable
-  database.QuestLibraryListArray.push(...db);
-  // eslint-disable-next-line no-unreachable
-  db.forEach((x) => {
-    database.QuestLibraryList[x.id] = x;
-  });
-}
+//   // eslint-disable-next-line no-unreachable
+//   const db = [
+//     questList,
+//     // , questList2
+//   ];
+//   // eslint-disable-next-line no-unreachable
+//   database.QuestLibraryListArray.push(...db);
+//   // eslint-disable-next-line no-unreachable
+//   db.forEach((x) => {
+//     database.QuestLibraryList[x.id] = x;
+//   });
+// }
 
-Vue.prototype.$db = database;
+// Vue.prototype.$db = database;
 export default database;

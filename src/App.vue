@@ -103,6 +103,8 @@
 </template>
 
 <script>
+import database from '@/database';
+
 export default {
   name: 'App',
   data() {
@@ -118,6 +120,8 @@ export default {
       collection: this.$vuetify.breakpoint.smAndUp,
       cleaVisibility: false,
       magic: 0,
+
+      db: database,
     };
   },
   computed: {
