@@ -28,18 +28,19 @@ import Clea from './components/Clea';
 import WIP from './components/WIP';
 
 import App from './App';
-
-import AsyncComputed from 'vue-async-computed';
-
 import store from './store';
 
-
 Vue.config.productionTip = false;
+Vue.config.errorHandler = (err, vm, info) => {
+  window.vue.$errorHasOccured = true;
+  console.error(`Captured in Vue.config.errorHandler: ${info}`, err);
+};
+
+Vue.prototype.$errorHasOccured = false;
+
+
 Vue.use(infiniteScroll);
 Vue.use(require('vue-script2'));
-Vue.use(AsyncComputed);
-
-
 
 Vue.use(Ads.Adsense);
 Vue.use(Ads.InFeedAdsense);
@@ -64,11 +65,13 @@ const vue = new Vue({
   vuetify,
   router,
   i18n,
-  render: (h) => h(App),
   store,
+  render: h => h(App)
 }).$mount('#app');
 
 window.vue = vue;
+
+
 
 String.prototype.format = function (pattern) {
   if (arguments.length > 1) {

@@ -72,7 +72,7 @@
           span Loading Database...
           span(v-show="databaseProgress")  {{databaseProgress.loaded}} / {{databaseProgress.total}}
       div(v-else, style="max-width: 768px; margin: auto; padding: 32px 0 80px 0")
-        span(v-if="!allLoaded"): router-view
+        span(v-if="!allLoaded && !reRendering"): router-view
         span(v-else): keep-alive: router-view
         //- v-divider
         //- Ad(:key="$router.toString()", type="display")
@@ -118,7 +118,7 @@ export default {
       databaseStatus: 0, // 0: no db; 1: ok, 2: updating, 3: updated
       databaseProgress: 0,
       applicationStatus: false,
-      allLoaded:false,
+      allLoaded: false,
 
       navigationMini: true,
       navigation: this.$vuetify.breakpoint.smAndUp,
@@ -126,7 +126,7 @@ export default {
       cleaVisibility: false,
       magic: 0,
 
-      
+      reRendering: false,
     };
   },
   computed: {
@@ -134,8 +134,10 @@ export default {
       return [
         this.$s.appTitleShowID && this.$route.params.id,
         this.$t(this.$route.name),
-        this.$vuetify.breakpoint.mdAndUp && (this.$t('KiraFan Wiki') + ' Forked'),
-      ].filter(x => x).join(' — ');
+        this.$vuetify.breakpoint.mdAndUp && this.$t('KiraFan Wiki') + ' Forked',
+      ]
+        .filter((x) => x)
+        .join(' — ');
     },
     font() {
       return {
@@ -151,7 +153,7 @@ export default {
           'Meiryo',
           'ＭＳ Ｐゴシック',
           'MS PGothic',
-          'sans-serif'
+          'sans-serif',
         ].join(),
         zh: [
           'Avenir',
@@ -161,7 +163,7 @@ export default {
           'Source Han Sans CN',
           'WenQuanYi Micro Hei',
           'Microsoft Yahei',
-          'sans-serif'
+          'sans-serif',
         ].join(),
         en: [
           'Avenir',
@@ -169,8 +171,8 @@ export default {
           'Helvetica',
           'Verdana',
           'Arial',
-          'sans-serif'
-        ].join()
+          'sans-serif',
+        ].join(),
       }[this.$i18n.locale];
     },
   },
@@ -188,13 +190,17 @@ export default {
     },
     fixedPosition(right) {
       switch (this.$vuetify.breakpoint.name) {
-        case 'xs': return 16;
-        case 'sm': return 16 + 64;
+        case 'xs':
+          return 16;
+        case 'sm':
+          return 16 + 64;
         case 'md':
           if (right) return 16 + 256;
           else return 16 + 64;
-        case 'lg': return 16 + 256;
-        case 'xl': return 16 + 256;
+        case 'lg':
+          return 16 + 256;
+        case 'xl':
+          return 16 + 256;
       }
       return 0;
     },
@@ -229,6 +235,20 @@ export default {
     this.$root.$on('cleaVisibility', (x) => {
       this.cleaVisibility = x;
     });
+  },
+  watch: {
+    $route() {
+      this.errorHasOccured = false;
+    },
+    'databaseProgress.loaded': function() {
+      if (this.$root.$errorHasOccured && !this.allLoaded) {
+        this.reRendering = true;
+        this.$nextTick(() => {
+          this.reRendering = false;
+        });
+        this.$root.$errorHasOccured = false;
+      }
+    },
   },
 };
 </script>
