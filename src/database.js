@@ -234,9 +234,11 @@ async function main() {
   //   .catch(() => {});
   Vue.prototype.$time = new Date();
 
-  let version = await axios.get('https://database.kirafan.cn/version');
+  let localVersion = await get_version();
+  let version = await axios
+    .get('https://database.kirafan.cn/version')
+    .catch(() => ({ data: localVersion }));
 
-  let localVersion = await get_version().catch(() => version.data);
   // XXX_QuestLibrary();
 
   if (localVersion != version.data) {
