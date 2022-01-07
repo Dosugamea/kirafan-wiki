@@ -18,11 +18,14 @@ export default {
   },
   methods: {
     async url() {
-      if (this.override_url.promise) return await this.override_url.url();
-      return (
-        (await this.override_url.url) ||
-        this.$asset.voice.format(this.name, this.cue) + ".mp3"
-      );
+      if (this.override_url) {
+        if (this.override_url.promise) {
+          return await this.override_url.url();
+        } else {
+          return await this.override_url.url;
+        }
+      }
+      return this.$asset.voice.format(this.name, this.cue) + ".mp3";
     },
     async play() {
       const url = await this.url();

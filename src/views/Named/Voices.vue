@@ -380,33 +380,16 @@ export default {
           })
         )
       )
-        .filter((x) => {
-          const output = x.status === "fulfilled";
-          // if (!output) {
-          //   this.dl_error = true;
-          // }
-          return output;
-        })
+        .filter((x) => x.status === "fulfilled")
         .map((x) => x.value);
-      // } else {
-      //   db = await Promise.all(
-      //     charas.map(async (x) => {
-      //       const name = x.replace("Voice_", "");
-      //       return axios
-      //         .get(this.$asset.voice.format(name, "index.json"))
-      //         .then((res) => {
-      //           return { name, data: res.data };
-      //         });
-      //     })
-      //   );
-      // }
+
       // [{name:string , data:[{fileName:string , url:string}]}]
       const cue = db.map((x) => {
         const charaname = x.name.replace("Voice_", "");
         const data = x.data.map((y) => {
           const fileName = y.name;
           const url = y.link;
-          return { fileName, url };
+          return { fileName, url:{url,promise:true} };
         });
         return { charaname, data };
       });
