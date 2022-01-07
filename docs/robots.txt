@@ -1,3 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://database.kirafan.cn/wiki_kirafan_moe_sitemap.xml

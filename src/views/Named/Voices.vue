@@ -379,9 +379,26 @@ export default {
           })
         )
       )
-        .filter((x) => x.status === "fulfilled")
+        .filter((x) => {
+          const output = x.status === "fulfilled";
+          // if (!output) {
+          //   this.dl_error = true;
+          // }
+          return output;
+        })
         .map((x) => x.value);
-
+      // } else {
+      //   db = await Promise.all(
+      //     charas.map(async (x) => {
+      //       const name = x.replace("Voice_", "");
+      //       return axios
+      //         .get(this.$asset.voice.format(name, "index.json"))
+      //         .then((res) => {
+      //           return { name, data: res.data };
+      //         });
+      //     })
+      //   );
+      // }
       // [{name:string , data:[{fileName:string , url:string}]}]
       const cue = db.map((x) => {
         const charaname = x.name.replace("Voice_", "");
