@@ -178,10 +178,10 @@ export default {
     },
     async get_audiobuffer_then_write(file_name) {
       const proxy_url =
-        "http://cri.starfree.jp";
+        "https://krr-proxy.herokuapp.com/cri/?name=";
       // const rvh = await this.$lazy.rvh;
 
-      await fetch(`${proxy_url}/${file_name}`)
+      await fetch(`${proxy_url}${file_name}`)
         .then((res) => res.arrayBuffer())
         .then((data) => {
           fs.writeFileSync(file_name, Buffer(data));
