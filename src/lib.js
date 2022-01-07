@@ -1,4 +1,4 @@
-export function lazy_load(lazy_variables, target = {}) {
+export function lazy_load_array(lazy_variables, target = {}) {
   const output = target;
   const _var = {};
 

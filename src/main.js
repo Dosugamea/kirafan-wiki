@@ -29,6 +29,8 @@ import WIP from './components/WIP';
 
 import App from './App';
 import store from './store';
+// import AsyncComputed from "vue-async-computed";
+
 
 Vue.config.productionTip = false;
 Vue.config.errorHandler = (err, vm, info) => {
@@ -41,6 +43,8 @@ Vue.prototype.$errorHasOccured = false;
 
 Vue.use(infiniteScroll);
 Vue.use(require('vue-script2'));
+// Vue.use(AsyncComputed);
+
 
 Vue.use(Ads.Adsense);
 Vue.use(Ads.InFeedAdsense);

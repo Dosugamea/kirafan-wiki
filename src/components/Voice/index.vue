@@ -7,36 +7,46 @@
 </template>
 
 <script>
-import voice from './voice';
-
+import voice from "./voice";
 export default {
-  name: 'Voice',
-  props: ['name', 'cue', 'override_url'],
+  name: "Voice",
+  props: ["name", "cue", "override_url"],
   data() {
     return {
-      voice: voice
+      voice: voice,
     };
   },
-  computed: {
-    url() {
-      return this.override_url || this.$asset.voice.format(this.name, this.cue) + '.mp3';
-    }
-  },
   methods: {
-    play() {
+    async url() {
+      if (this.override_url.promise) return await this.override_url.url();
+      return (
+        (await this.override_url.url) ||
+        this.$asset.voice.format(this.name, this.cue) + ".mp3"
+      );
+    },
+    async play() {
+      const url = await this.url();
       if (voice.audio) {
         voice.audio.pause();
       }
-      if (voice.name == this.name && voice.cue == this.cue && (voice.loading || voice.playing)) {
+      if (
+        voice.name == this.name &&
+        voice.cue == this.cue &&
+        (voice.loading || voice.playing)
+      ) {
         voice.loading = false;
         voice.playing = false;
-        this.fileDownload(this.url,`${this.name}_${this.cue}.${this.override_url ? "wav" :this.url.split('.').pop()}`);
+        this.fileDownload(
+          url,
+          `${this.name}_${this.cue}.${
+            this.override_url ? "wav" : url.split(".").pop()
+          }`
+        );
         // window.open(this.url, '_blank');
-      }
-      else {
+      } else {
         voice.name = this.name;
         voice.cue = this.cue;
-        voice.audio = new Audio(this.url);
+        voice.audio = new Audio(url);
         voice.audio.oncanplay = () => {
           if (voice.loading) {
             voice.loading = false;
@@ -56,7 +66,7 @@ export default {
       link.href = url;
       link.download = fileName;
       link.click();
-    }
-  }
+    },
+  },
 };
 </script>

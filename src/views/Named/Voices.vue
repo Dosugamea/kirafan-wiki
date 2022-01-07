@@ -199,25 +199,18 @@ export default {
     },
     async unpack_then_return_url(file_base_name) {
       const key = define.cri_key;
-      await cri.acb2wavs(`${file_base_name}.acb`, key);
+      const namels_n_prom = await cri.acbParse(`${file_base_name}.acb`, key);
 
-      const output = fs
-        .readdirSync(`./${file_base_name}`)
-        .filter((x) => x.endsWith(".wav"))
-        .map((file) => {
-          // {"name": "voice_000_0", "type": "mp3", "new": false, "link": "https://cri-asset.kirafan.cn/Voice_Killme_Agiri/voice_000_0.mp3"},
-          const audio = fs.readFileSync(`./${file_base_name}/${file}`);
-          const url = URL.createObjectURL(
-            new Blob([audio], { type: "audio/wav" })
-          );
-          this.cue_url[file] = url;
-          return {
-            name: file,
-            type: "wav",
-            new: false,
-            link: url,
-          };
-        });
+      const output = namels_n_prom.map(([Name, prom]) => {
+        const url = async () => {
+          await prom().catch(() => {});
+          const audio = fs.readFileSync(`./${file_base_name}/${Name}`);
+          const blob = new Blob([audio], { type: "audio/wav" });
+          return URL.createObjectURL(blob);
+        };
+        this.cue_url[Name] = { url, promise: true };
+        return { name: Name, type: "wav", new: false, link: url };
+      });
       return output;
     },
     async get_response(url) {
@@ -228,7 +221,8 @@ export default {
     },
     async isLatestVersion(chara_name) {
       const file_base_name = `Voice_${chara_name}`;
-      const version = this.$store.state.$db.CRIFileVersion[file_base_name].m_Version;
+      const version = this.$store.state.$db.CRIFileVersion[file_base_name]
+        .m_Version;
       const response = await this.get_response(
         this.$asset.voice.format(chara_name, String(version))
       );

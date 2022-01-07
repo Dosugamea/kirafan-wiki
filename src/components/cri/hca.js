@@ -1,13 +1,7 @@
-// const fs = window.fs;
 const util = require('util');
 const path = window.require("path");
 const Buffer =  window.require("buffer").Buffer;
-
-// const require = window.require;
 const fs = window.require("fs")
-
-
-// console.log('fs :>> ', fs);
 
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);

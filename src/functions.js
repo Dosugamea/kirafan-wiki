@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import axios from 'axios';
-import { lazy_load } from './lib';
+import { lazy_load_array } from './lib';
 
 Vue.prototype.$size = function(base) {
   return (
@@ -146,7 +146,7 @@ Vue.prototype.$version = 'Forked-version-0.0.2 Media 4.1.3';
 
 // const rvh_url = `https://rvh.kirafan.cn/`;
 const rvh_url = 'https://y52en.github.io/test/rvh.txt';
-Vue.prototype.$lazy = lazy_load([
+Vue.prototype.$lazy = lazy_load_array([
   ['rvh', () => axios.get(rvh_url).then((res) => res.data)],
 ]);
 
