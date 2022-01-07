@@ -1,6 +1,6 @@
 import Vue from 'vue';
-import axios from 'axios';
-import { lazy_load_array } from './lib';
+// import axios from 'axios';
+// import { lazy_load_array } from './lib';
 
 Vue.prototype.$size = function(base) {
   return (
@@ -49,6 +49,7 @@ Vue.prototype.$asset = {
   townobjecticon:
     'https://asset.kirafan.cn/texture/townobjecticon/townobjecticon_bld_{1}',
   voice: 'https://voice-cri.kirafan.cn/Voice_{0}/{1}',
+
   weaponicon: 'https://asset.kirafan.cn/texture/weaponicon/weaponicon_wpn_{0}',
 };
 
@@ -145,10 +146,10 @@ Vue.prototype.$version = 'Forked-version-0.0.2 Media 4.1.3';
 
 
 // const rvh_url = `https://rvh.kirafan.cn/`;
-const rvh_url = 'https://y52en.github.io/test/rvh.txt';
-Vue.prototype.$lazy = lazy_load_array([
-  ['rvh', () => axios.get(rvh_url).then((res) => res.data)],
-]);
+// const rvh_url = 'https://y52en.github.io/test/rvh.txt';
+// Vue.prototype.$lazy = lazy_load_array([
+//   ['rvh', () => axios.get(rvh_url).then((res) => res.data)],
+// ]);
 
 
 // Vue.prototype.$store.state.$db = {

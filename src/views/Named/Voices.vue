@@ -111,7 +111,7 @@ div
 <script>
 import axios from "axios";
 import cri from "../../components/cri/acb";
-import * as b64toArr from "base64-arraybuffer";
+// import * as b64toArr from "base64-arraybuffer";
 const fs = window.require("fs");
 import define from "../../define";
 const Buffer = window.require("buffer").Buffer;
@@ -178,14 +178,13 @@ export default {
     },
     async get_audiobuffer_then_write(file_name) {
       const proxy_url =
-        "https://script.google.com/macros/s/AKfycbybmAUWjnNpeHGJQVAaP5iz9t4Tmw1VJHmnyOPqNc9oDrvQ3dCAX_qgnB0l58RF4Btdyw/exec?raw_test=0&url=https://asset-krr-prd.star-api.com/";
-      const rvh = await this.$lazy.rvh;
+        "http://cri.starfree.jp";
+      // const rvh = await this.$lazy.rvh;
 
-      await axios
-        .get(`${proxy_url}${rvh}/CRI/${file_name}`)
-        .then((res) => res.data)
+      await fetch(`${proxy_url}/${file_name}`)
+        .then((res) => res.arrayBuffer())
         .then((data) => {
-          fs.writeFileSync(file_name, Buffer(b64toArr.decode(data)));
+          fs.writeFileSync(file_name, Buffer(data));
         });
     },
     async get_acb_awb(file_base_name) {
@@ -234,11 +233,11 @@ export default {
       if (this.config) {
         const file_base_name = `Voice_${chara_name}`;
 
-        const isLatestVersion = await this.isLatestVersion(chara_name);
-        if (!isLatestVersion) {
+        // const isLatestVersion = await this.isLatestVersion(chara_name);
+        // if (!isLatestVersion) {
           await this.get_acb_awb(file_base_name);
           return await this.unpack_then_return_url(file_base_name);
-        }
+        // }
       }
       return await axios
         .get(
@@ -355,14 +354,14 @@ export default {
             const name = file_base_name.replace("Voice_", "");
 
             if (this.config) {
-              const isLatestVersion = await this.isLatestVersion(name);
-              if (!isLatestVersion) {
+              // const isLatestVersion = await this.isLatestVersion(name);
+              // if (!isLatestVersion) {
                 return this.get_acb_awb(file_base_name)
                   .then(() => this.unpack_then_return_url(file_base_name))
                   .then((res) => {
                     return { name, data: res };
                   });
-              }
+              // }
             }
             return axios
               .get(this.$asset.voice.format(name, "index.json"))
@@ -389,7 +388,7 @@ export default {
         const data = x.data.map((y) => {
           const fileName = y.name;
           const url = y.link;
-          return { fileName, url:{url,promise:true} };
+          return { fileName, url:{url,promise:this.config} };
         });
         return { charaname, data };
       });
