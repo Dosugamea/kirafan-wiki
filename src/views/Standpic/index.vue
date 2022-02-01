@@ -206,15 +206,15 @@ export default {
       this.isLoadingDb = true;
 
       let assetBundle;
-      if (this.$s.loadAssetbundle || false) {
-        assetBundle = this.$store.state.$db.assetBundle;
-      } else {
-        assetBundle = (
-          await axios.get("https://database.kirafan.cn/assetBundle.json", {
-            responseType: "json",
-          })
-        ).data;
-      }
+      // if (this.$s.loadAssetbundle || false) {
+      assetBundle = this.$store.state.$db.assetBundle;
+      // } else {
+      //   assetBundle = (
+      //     await axios.get("https://database.kirafan.cn/assetBundle.json", {
+      //       responseType: "json",
+      //     })
+      //   ).data;
+      // }
       const standpicDB = {};
 
       assetBundle
@@ -228,14 +228,14 @@ export default {
           );
           let name = r.groups.name;
           let img = r.groups.img;
-          let path = path_[path_.length - 1];
 
+          let path = path_[64];
           if (!standpicDB[name]) {
             standpicDB[name] = [];
           }
-          if (img.match("standpic")) {
-            standpicDB[name].standpicPath = path;
-          }
+          // if (img.match("standpic")) {
+          //   standpicDB[name].standpicPath = path;
+          // }
           standpicDB[name].push({ img, path });
         });
       this.$store.state.$db.standpicDB = standpicDB;
@@ -320,7 +320,11 @@ export default {
     },
     standpicPath() {
       try {
-        return this.standpicDB()[this.base].standpicPath || "";
+        return (
+          this.standpicDB()[this.base].find(
+            (x) => x.img === this.base + "_standpic_" + String(this.poseID)
+          ).path || ""
+        );
       } catch {
         return "";
       }
@@ -340,11 +344,13 @@ export default {
   mounted() {
     if (this.standpicDB()) {
       this.load();
-    } else if (this.$s.loadAssetbundle || false) {
+    }else{
       this.loadAssetBundle();
-    } else {
-      this.dialog = true;
     }
+    // if (this.$s.loadAssetbundle || false) {
+    // } else {
+    //   this.dialog = true;
+    // }
   },
 };
 </script>
