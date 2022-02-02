@@ -133,13 +133,7 @@ export default {
       const cri_audio_awb = this.get_audiobuffer_then_write(
         `${file_base_name}.awb`
       );
-      const cri_event_base_awb = this.get_audiobuffer_then_write(
-        `event_00000000000.awb`
-      );
-      const cri_event_base_acb = this.get_audiobuffer_then_write(
-        `event_00000000000.acb`
-      );
-      await Promise.all([cri_audio_acb, cri_audio_awb, cri_event_base_acb, cri_event_base_awb]);
+      await Promise.all([cri_audio_acb, cri_audio_awb]);
     },
     async unpack_then_return_url(file_base_name) {
       const key = define.cri_key;
