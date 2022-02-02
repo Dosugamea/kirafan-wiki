@@ -4,7 +4,6 @@
 
   div(v-else)
     p.display.px-4.primary--text {{adv.m_Title}}
-    
     template(v-if="adv.m_LibraryID!=-1")
       p.px-4.primary--text
         template(v-if="adv.m_ScriptTextName")
@@ -28,10 +27,14 @@
     .py-4.text-center(v-else-if="loading")
       v-progress-circular(indeterminate=true, color="primary")
     template(v-else)
-
       div(v-for="item in text", :key="`scenario-text-${item.m_id}`")
         Item(:item="item")
-        //- p {{item}}  
+        v-list-item
+          Voice(
+            :name="item.m_voiceLabel",
+            :cue="item.m_voiceLabel",
+            :override_url="cue_list[`${item.m_voiceLabel}_0.wav`]"
+          )
 
       v-divider
       Ad(:key="`scenario-ad-${id}`")
@@ -52,6 +55,10 @@
 <script>
 import axios from 'axios';
 import Item from './Item';
+import cri from "../../components/cri/acb";
+import define from "../../define";
+const fs = window.require("fs");
+const Buffer = window.require("buffer").Buffer;
 
 export default {
   name: 'Scenario',
@@ -61,11 +68,15 @@ export default {
     return {
       loading: 0,
       text: null,
+      cue_list: {}
     };
   },
   computed: {
     adv() {
       return this.$store.state.$db.ADVList[this.id];
+    },
+    cue () {
+      return this.adv.m_CueSheet;
     },
     categories() {
       return {
@@ -104,12 +115,56 @@ export default {
     }
   },
   methods: {
-    load() {
+    async get_audiobuffer_then_write(file_name) {
+      const proxy_url =
+        "https://krr-proxy.herokuapp.com/cri/?name=";
+      // const rvh = await this.$lazy.rvh;
+
+      await fetch(`${proxy_url}${file_name}`)
+        .then((res) => res.arrayBuffer())
+        .then((data) => {
+          fs.writeFileSync(file_name, Buffer(data));
+        });
+    },
+    async get_acb_awb(file_base_name) {
+      const cri_audio_acb = this.get_audiobuffer_then_write(
+        `${file_base_name}.acb`
+      );
+      const cri_audio_awb = this.get_audiobuffer_then_write(
+        `${file_base_name}.awb`
+      );
+      const cri_event_base_awb = this.get_audiobuffer_then_write(
+        `event_00000000000.awb`
+      );
+      const cri_event_base_acb = this.get_audiobuffer_then_write(
+        `event_00000000000.acb`
+      );
+      await Promise.all([cri_audio_acb, cri_audio_awb, cri_event_base_acb, cri_event_base_awb]);
+    },
+    async unpack_then_return_url(file_base_name) {
+      const key = define.cri_key;
+      const namels_n_prom = await cri.acbParse(`${file_base_name}.acb`, key);
+
+      const output = namels_n_prom.map(([Name, prom]) => {
+        const url = async () => {
+          await prom().catch(() => {});
+          const audio = fs.readFileSync(`./${file_base_name}/${Name}`);
+          const blob = new Blob([audio], { type: "audio/wav" });
+          return URL.createObjectURL(blob);
+        };
+        this.cue_list[Name] = { url: url, promise: true };
+        return { name: Name, type: "wav", new: false, link: url };
+      });
+      return output;
+    },
+    async load() {
       if (!this.adv || !this.adv.m_ScriptTextName) {
         return;
       }
       this.loading += 1;
       const loading = this.loading;
+      await this.get_acb_awb(this.cue);
+      await this.unpack_then_return_url(this.cue);
       axios
         .get(this.$asset.advscript.format(
           this.categories[this.adv.m_Category].name,
