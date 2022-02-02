@@ -29,6 +29,15 @@
   <link rel="preload" crossorigin="anonymous" href="https://trans.kirafan.cn/version" as="fetch">
   <!-- <script data-ad-client="ca-pub-7892650861805139" async
     src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+        <script type="text/javascript" src="./js/browserfs.min.js"></script>
+  <script type="text/javascript"> BrowserFS.install(window);
+      BrowserFS.configure({
+        fs: "InMemory",
+      }, (e) => {
+        if (e) throw e;
+      });
+      window.require = require;
+  </script>
 </head>
 
 <body>

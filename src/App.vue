@@ -1,13 +1,5 @@
 <template lang="pug">
   v-app(color="secondary", :style="{'font-family': font}")
-    script2(type="text/javascript" src="./js/browserfs.min.js")
-    script2(type="text/javascript") BrowserFS.install(window);
-      | BrowserFS.configure({
-      |  fs: "InMemory",
-      |}, (e) => {
-      |  if (e) throw e;
-      |});
-      |window.require = require;
     script2(src="./js/live2dcubismcore.min.js")
     v-app-bar(app, clipped-left, clipped-right, color="secondary", height=56, elevation=0)
       
