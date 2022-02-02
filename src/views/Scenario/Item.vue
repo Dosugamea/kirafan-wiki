@@ -17,11 +17,12 @@
       div(v-html="text", :style="{'line-height': 1.5, 'font-size': $vuetify.breakpoint.xsOnly ? '70%': null}")
       //- p {{item}}
       //- p {{character}}
-      //- Voice(
-      //-   :name="undefined",
-      //-   :cue="undefined",
-      //-   :override_url="undefined"
-      //- )
+      voice(
+        v-if="item.voice_url"
+        :name="name",
+        :cue="text.replace('br', '').replace(/\s+/g, '')",
+        :override_url="item.voice_url"
+      )
 </template>
 
 <script>
