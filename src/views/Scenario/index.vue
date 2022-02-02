@@ -22,13 +22,20 @@
 
     v-divider
 
+    .py-4.text-center(v-if="this.cue && !voice_loaded")
+      v-row
+        v-col(cols="5").text-end
+          v-progress-circular(indeterminate=true, color="primary")
+        v-col(cols="7").text-start
+          .pt-2 {{ $t('Voice Loading') }}
+
     .pa-4(v-if="!adv.m_ScriptTextName")
       KeyValue(:k="$t('No Scenario')")
     .py-4.text-center(v-else-if="loading")
       v-progress-circular(indeterminate=true, color="primary")
     template(v-else)
       div(v-for="item in text", :key="`scenario-text-${item.m_id}`")
-        Item(:item="get_voice_injected_item(item)")
+        Item(:item="get_voice_injected_item(item)" :show_voice="() => voice_loaded")
 
       v-divider
       Ad(:key="`scenario-ad-${id}`")
@@ -62,7 +69,8 @@ export default {
     return {
       loading: 0,
       text: null,
-      cue_list: {}
+      cue_list: {},
+      voice_promise: undefined,
     };
   },
   computed: {
@@ -106,11 +114,17 @@ export default {
         }
       }
       return undefined;
-    }
+    },
+    voice_loaded() {
+      return Boolean(Object.keys(this.cue_list).length);
+    },
   },
   methods: {
     get_voice_injected_item (item) {
-      item.voice_url = this.cue_list[`${item.m_voiceLabel}_0.wav`];
+      item.voice_url = (async()=> {  
+        await this.voice_promise;
+        return this.cue_list[`${item.m_voiceLabel}_0.wav`];  
+      })();
       return item;
     },
     async get_audiobuffer_then_write(file_name, file_save_name) {
@@ -141,6 +155,7 @@ export default {
       const namels_n_prom = await cri.acbParse(`${file_base_name}.acb`, key);
       namels_n_prom.map(([Name, prom]) => {
         const url = async () => {
+          await this.voice_promise;
           await prom().catch(() => {});
           const audio = fs.readFileSync(
             `./${file_save_name}/${Name}`
@@ -148,10 +163,12 @@ export default {
           const blob = new Blob([audio], { type: "audio/wav" });
           return URL.createObjectURL(blob);
         };
-        this.cue_list[Name] = { url: url, promise: true };
+        this.$set(this.cue_list, Name,  { url: url, promise: true });
       });
     },
     async load() {
+      this.cue_list = {};
+      this.voice_promise = undefined;
       if (!this.adv || !this.adv.m_ScriptTextName) {
         return;
       }
@@ -162,8 +179,10 @@ export default {
         if (this.cue.startsWith('event')) {
           file_save_name = `event_000000000${this.get_event_seq(file_save_name)}`;
         }
-        await this.get_acb_awb(this.cue, file_save_name);
-        await this.unpack_to_cue_list(this.cue, file_save_name);
+        this.voice_promise = (async()=>{
+          await this.get_acb_awb(this.cue, file_save_name);
+          await this.unpack_to_cue_list(this.cue, file_save_name);
+        })();
       }
       axios
         .get(this.$asset.advscript.format(
@@ -177,7 +196,7 @@ export default {
           this.text = response.data;
           this.loading = 0;
         });
-    }
+    },
   },
   watch: {
     id() {

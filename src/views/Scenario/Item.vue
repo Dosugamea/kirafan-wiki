@@ -11,24 +11,35 @@
         :style="style('face_0_default')")
 
     v-list-item-avatar.mx-auto.mr-2.mr-md-4(:size="$size()", tile, v-else)
+    .mr-3(v-if="show_voice()")
+      voice(
+        v-if="voice_url"
+        :name="name",
+        :cue="text.replace('br', '').replace(/\s+/g, '')",
+        :override_url="voice_url"
+      )
+      //- XXX:サイズがわからないので、実体を非表示としておいておく
+      Voice(
+        v-else
+        style="visibility: hidden;"
+      )
 
     v-list-item-content.mr-auto.ml-0(style="max-width: 384px")
       v-list-item-subtitle.primary--text(v-html="name")
       div(v-html="text", :style="{'line-height': 1.5, 'font-size': $vuetify.breakpoint.xsOnly ? '70%': null}")
-      //- p {{item}}
-      //- p {{character}}
-      voice(
-        v-if="item.voice_url"
-        :name="name",
-        :cue="text.replace('br', '').replace(/\s+/g, '')",
-        :override_url="item.voice_url"
-      )
+        //- p {{item}}
+        //- p {{character}}
 </template>
 
 <script>
 export default {
   name: 'Item',
-  props: ['item'],
+  props:["item", "show_voice"],
+  data() {
+    return {
+      voice_url: undefined,
+    };
+  },
   computed: {
     id() {
       return this.item.m_charaName.split('$')[1] || this.item.m_charaName;
@@ -78,6 +89,11 @@ export default {
         // 'background-size': '100%',
       };
     },
+  },
+  async mounted(){
+    if(this.item.voice_url){
+      this.voice_url = await this.item.voice_url;
+    }
   }
 };
 </script>
