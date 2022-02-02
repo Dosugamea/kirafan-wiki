@@ -15,7 +15,7 @@ const requiredDatabases = [
   },
   { name: 'ADVLibraryList', key: 'm_LibraryListID' },
   { name: 'ADVList', key: 'm_AdvID' },
-  // { name: "assetBundle", uri: "../assetBundle" },
+  { name: 'assetBundle', uri: '../assetBundle' },
 
   { name: 'ArousalLevels' },
   { name: 'BattleStatusRatioByHp', key: 'm_ID' },
@@ -204,13 +204,13 @@ async function get_version() {
 }
 
 async function main() {
-  let settings = await get('settings');
-  if (settings ? settings['loadAssetbundle'] : false) {
-    // if (!(await get('database'))['assetBundle']) {
-    // localVersion = 'undefined';
-    // }
-    requiredDatabases.unshift({ name: 'assetBundle', uri: '../assetBundle' });
-  }
+  // let settings = await get('settings');
+  // if (settings ? settings['loadAssetbundle'] : false) {
+  //   // if (!(await get('database'))['assetBundle']) {
+  //   // localVersion = 'undefined';
+  //   // }
+  //   requiredDatabases.unshift({ name: 'assetBundle', uri: '../assetBundle' });
+  // }
   // else {
   //   (async () => {
   //     const db = await get("database");
