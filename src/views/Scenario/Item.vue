@@ -24,7 +24,7 @@
         style="visibility: hidden;"
       )
 
-    v-list-item-content.mr-auto.ml-0(style="max-width: 384px")
+    v-list-item-content.mr-auto.ml-0.py-1(style="max-width: 384px")
       v-list-item-subtitle.primary--text(v-html="name")
       div(v-html="text", :style="{'line-height': 1.5, 'font-size': $vuetify.breakpoint.xsOnly ? '70%': null}")
         //- p {{item}}
