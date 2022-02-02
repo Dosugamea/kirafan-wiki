@@ -17,6 +17,12 @@
       div(v-html="text", :style="{'line-height': 1.5, 'font-size': $vuetify.breakpoint.xsOnly ? '70%': null}")
       //- p {{item}}
       //- p {{character}}
+      voice(
+        v-if="item.voice_url"
+        :name="name",
+        :cue="text.replace('br', '').replace(/\s+/g, '')",
+        :override_url="item.voice_url"
+      )
 </template>
 
 <script>
@@ -26,6 +32,9 @@ export default {
   computed: {
     id() {
       return this.item.m_charaName.split('$')[1] || this.item.m_charaName;
+    },
+    voice () {
+      return this.$store.state.$db.VoiceList[this.item.m_VoiceID];
     },
     character() {
       return this.$store.state.$db.ADVCharacterList[this.id];
