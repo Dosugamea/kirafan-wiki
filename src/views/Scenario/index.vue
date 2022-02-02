@@ -159,7 +159,7 @@ export default {
       const loading = this.loading;
       if (this.cue) {
         let file_save_name = this.cue;
-        if (this.cue.includes('event')) {
+        if (this.cue.startsWith('event')) {
           file_save_name = `event_000000000${this.get_event_seq(file_save_name)}`;
         }
         await this.get_acb_awb(this.cue, file_save_name);
