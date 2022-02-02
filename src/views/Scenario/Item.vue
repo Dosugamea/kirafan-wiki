@@ -17,11 +17,12 @@
         :name="name",
         :cue="text.replace('br', '').replace(/\s+/g, '')",
         :override_url="voice_url"
+        :style="`width:${$size()}px;height:${$size()}px;`"
       )
       //- XXX:サイズがわからないので、実体を非表示としておいておく
       Voice(
         v-else
-        style="visibility: hidden;"
+        :style="`visibility: hidden;width:${$size()}px;height:${$size()}px;`"
       )
 
     v-list-item-content.mr-auto.ml-0.py-1(style="max-width: 384px")
