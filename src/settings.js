@@ -16,6 +16,7 @@ const settings = {
     downloadAudioFilesDirectly:false,
     // maxFriendship: undefined,
     // loadAssetbundle: false,
+    loadScenarioVoice: true,
     questDropsGrouped: false,
     appTitleShowID: false,
     advancedFilter: false,

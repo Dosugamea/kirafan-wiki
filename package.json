@@ -10,6 +10,8 @@
     "sitemap_fetch": "curl 'https://database.kirafan.cn/wiki_kirafan_moe_sitemap.xml' > dist/sitemap.xml"
   },
   "dependencies": {
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.16.7",
+    "@babel/plugin-proposal-optional-chaining": "^7.16.7",
     "axios": "^0.19.0",
     "base64-arraybuffer": "^1.0.1",
     "bignumber.js": "^9.0.2",

@@ -78,7 +78,7 @@ export default {
       return this.$store.state.$db.ADVList[this.id];
     },
     cue () {
-      return this.adv.m_CueSheet;
+      return this.$s.loadScenarioVoice ? this.adv.m_CueSheet : undefined;
     },
     categories() {
       return {
