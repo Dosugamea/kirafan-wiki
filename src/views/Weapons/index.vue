@@ -23,6 +23,8 @@
                 span {{$name($store.state.$db.TitleList[value].m_DisplayName)}}
               template(v-else-if="key=='skill'")
                 span.primary--text(style="font-weight: 550") skill
+              template(v-else-if="key=='passive'")
+                span.primary--text(style="font-weight: 550") passive: {{ $t( "Passive Types." + String(JSON.parse(value).type)) }}
               template(v-else-if="key=='name'")
                 span {{value}}
               template(v-else)
@@ -77,11 +79,14 @@
                 v-icon mdi-dots-horizontal
           SkillSelector(:push="(x) => q('skill', x)")
         
-        v-list-item(dense, @click="")
-          v-list-item-content
-            v-list-item-title {{$t('Passive Skill')}}
-          v-list-item-action.ma-0
-            v-icon mdi-dots-horizontal
+        v-dialog(max-width=512)
+          template(v-slot:activator="{on}")
+            v-list-item(dense, v-on="on")
+              v-list-item-content
+                v-list-item-title {{$t('Passive Skill')}}
+              v-list-item-action.ma-0
+                v-icon mdi-dots-horizontal
+          PassiveSelector(:push="(x) => q('passive', x)")
 
 
     v-text-field.px-4(v-model="input", dense, :placeholder="$t('Input.Filter')", @keydown.enter="enter")
@@ -97,6 +102,7 @@
 <script>
 import parser from '@/components/Skill/parser';
 import Weapon from './Weapon';
+import passiveSelector from '@/components/Selector/PassiveSelector';
 
 export default {
   name: 'Weapons',
@@ -160,7 +166,14 @@ export default {
           ) && (
             !this.query.eval || !this.query.eval.length || this.query.eval
               .some(e => eval(e))
-          );
+          ) && (
+            !this.query.passive || !this.query.passive.length || this.query.passive
+              .some(passive => 
+                passiveSelector.filter(passive,weapon)
+              ) 
+                
+          
+          )
         } catch (e) {
           // eslint-disable-next-line
           console.log(e);
@@ -210,7 +223,7 @@ export default {
       this.input = '';
     },
     q(key, value) {
-      let v = value.toString();
+      let v = String(value);
       let query = this.query;
       if (!query[key]) {
         query[key] = [v];
