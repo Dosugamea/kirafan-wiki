@@ -102,7 +102,7 @@
 <script>
 import parser from '@/components/Skill/parser';
 import Weapon from './Weapon';
-import passiveSelector from '@/components/Selector/PassiveSelector';
+import passiveFilter from '@/components/Selector/PassiveFilter.js';
 
 export default {
   name: 'Weapons',
@@ -169,7 +169,7 @@ export default {
           ) && (
             !this.query.passive || !this.query.passive.length || this.query.passive
               .some(passive => 
-                passiveSelector.filter(passive,weapon)
+                passiveFilter.filter(passive,weapon)
               ) 
                 
           
