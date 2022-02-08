@@ -102,7 +102,7 @@
 <script>
 import parser from '@/components/Skill/parser';
 import Weapon from './Weapon';
-import passiveFilter from '@/components/Selector/PassiveFilter.js';
+import passiveFilter from '@/components/Selector/PassiveFilter';
 
 export default {
   name: 'Weapons',

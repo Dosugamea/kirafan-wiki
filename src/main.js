@@ -18,7 +18,7 @@ import PassiveSkill from './components/PassiveSkill';
 import Scroller from './components/Scroller';
 import Skill from './components/Skill';
 import SkillSelector from './components/SkillSelector';
-import PassiveSelector from './components/Selector/PassiveFilter';
+import PassiveSelector from './components/Selector/PassiveSelector';
 import Status from './components/Status';
 import Theme from './components/Theme';
 import Credit from './components/Credit';
