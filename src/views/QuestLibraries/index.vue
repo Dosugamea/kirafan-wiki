@@ -4,13 +4,14 @@ div
     v-col(cols=7)
       p.display.px-4.primary--text {{ $t('Quests') }}
     v-col.text-right(cols=5)
-      v-badge(dot, overlap, offset-x="5", offset-y="5", :value="isFilter")
-        v-btn(outlined, v-show="isEvent", @click="open")
+      v-badge(dot, overlap, offset-x="5", offset-y="5", :value="isFilter", v-show="isEvent")
+        v-btn(outlined, @click="open")
           v-icon mdi-filter
 
   v-expansion-panels(
       v-model="panel"
       :class='panel === 0 ? "pb-5" : "mb-0" '
+      v-if="isEvent"
     )
     v-expansion-panel
       v-expansion-panel-content 
