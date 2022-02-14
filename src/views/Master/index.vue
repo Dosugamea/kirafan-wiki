@@ -10,11 +10,11 @@
       v-col(cols=12, sm=6): KeyValue.px-4(:k="$t('Weapon Limit')", :v="master.m_WeaponLimit")
       v-col(cols=12, sm=6): KeyValue.px-4(:k="$t('Training Slot Num')", :v="master.m_TrainingSlotNum")
 
-    v-slider.px-4(v-model="level", min=1, max=120)
+    v-slider.px-4(v-model="level", min=1, :max="max")
       template(v-slot:label): span.d-inline-block.slider-label
         span {{$t('Level')}}:
         .float-right {{level}}
-      template(v-slot:append): v-icon(@click="level=120") mdi-chevron-double-up
+      template(v-slot:append): v-icon(@click="level=max") mdi-chevron-double-up
       template(v-slot:thumb-label="props") {{exp}}
 
     v-list-item(v-show="$i18n.locale=='ja'", target="_blank",
@@ -28,7 +28,8 @@
       v-list-item-action.ma-0: v-icon mdi-open-in-new
 
     v-divider
-    Ad(:key="`master-ad-${id}`")
+    //- id is not undefined
+    //- Ad(:key="`master-ad-${id}`")
 
     template(v-for="orb in $store.state.$db.MasterOrbListArray")
       v-divider
@@ -56,6 +57,9 @@ export default {
         .filter(item => item.m_Rank < this.level)
         .reduce((sum, item) => (sum + item.m_NextExp), 0));
     },
+    max(){
+      return this.$store.state.$db.MasterRankArray.length;
+    }
   }
 };
 </script>

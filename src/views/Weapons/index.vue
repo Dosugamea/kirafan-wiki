@@ -170,9 +170,7 @@ export default {
             !this.query.passive || !this.query.passive.length || this.query.passive
               .some(passive => 
                 passiveFilter.filter(passive,weapon)
-              ) 
-                
-          
+              )
           )
         } catch (e) {
           // eslint-disable-next-line

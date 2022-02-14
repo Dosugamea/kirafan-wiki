@@ -576,6 +576,15 @@ const quest = {
     6: 'クラフトクエスト',
   },
 
+  'QuestFilter': {
+    'All': '全て',
+    'Date': '年月フィルター',
+    'NonCategorized': '日時データを取得できていないクエストのみ表示',
+  },
+  'QuestDateFilter': {
+    'NoSelect': '(未選択)',
+  },
+
   'Event Information': '情報',
   'Event Abstract': 'イベント概要',
   'Event Bonus': 'イベントボーナス',
