@@ -4,7 +4,7 @@ span
 
   p.px-4.title.primary--text {{ $t('Room Objects') }}
 
-  v-row
+  v-row(style='max-width:100%;')
     v-col(
       v-for="l in list",
       :key="`room-object-tweet-${l[0].m_DBAccessID}`",
