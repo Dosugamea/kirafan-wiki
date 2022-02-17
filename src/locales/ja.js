@@ -845,6 +845,8 @@ const settings = {
   'Show Clea In Detail Page': 'クレアを常設展示にする',
   'Show Clea In Detail Page Hint': 'クレアちゃん超カワイイ( ´▽｀)',
 
+  'Footer Fixed': 'ホームのフッターを固定する',
+
   Application: 'アプリ',
   Contact: '連絡',
 

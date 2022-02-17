@@ -25,6 +25,7 @@ const settings = {
     // cleaSettingsEnable: false,
     showCleaOnStart : false,
     showCleaInDetailPage: false,
+    isHomePageFooterFixed: false,
   },
   save() {
     set('settings', this._);

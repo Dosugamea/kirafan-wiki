@@ -37,7 +37,7 @@
     v-divider.mb-4
     p.text-center {{$t('Day Count').format(dayCount)}}
 
-    v-bottom-navigation.hidden-sm-and-up(background-color="transparent")
+    v-bottom-navigation.hidden-sm-and-up(:fixed="$s.isHomePageFooterFixed")
       v-btn(to='/characters') {{$t('Character')}}
         v-icon mdi-cards
       v-btn(to='/weapons') {{$t('Weapons')}}
