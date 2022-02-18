@@ -86,8 +86,9 @@ async function axios_fetch(version) {
     requiredDatabases.map((requiredDatabase) =>
       axios
         .get(
-          `${databaseHost}/${requiredDatabase.uri ||
-            requiredDatabase.name}.json?t=${new Date().getTime()}`
+          `${databaseHost}/${
+            requiredDatabase.uri || requiredDatabase.name
+          }.json?t=${new Date().getTime()}`
         )
         .then((data) => {
           loaded += 1;
@@ -250,6 +251,7 @@ async function main() {
     window.vue.$emit('databaseLoaded');
 
     await axios_fetch(version.data);
+    fix_quest_library();
 
     window.vue.$emit('allLoaded');
 
@@ -260,9 +262,54 @@ async function main() {
     // }/
   } else {
     await load();
+    fix_quest_library();
     window.vue.$emit('databaseLoaded');
     window.vue.$emit('allLoaded');
   }
+}
+
+function fix_quest_library() {
+  const output = [];
+  const craft_quest = database.QuestWaveListArray.filter(
+    (x) => 400000000 <= x.m_ID && x.m_ID < 500000000
+  );
+
+  craft_quest.forEach((x) => {
+    const id = x.m_ID;
+    const chara_id = String(id).slice(1, -1) + '0';
+    const title =
+      database.NamedList[database.CharacterList[chara_id].m_NamedType]
+        .m_TitleType;
+    let i = output.findIndex((x) => x.id === 5000 + title);
+
+    if (i === -1) {
+      output.push({
+        badge: null,
+        category: 5,
+        icon: `https://texture-asset.kirafan.cn/contenttitlelogo/contentslogo${title}.png`,
+        id: 5000 + title,
+        name: database.TitleList[title].m_DisplayName,
+        quests: {},
+      });
+
+      i = output.length - 1;
+    }
+    output[i].quests[chara_id] = (id - (id % 10)) / 10;
+  });
+
+  const quest_library_filtered = database.QuestLibraryListArray.filter(
+    (x) => x.category !== 5
+  );
+  const QuestLibraryListArray = output.concat(quest_library_filtered);
+  // database.QuestLibraryListArray = QuestLibraryListArray;
+  setdb('QuestLibraryListArray', QuestLibraryListArray);
+
+  const QuestLibraryList = {};
+  QuestLibraryListArray.forEach((x) => {
+    QuestLibraryList[x.id] = x;
+  });
+  // database.QuestLibraryList = QuestLibraryList;
+  setdb('QuestLibraryList', QuestLibraryList);
 }
 
 // https://gist.github.com/jherax/a81c8c132d09cc354a0e2cb911841ff1
