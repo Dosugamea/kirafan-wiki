@@ -32,6 +32,8 @@
     //- Weapons
     //- QuestLibraries
 
+    QuickJump
+
     Media
 
     v-divider.mb-4
@@ -54,10 +56,11 @@ import Weapons from './Weapons';
 import QuestLibraries from './QuestLibraries';
 import RandomCharacter from './RandomCharacter';
 import Media from './Media';
+import QuickJump from './QuickJump';
 
 export default {
   name: 'Home',
-  components: { Characters, Weapons, QuestLibraries, RandomCharacter, Media },
+  components: { Characters, Weapons, QuestLibraries, RandomCharacter, Media, QuickJump },
   data() {
     return {
       show: false,

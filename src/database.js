@@ -81,7 +81,7 @@ let loaded = 0;
 //   await set("databaseDate", null);
 // }
 
-async function fetch(version) {
+async function axios_fetch(version) {
   await axios.all(
     requiredDatabases.map((requiredDatabase) =>
       axios
@@ -235,8 +235,9 @@ async function main() {
   Vue.prototype.$time = new Date();
 
   let localVersion = await get_version();
-  let version = await axios
-    .get('https://database.kirafan.cn/version')
+  let version = await fetch('https://database.kirafan.cn/version')
+    .then((x) => x.text())
+    .then((x) => ({ data: x }))
     .catch(() => ({ data: localVersion }));
 
   // XXX_QuestLibrary();
@@ -248,7 +249,7 @@ async function main() {
     // }
     window.vue.$emit('databaseLoaded');
 
-    await fetch(version.data);
+    await axios_fetch(version.data);
 
     window.vue.$emit('allLoaded');
 

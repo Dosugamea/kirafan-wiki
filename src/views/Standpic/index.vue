@@ -4,7 +4,7 @@
 //- .pa-4(v-if="!character")
 //-   KeyValue(:k="$t('No Character')")
 div
-  p.display.px-4.primary--text {{ $t('Standpic') }}
+  p.display.px-4.mb-10.primary--text {{ $t('Standpic') }}
 
   v-row(justify="center")
     v-dialog(v-model="dialog", max-width="290")
@@ -146,9 +146,13 @@ export default {
           this.base.toLowerCase() +
           "/" +
           this.base.toLowerCase() +
-          "_standpic_0/" +
+          "_standpic_" +
+          this.poseID +
+          "/" +
           this.base_row +
-          "_StandPic_0.png",
+          "_StandPic_" +
+          this.poseID +
+          ".png",
         face:
           "https://bucket-" +
           (this.face ? this.face.path : "") +
@@ -190,10 +194,7 @@ export default {
 
       const db = this.standpicDB()[this.base];
       this.index = db.map((item) => {
-        let key = item.img
-          .split(this.base)[1]
-          .split("_")
-          .slice(1);
+        let key = item.img.split(this.base)[1].split("_").slice(1);
         return { key, path: item.path };
       });
 
@@ -337,6 +338,9 @@ export default {
     base() {
       this.load();
     },
+    poseID() {
+      this.load();
+    },
     faceID() {
       this.showImg();
     },
@@ -344,7 +348,7 @@ export default {
   mounted() {
     if (this.standpicDB()) {
       this.load();
-    }else{
+    } else {
       this.loadAssetBundle();
     }
     // if (this.$s.loadAssetbundle || false) {

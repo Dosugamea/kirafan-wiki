@@ -11,16 +11,23 @@ const languages = ['zh', 'en', 'ko'];
 
 const translations = {};
 
-async function fetch(version) {
+async function axios_fetch(version) {
   await axios
-    .all(languages.map(language =>
-      axios.get(`${translationHost}/${language}.json?t=${new Date().getTime()}`)))
-    .then(axios.spread(function () {
-      languages.forEach((language, i) => {
-        const data = arguments[i].data;
-        translations[language] = data;
-      });
-    }));
+    .all(
+      languages.map((language) =>
+        axios.get(
+          `${translationHost}/${language}.json?t=${new Date().getTime()}`
+        )
+      )
+    )
+    .then(
+      axios.spread(function () {
+        languages.forEach((language, i) => {
+          const data = arguments[i].data;
+          translations[language] = data;
+        });
+      })
+    );
   let date = new Date().toJSON();
   translations.version = version;
   translations.date = date;
@@ -33,7 +40,7 @@ async function load() {
   let localVersion = await get('translationVersion');
   let localTranslations = await get('translations');
   if (localVersion && localTranslations) {
-    Object.keys(localTranslations).forEach(name => {
+    Object.keys(localTranslations).forEach((name) => {
       translations[name] = localTranslations[name];
     });
     translations.version = localVersion;
@@ -44,14 +51,13 @@ async function load() {
 
 async function main() {
   let localVersion = await load();
-  let version = await axios.get(`${translationHost}/version`);
-  if (localVersion != version.data) {
-    await fetch(version.data);
+  let version = await fetch(`${translationHost}/version`).then((x) => x.text());
+  if (localVersion != version) {
+    await axios_fetch(version);
   }
 }
 
 main();
-
 
 Vue.prototype.$name = function (name, noJapanese) {
   if (i18n.locale == 'ja') {
@@ -59,7 +65,10 @@ Vue.prototype.$name = function (name, noJapanese) {
   }
   let groups = /★5(.*)専用(.*)/.exec(name);
   if (groups && groups[1] && groups[2]) {
-    return this.$t('Star 5 Special Weapon').format(this.$name(groups[1]), this.$name(groups[2]));
+    return this.$t('Star 5 Special Weapon').format(
+      this.$name(groups[1]),
+      this.$name(groups[2])
+    );
   }
 
   let trans = translations[i18n.locale] && translations[i18n.locale][name];

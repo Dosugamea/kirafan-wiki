@@ -106,6 +106,8 @@ const home = {
   'Events': 'イベント',
   'Summon': '召喚',
   'Summon 10 Times': '10 回召喚',
+
+  'No Item : Check Config': 'アイテムはありません<br>設定で追加することができます',
 };
 
 const chatacter = {
@@ -846,6 +848,11 @@ const settings = {
   'Show Clea In Detail Page Hint': 'クレアちゃん超カワイイ( ´▽｀)',
 
   'Footer Fixed': 'ホームのフッターを固定する',
+  'QuickJump': {
+    'QuickJump': 'クイックジャンプ',
+    'ShowEvent': 'イベントの超強敵や極を表示',
+    'ShowChangedWeapons':'変更された武器を表示',
+  },
 
   Application: 'アプリ',
   Contact: '連絡',

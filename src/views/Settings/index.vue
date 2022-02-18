@@ -3,6 +3,10 @@ div
   v-subheader {{ $t('Common') }}
   Config(configName="appTitleShowID", :title="$t('App Title Show ID')")
   Config(configName="isHomePageFooterFixed", :title="$t('Footer Fixed')")
+
+  v-subheader {{ $t('QuickJump.QuickJump') }}
+  Config(configName="QuickJump_ShowEvent", :title="$t('QuickJump.ShowEvent')")
+  Config(configName="QuickJump_ShowChangedWeapons", :title="$t('QuickJump.ShowChangedWeapons')")
   //- v-list-item(@click="$s.advancedFilter=!$s.advancedFilter")
   //-   v-list-item-content: v-list-item-title {{$t('Advanced Filter')}}
   //-   v-list-item-action: v-switch(color="primary", readonly, v-model="$s.advancedFilter")
@@ -132,7 +136,6 @@ import settings from "@/settings";
 import translations from "@/translations";
 import { del } from "@/idb-localforage";
 import { unregister } from "register-service-worker";
-
 import Config from "./Config";
 
 export default {

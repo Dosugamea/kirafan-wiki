@@ -26,6 +26,8 @@ const settings = {
     showCleaOnStart : false,
     showCleaInDetailPage: false,
     isHomePageFooterFixed: false,
+    QuickJump_ShowChangedWeapons: false,
+    QuickJump_ShowEvent: false,
   },
   save() {
     set('settings', this._);
