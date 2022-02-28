@@ -17,3 +17,8 @@ export function lazy_load_array(lazy_variables, target = {}) {
   });
   return output;
 }
+
+export const optional_chain = (...arg) =>
+  arg.reduce((prev, current) => prev?.[current]);
+
+export const nullish = (val, def) => val ?? def;

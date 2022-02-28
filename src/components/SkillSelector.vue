@@ -114,6 +114,15 @@ export default {
             value: i,
             eval: i && `amount(${attribute.eval}, amounts[2][${this.attribute}], true)==${i}`,
           }));
+        case 8:
+          return [0, 1, 2, 3, -1, -2, -3].map(i => ({
+            text: i == 0 ? this.$t('All') : this.$t('Skill Amount Sign').format({
+              amount: this.$t(`Skill Amounts.8.${Math.abs(i)}`),
+              sign: this.$t(`Skill Signs.${Math.sign(i)}`),
+            }),
+            value: i,
+            eval: i && `[${ this.attribute ?? "0,1,2,3,4,5" }].some(i => amount(data.m_Args[i + 2], amounts[8], true) == ${i} );`,
+          }));
         case 11:
           return [0, 1, 2, 3, 4].map(i => ({
             text: i == 0 ? this.$t('All') : this.$t(`Skill Amounts.11.${i}`),
