@@ -116,6 +116,11 @@ Vue.prototype.$isDev = function() {
   return process.env.NODE_ENV !== 'production';
 };
 
+Vue.prototype.$pleaseUseYourEtoilium = function () {
+  // 武器Scenario表示しない
+  return true;
+};
+
 Vue.prototype.$showAd = function() {
   return false;
 };

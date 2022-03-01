@@ -56,7 +56,7 @@ export default {
         this.$store.state.$db.ADVListArray.filter(item =>
           item.m_NamedType[0] >= 0 && this.$store.state.$db.NamedList[item.m_NamedType[0]].m_TitleType == this.id - 5000 ||
           item.m_NamedType[1] >= 0 && this.$store.state.$db.NamedList[item.m_NamedType[1]].m_TitleType == this.id - 5000 ||
-          !this.$isMoe() && item.m_CharaID >= 0 && this.$store.state.$db.NamedList[this.$store.state.$db.CharacterList[item.m_CharaID].m_NamedType].m_TitleType == this.id - 5000 ||
+          !this.$pleaseUseYourEtoilium() && item.m_CharaID >= 0 && this.$store.state.$db.NamedList[this.$store.state.$db.CharacterList[item.m_CharaID].m_NamedType].m_TitleType == this.id - 5000 ||
           false) :
         this.$store.state.$db.ADVListArray.filter(item => item.m_LibraryID == this.id);
       for (let i = 0; i < scenarios.length; i++) {
