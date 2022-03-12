@@ -37,7 +37,7 @@
     Media
 
     v-divider.mb-4
-    p.text-center {{$t('Day Count').format(dayCount)}}
+    p.text-center(:class="$s.isHomePageFooterFixed? 'margin-footer' : ''") {{$t('Day Count').format(dayCount)}}
 
     v-bottom-navigation.hidden-sm-and-up(:fixed="$s.isHomePageFooterFixed")
       v-btn(to='/characters') {{$t('Character')}}
@@ -49,6 +49,16 @@
       v-btn(to='/settings') {{$t('Settings')}}
         v-icon mdi-cog
 </template>
+
+<style lang="scss">
+@import "../../scss/variables";
+
+@media screen and (max-width: map-get($grid-breakpoint,sm)) { 
+  div > .margin-footer {
+    margin-bottom: 80px;
+  }
+}
+</style>
 
 <script>
 import Characters from './Characters';

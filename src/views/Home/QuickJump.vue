@@ -8,19 +8,20 @@ span.mb-3
     v-divider
     v-list-item(@click="")
       v-list-item-content
-        v-list-item-subtitle(
-          v-html="$t('No Item : Check Config')"
-        ) 
+        v-list-item-subtitle(v-html="$t('No Item : Check Config')") 
 
   span(v-if="$s.QuickJump_ShowEvent")
     v-divider
     .text-subtitle-1.mx-5.my-2 {{ $t('Quest') }}
-    span(v-if="quests.length > 0")
-        span(v-for="id in quests")
-            v-divider
-            Quest(:key="`home-quest-${id}`", :id="id")
+    span(v-if="quests.length > 0 || _challengeQuest != undefined")
+      span(v-for="id in quests")
+        v-divider
+        Quest(:key="`home-quest-${id}`", :id="id")
+      span(v-if="_challengeQuest != undefined")
+        v-divider
+        ChallengeQuest(:id="_challengeQuest" )
     span(v-else)
-        NoItem
+      NoItem
 
   span(v-if="$s.QuickJump_ShowChangedWeapons")
     v-divider
@@ -33,8 +34,8 @@ span.mb-3
     span(v-else)
       span(v-if="weapons.length > 0")
         span(v-for="id in weapons")
-            v-divider
-            Weapon(:key="`home-weapon-${id}`", :id="id")
+          v-divider
+          Weapon(:key="`home-weapon-${id}`", :id="id")
       span(v-else)
         NoItem
 
@@ -44,10 +45,11 @@ span.mb-3
 <script>
 import Weapon from "@/views/Weapons/Weapon";
 import Quest from "@/views/QuestLibrary/Quest";
+import ChallengeQuest from "@/views/QuestLibraries/QuestLibrary";
 import NoItem from "./NoItem";
 
 export default {
-  components: { Weapon, Quest, NoItem },
+  components: { Weapon, Quest, NoItem, ChallengeQuest },
 
   data() {
     return {
@@ -80,7 +82,13 @@ export default {
       });
       return output;
     },
+    _challengeQuest() {
+      return this.$store.state.$db.QuestLibraryListArray.filter(
+        (questLibrary) => questLibrary.category == 4
+      ).sort((a, b) => b.id - a.id)?.[0]?.id;
+    },
   },
+
   async mounted() {
     if (!this.$s.QuickJump_ShowChangedWeapons) return [];
     this.loading = true;
