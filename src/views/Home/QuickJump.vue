@@ -90,12 +90,12 @@ export default {
   },
 
   async mounted() {
-    if (!this.$s.QuickJump_ShowChangedWeapons) return [];
+    if (!this.$s.QuickJump_ShowChangedWeapons) return;
     this.loading = true;
     const db = await fetch(
       "https://y52en.github.io/test/diff_weapon.json"
     ).then((res) => res.json());
-    if (db.keyLength !== this.$store.state.$db.WeaponList.length) {
+    if (db.keyLength !== this.$store.state.$db.WeaponListArray.length) {
       this.loading = false;
       return [];
     }
