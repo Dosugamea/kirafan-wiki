@@ -15,7 +15,7 @@ div
     div(v-show="show")
       .py-4.text-center(v-if="loading")
         v-progress-circular(indeterminate, color="primary")
-        div(v-if="config" v-html="$t('Hint:Download audio files directly')") 
+        //- div(v-if="config" v-html="$t('Hint:Download audio files directly')") 
         div(v-if="dl_error") {{ $t("failed download audio data") }}
 
       template(v-else)
@@ -57,8 +57,8 @@ div
                 div {{ $t("failed download audio data") }}
               .py-4.text-center(v-if="!isCardVoiceLoaded") 
                 v-progress-circular(indeterminate, color="primary")
-                div(v-if="config" v-html="$t('Hint:Download audio files directly')") 
-                //- div(v-if="dl_error") {{ $t("failed download audio data") }}
+                //- div(v-if="config" v-html="$t('Hint:Download audio files directly')") 
+                div(v-if="dl_error") {{ $t("failed download audio data") }}
 
               div(
                 v-else
@@ -142,7 +142,7 @@ export default {
       },
       type: 0,
       cue_url: {},
-      config: this.$s.downloadAudioFilesDirectly,
+      config: false,
       dl_error: false,
       isCardVoiceLoaded: false,
       isCardVoiceLoading: false,
@@ -315,7 +315,7 @@ export default {
     },
     reset() {
       this.show = false;
-      this.config = this.$s.downloadAudioFilesDirectly;
+      this.config = false;
       this.loading = 1;
       this.cues = {
         0: {},

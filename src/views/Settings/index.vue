@@ -26,11 +26,11 @@ div
     configName="characterIconFramed",
     :title="$t('Character Icon Framed')"
   )
-  Config(
-    configName="downloadAudioFilesDirectly",
-    :title="$t('Download Audio Files Directly')",
-    :subtitle="$t('Setting Hint:Download Audio Files Directly')"
-  )
+  //- Config(
+  //-   configName="downloadAudioFilesDirectly",
+  //-   :title="$t('Download Audio Files Directly')",
+  //-   :subtitle="$t('Setting Hint:Download Audio Files Directly')"
+  //- )
   Config(configName="loadScenarioVoice", :title="$t('Load Scenario Voice')")
 
   //- v-list-item()
