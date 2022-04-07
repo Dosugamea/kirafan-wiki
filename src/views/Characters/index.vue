@@ -102,16 +102,12 @@
                   v-list-item-action.ma-0
                     v-icon mdi-chevron-right
               v-list.overflow-y-auto(dense, max-height="calc(100vh - 24px)")
-                v-list-item(@click="q('eval', 'character.year == 2017')")
-                  v-list-item-content: v-list-item-title 2017
-                v-list-item(@click="q('eval', 'character.year == 2018')")
-                  v-list-item-content: v-list-item-title 2018
-                v-list-item(@click="q('eval', 'character.year == 2019')")
-                  v-list-item-content: v-list-item-title 2019
-                v-list-item(@click="q('eval', 'character.year == 2020')")
-                  v-list-item-content: v-list-item-title 2020
-                v-list-item(@click="q('eval', 'character.year == 2021')")
-                  v-list-item-content: v-list-item-title 2021
+                  v-list-item(
+                      v-for="i in new Array(new Date().getFullYear() - 2017 + 1).fill(0).map((_,i) => 2017 + i)"
+                      @click="q('eval', `character.year == ${i}`)" key=`year_${i}`
+                    )
+                    v-list-item-content: v-list-item-title {{ i }}
+    
 
 
     v-chip.mr-4.float-right(@click="q('order', 'asc')") {{$t('Reverse')}}
