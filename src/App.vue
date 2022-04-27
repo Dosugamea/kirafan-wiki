@@ -119,6 +119,7 @@ export default {
       magic: 0,
 
       reRendering: false,
+      isWaitingRerander: false,
     };
   },
   computed: {
@@ -199,6 +200,19 @@ export default {
     reload() {
       return window.location.reload(true);
     },
+    rerenderWithCathe() {
+      if (this.isWaitingRerander) return;
+      setTimeout(() => {
+        this.isWaitingRerander = false;
+        if(this.allLoaded){
+          return;
+        }
+        this.reRendering = true;
+        this.$nextTick(() => {
+          this.reRendering = false;
+        });
+      }, 5 * 1000);
+    },
   },
   mounted() {
     this.$root.$on('databaseLoading', (x) => {
@@ -234,10 +248,7 @@ export default {
     },
     'databaseProgress.loaded': function() {
       if (this.$root.$errorHasOccured && !this.allLoaded) {
-        this.reRendering = true;
-        this.$nextTick(() => {
-          this.reRendering = false;
-        });
+        this.rerenderWithCathe();
         this.$root.$errorHasOccured = false;
       }
     },
