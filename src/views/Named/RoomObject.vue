@@ -40,10 +40,12 @@ span
 <script>
 import define from "../../define";
 export default {
-    props: ['id'],
+  props: ["id"],
   computed: {
     list() {
-      return this.$store.state.$db.TweetList.filter((tweet) => tweet.m_NamedType === Number(this.id))
+      return this.$store.state.$db.TweetList.filter(
+        (tweet) => tweet.m_NamedType === Number(this.id)
+      )
         .map((x) => [
           this.$store.state.$db.RoomObjectListArray.find(
             (item) => x.m_ID === item.m_ObjEventArgs[1]

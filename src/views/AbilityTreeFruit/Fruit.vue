@@ -3,9 +3,11 @@
         PassiveSkill(:id="id + '0'", owner="ABL", :characterSkillIDs="[]")
 
     div(v-else)
-      .px-4.mb-4
-        v-row
-          v-col.py-0(cols=12)
+      .px-0.mb-0
+         span
+           span
+            //- v-row
+            //-   v-col(cols=12)
             KeyValue(:k="$t('Fruit Name')", :v="name", width="33%")
 
             .d-flex
@@ -32,7 +34,7 @@ export default {
   },
   computed: {
     fruit() {
-      return this.$store.state.$db.AbilitySpheres[this.id];
+      return this.$store.state.$db.AbilitySpheres[this.id] || {};
     },
     itemId() {
       return this.fruit.m_ItemID;
@@ -47,7 +49,12 @@ export default {
       return this.$asset.itemicon.format(this.id.replace(/0$/, "")) + ".png";
     },
     isPassive() {
-      return this.fruitType === 5;
+      try {
+        if (this.fruitType == undefined) return true;
+        return this.fruitType === 5;
+      } catch {
+        return true;
+      }
     },
     status() {
       return ["HP", "ATK", "MAT", "DEF", "MDF", ""][this.fruitType];

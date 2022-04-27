@@ -18,7 +18,7 @@ export default {
 
   computed: {
     groupedItem() {
-      return [0, 1, 2].map((x) => {
+      return [0, 1, 2, 3].map((x) => {
         let tmp_id = this.id.split("");
         tmp_id.splice(2, 1, x);
         return tmp_id.join("");

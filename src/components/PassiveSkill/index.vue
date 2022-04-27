@@ -3,9 +3,9 @@
     KeyValue(:k="$t('No Passive Skill')")
 
   div(v-else)
-    .px-4.mb-4
-      v-row
-        v-col.py-0(cols=12, xl=9)
+    .px-4
+        span
+          //- v-col.py-0(cols=12, xl=9)
           KeyValue(:k="$t('Skill Name')", :v="skill.m_SkillName||$t('Passive Skill')", width="33%")
 
           .d-flex
