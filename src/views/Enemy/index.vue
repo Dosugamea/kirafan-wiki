@@ -28,6 +28,8 @@
       KeyValue(:k="$t('AI ID')", :v="aiID", width="33%")
       KeyValue(:k="$t('Charge Max')", :v="enemy.m_CharageMax", width="33%")
       KeyValue(:k="$t('Stun Coef')", :v="enemy.m_StunCoef", width="33%")
+      KeyValue(v-if="enemy.m_StunerMag !== 1" :k="$t('Stuner Mag')", :v="enemy.m_StunerMag", width="33%")
+      KeyValue(v-if="enemy.m_StunerAvoid !== 0" :k="$t('Stuner Avoid')", :v="enemy.m_StunerAvoid", width="33%")
 
     v-divider
     Ad(:key="`enemy-ad-${id}`")

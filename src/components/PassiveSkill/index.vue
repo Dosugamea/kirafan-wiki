@@ -25,6 +25,8 @@
           KeyValue(:k="$t('Load')", v="-")
           KeyValue(:k="$t('Recast')", v="-")
           KeyValue(:k="$t('Charge')", v="-")
+    
+    .pb-3
 
     Skill(:key="`passive-skill-${id}-skill-change-${1}`", v-if="skillChangeIDs[1]!=-1",
       :id="skillChangeIDs[1]", :from="characterSkillIDs[1]", owner="PL", max=25)

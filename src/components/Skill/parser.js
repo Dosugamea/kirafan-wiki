@@ -298,26 +298,29 @@ function parse(id, owner, level, sp) {
           if (data.m_Args[i + 2] == 0) {
             continue;
           }
+          // 2 - 7
+          // eslint-disable-next-line no-var
+          var mArgs_index = i + 2;
           content = {
             type: data.m_Type,
             target: i18n.t(`Skill Targets.${data.m_Target}`),
             turnType: i18n.t(`Skill Turn Types.${data.m_Args[0]}`),
             turn: data.m_Args[1],
           };
-          content.amount = amount(data.m_Args[i + 2], amounts[data.m_Type][i]);
+          content.amount = amount(data.m_Args[mArgs_index], amounts[data.m_Type][i]);
           content.amount = i18n.t(`Skill Amounts.${data.m_Type}.${content.amount}`);
           if (i == 4) { // SPD
             content.coef = data.m_SkillLvCoef == 0 ?
-              data.m_Args[i + 2] < 1 ? 1 : 2 :
+              data.m_Args[mArgs_index] < 1 ? 1 : 2 :
               data.m_SkillLvCoef;
             content.power = new BigNumber(data.m_Args[i + 2]).times(coef(level, content.coef));
             content.power = new BigNumber(new BigNumber(1).minus(content.power)).times(100) + '%';
-            content.sign = Math.sign(1 - data.m_Args[i + 2]);
+            content.sign = Math.sign(1 - data.m_Args[mArgs_index]);
           }
           else {
-            content.power = new BigNumber(data.m_Args[i + 2]).times(coef(level, data.m_SkillLvCoef));
+            content.power = new BigNumber(data.m_Args[mArgs_index]).times(coef(level, data.m_SkillLvCoef));
             content.power = content.power + '%';
-            content.sign = Math.sign(data.m_Args[i + 2]);
+            content.sign = Math.sign(data.m_Args[mArgs_index]);
           }
           content.sign = i18n.t(`Skill Signs.${content.sign}`);
           content.status = i18n.t(`Statuses.${i}`);
@@ -475,6 +478,9 @@ function parse(id, owner, level, sp) {
 
       case 19: // Charge Change
         content.power = data.m_Args[0];
+        if (data.m_Args.length >= 2 && data.m_Args[1] !== 100) { 
+          content.power += `, m_Args[1] : ${data.m_Args[1]}`;
+        }
         content.verb = i18n.t(`Skill Verbs.${Math.sign(data.m_Args[0])}`);
         break;
 

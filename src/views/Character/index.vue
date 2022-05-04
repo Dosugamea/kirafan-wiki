@@ -185,7 +185,7 @@ export default {
         this.id, this.level, this.arousal,
         this.friendship, this.titleFacility, this.classFacilities,
         this.orb);
-      return {
+      const output = {
         HP: status.HP,
         '-': null,
         ATK: status.ATK,
@@ -195,6 +195,11 @@ export default {
         SPD: status.SPD,
         LUK: status.LUK,
       };
+      if(this.character.m_StunCoef !== 1.2){
+        output[this.$t("Stun Coef")] = this.character.m_StunCoef;
+      }
+
+      return output;
     },
     maxLevel() {
       return [50, 90, 100][this.character.m_Rare - 2];

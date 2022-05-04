@@ -1,9 +1,9 @@
 <template lang="pug">
     span(v-if="isPassive")
-        PassiveSkill(:id="id + '0'", owner="ABL", :characterSkillIDs="[]")
+        PassiveSkill.mb-n2(:id="id + '0'", owner="ABL", :characterSkillIDs="[]")
 
     div(v-else)
-      .px-0.mb-0
+      .px-4.mb-0
          span
            span
             //- v-row
