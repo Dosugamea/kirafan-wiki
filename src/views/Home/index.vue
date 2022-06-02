@@ -1,6 +1,7 @@
 <template lang="pug">
   div(style="margin-bottom: -80px")
-    v-img.mx-auto(src="@/assets/claire.svg", aspect-ratio=1, max-width=384, contain, @click="onCleaClick")
+    v-img.clea-mask1.mx-auto(src="@/assets/claire_wed.jpg", aspect-ratio=1.0852, max-width=384, contain, @click="onCleaClick")
+      div.clea-overlay.clea-mask2
 
     v-expand-transition
       div(v-show="show")
@@ -58,7 +59,34 @@
     margin-bottom: 80px;
   }
 }
+
+
 </style>
+<style lang="scss" scoped>
+.clea-mask1 {
+  -webkit-mask-image: url("~@/assets/claire_wed_alpha.png");
+  mask-image: url("~@/assets/claire_wed_alpha.png");
+  -webkit-mask-size: 100%;
+  mask-size: 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+.clea-mask2 {
+  -webkit-mask-image: url("~@/assets/claire_wed_dynamic.png");
+  mask-image: url("~@/assets/claire_wed_dynamic.png");
+  -webkit-mask-size: 100%;
+  mask-size: 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+.clea-overlay {
+  background-color: var(--v-primary-base);
+  height: 100%;
+}
+</style>
+
 
 <script>
 import Characters from './Characters';

@@ -4,8 +4,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "ads.txt"
   },
   {
-    "revision": "f3c3f2e78e40132ab0ac",
-    "url": "css/app.0ddb2349.css"
+    "revision": "38904591c50b500b137b",
+    "url": "css/app.36b0f503.css"
   },
   {
     "revision": "a9a3f802239e051c0ed1",
@@ -44,20 +44,28 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "favicon.png"
   },
   {
-    "revision": "10cc5b5519a54bcc200f6958abc7d78a",
-    "url": "img/claire.10cc5b55.svg"
+    "revision": "1241c1fd61741195ae30219704563cd0",
+    "url": "img/claire_wed.1241c1fd.jpg"
+  },
+  {
+    "revision": "d52bd89e7e30b8fac5e4259fcd72607b",
+    "url": "img/claire_wed_alpha.d52bd89e.png"
+  },
+  {
+    "revision": "270763210f847710e57d33a80f38c455",
+    "url": "img/claire_wed_dynamic.27076321.png"
   },
   {
     "revision": "8a7862aedd1272c04cc886b7ee17f708",
     "url": "img/media.8a7862ae.png"
   },
   {
-    "revision": "cdadccf4b60fef9c147a509c1a5b6e4f",
+    "revision": "1882464919b975d6ff51b2953dac235e",
     "url": "index.html"
   },
   {
-    "revision": "f3c3f2e78e40132ab0ac",
-    "url": "js/app.8efbee00.js"
+    "revision": "38904591c50b500b137b",
+    "url": "js/app.5009d6d4.js"
   },
   {
     "revision": "c6cc70fa813dabe69122feb7077521c2",

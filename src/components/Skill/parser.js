@@ -220,6 +220,7 @@ function parse(id, owner, level, sp) {
   for (let sap of skill.sap) {
     let data = skill.m_Datas[sap.index];
     if (!data) {
+      console.log(`not found `, id, owner, level, sp, sap.index);
       continue;
     }
     let content = {
