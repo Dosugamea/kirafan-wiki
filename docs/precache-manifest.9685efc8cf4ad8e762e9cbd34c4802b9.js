@@ -72,6 +72,74 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "img/claire_wed_dynamic.27076321.png"
   },
   {
+    "revision": "3145300be18739962ae523002910a09b",
+    "url": "img/filtericon/AbilityIcon.png"
+  },
+  {
+    "revision": "1f7c7b3a1f67d47490bf913b9a616b60",
+    "url": "img/filtericon/AchievementIcon.png"
+  },
+  {
+    "revision": "89acc53cdedaddbe3fd1a8f7ecf7c89a",
+    "url": "img/filtericon/ArousalIcon.png"
+  },
+  {
+    "revision": "3f695925ef27c86349f6519a3a869012",
+    "url": "img/filtericon/ArousalIcon_S.png"
+  },
+  {
+    "revision": "a5521af16d99c882b46a935d9f8bd24e",
+    "url": "img/filtericon/CMD_ActiveAttack.png"
+  },
+  {
+    "revision": "d5f8243808537efe10ba2ffd7f49c9da",
+    "url": "img/filtericon/CMD_ActiveBuff.png"
+  },
+  {
+    "revision": "c84d189cb8cd1d09b3b0e296bd082e24",
+    "url": "img/filtericon/CMD_ActiveRecovery.png"
+  },
+  {
+    "revision": "28c47d3e2981cc7c189f987f2d322179",
+    "url": "img/filtericon/CMD_SkillAttack.png"
+  },
+  {
+    "revision": "eb21cb276477c1fb6622b5275df835ad",
+    "url": "img/filtericon/CMD_SkillBuff.png"
+  },
+  {
+    "revision": "53f4fe08d0d1a04d4ddc06a828048dc1",
+    "url": "img/filtericon/CMD_SkillDeBuff.png"
+  },
+  {
+    "revision": "41f688502e97423871c5ebc5404617bf",
+    "url": "img/filtericon/CMD_SkillMagic.png"
+  },
+  {
+    "revision": "53c7543ab59ca8c988c96556663d7c7e",
+    "url": "img/filtericon/CMD_SkillPassive.png"
+  },
+  {
+    "revision": "c874be8ccddc317ad9515ac894eb6a91",
+    "url": "img/filtericon/CMD_SkillRecovery.png"
+  },
+  {
+    "revision": "9f8c4df24b121ee836369531e442d5f1",
+    "url": "img/filtericon/CMD_SkillSP.png"
+  },
+  {
+    "revision": "8afd6862130868e3fb3537999d536ce6",
+    "url": "img/filtericon/CharaIconFrame03.png"
+  },
+  {
+    "revision": "9956c916ae504ca0bd249436d7df7d6d",
+    "url": "img/filtericon/CharaIconFrame04.png"
+  },
+  {
+    "revision": "2091dd724cd38ec37d729e5775e5413a",
+    "url": "img/filtericon/CharaIconFrame05.png"
+  },
+  {
     "revision": "32fb1a9a8627ae50445139673f93106f",
     "url": "img/filtericon/ClassIconAlchemist.png"
   },
@@ -118,6 +186,62 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "63058769a9f09079b2e1bd2b2c21a634",
     "url": "img/filtericon/ElementIconWind.png"
+  },
+  {
+    "revision": "feb25c614a7c281ef0eaaa8ace895b39",
+    "url": "img/filtericon/GemIcon.png"
+  },
+  {
+    "revision": "9ee7b363eae3d9f776d539e50256571c",
+    "url": "img/filtericon/GlobalGemIcon.png"
+  },
+  {
+    "revision": "379c145023b3be152b6917e95084b691",
+    "url": "img/filtericon/GlobalGoldIcon.png"
+  },
+  {
+    "revision": "f728f10477509982e18bde5d1a5f6296",
+    "url": "img/filtericon/GoldIcon.png"
+  },
+  {
+    "revision": "3adfd26fd31b8fee12cddf46bc7edeb3",
+    "url": "img/filtericon/IconAbility.png"
+  },
+  {
+    "revision": "0ec5afc1ec6344d67813a5d333291e92",
+    "url": "img/filtericon/IconBG.png"
+  },
+  {
+    "revision": "96f74c3b3ca097c935291f865c204f06",
+    "url": "img/filtericon/IconFrame.png"
+  },
+  {
+    "revision": "3ba326849577b050381ad65d7decad8f",
+    "url": "img/filtericon/IconFrameBG.png"
+  },
+  {
+    "revision": "be2232c2861ca5865fae38b40a1ea681",
+    "url": "img/filtericon/IconFrameGold.png"
+  },
+  {
+    "revision": "c022d04fe7457a05c7f8a4f5ad64a3b2",
+    "url": "img/filtericon/KPIcon.png"
+  },
+  {
+    "revision": "6ac2d7a1b74db9d365391223aa8e359e",
+    "url": "img/filtericon/OrbBuffIcon.png"
+  },
+  {
+    "revision": "d6b1f87baeae8b29b6f22bf93b5155ea",
+    "url": "img/filtericon/RareIcon.png"
+  },
+  {
+    "revision": "15c3de57dd88f3287a5cc430558d4fad",
+    "url": "img/filtericon/RareIconSmall.png"
+  },
+  {
+    "revision": "d1add44d408e4d2c583882116bad7dfd",
+    "url": "img/filtericon/StaminaIcon.png"
   },
   {
     "revision": "8a7862aedd1272c04cc886b7ee17f708",
