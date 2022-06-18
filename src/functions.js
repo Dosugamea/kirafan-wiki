@@ -32,7 +32,7 @@ Vue.prototype.$asset = {
     'https://asset.kirafan.cn/texture/charauiresource/charaillustfull/charaillust_full_{0}',
   commonuiatlas:
     // 'https://asset.kirafan.cn/uiatlas/commonuiatlas.muast?name={0}',
-    './img/filtericon/{0}.png',
+    './img/filtericon/{0}',
   contentslogo:
     'https://asset.kirafan.cn/texture/contenttitlelogo/contentslogo{0}',
   itemicon: 'https://asset.kirafan.cn/texture/itemicon/itemicon_{0}',
