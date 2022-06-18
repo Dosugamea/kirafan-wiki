@@ -1,5 +1,8 @@
 # wiki
 
+フォーク版のwikiです。
+オリジナルのレポは[こちら](https://gitlab.com/kirafan/wiki)
+
 ## Project setup
 ```
 npm install
