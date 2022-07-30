@@ -226,29 +226,11 @@ function parse(id, owner) {
         continue;
 
       case 17: //Increase turn of buff/debuff
-        if (data.m_Args[0] === 0) {
-          content.buffType = i18n.t(`Passive Powers.${data.m_Type}.${data.m_Args[0]}.${data.m_Args[1]}`)
-          content.amount = data.m_Args[2];
-        } else {
-          if (
-            data.m_Args[1] !== 0 &&
-            !(data.m_Args[1] === 1 && data.m_Args[0] === 6)
-          ) {
-            defaultSkill();
-            continue;
-          }
-          var buffType = i18n.t(
-            `Passive Powers.${data.m_Type}.${data.m_Args[0]}`
-          );
-          if (buffType) {
-            content.buffType = buffType;
-            content.amount = data.m_Args[2];
-          } else {
-            defaultSkill();
-            continue;
-          }
-        }
-        break;
+        content.buffType = i18n.t(`Passive Powers.${17}.${data.m_Args[0]}`);
+        content.option = i18n.t(`Passive Option.${17}.${data.m_Args[1]}`);
+        content.amount = data.m_Args[2];
+        push(content)
+        continue;
 
       default:
         defaultSkill();

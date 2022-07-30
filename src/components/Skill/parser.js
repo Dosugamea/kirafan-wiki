@@ -264,6 +264,11 @@ function parse(id, owner, level, sp) {
           content.power.powerA = Math.floor(content.sapSum * data.m_Args[10] * coef(level, data.m_SkillLvCoef));
           content.power.powerB = Math.floor(content.sapSum * data.m_Args[11] * coef(level, data.m_SkillLvCoef));
           content.power.powerC = Math.floor(content.sapSum * data.m_Args[12] * coef(level, data.m_SkillLvCoef));
+        } else if (content.option === 99) {
+          content.power.power = Math.floor(content.sapSum * data.m_Args[0] * coef(level, data.m_SkillLvCoef));
+          content.power.power2 = Math.floor(content.sapSum * data.m_Args[10] * coef(level, data.m_SkillLvCoef));
+          content.power.abnormal = i18n.t(`Stun`);
+          content.option = 100;
         } else if (content.option >= 100) {
           content.power.power = Math.floor(content.sapSum * data.m_Args[0] * coef(level, data.m_SkillLvCoef));
           content.power.power2 = Math.floor(content.sapSum * data.m_Args[10] * coef(level, data.m_SkillLvCoef));

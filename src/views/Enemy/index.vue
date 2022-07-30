@@ -30,6 +30,7 @@
       KeyValue(:k="$t('Stun Coef')", :v="enemy.m_StunCoef", width="33%")
       KeyValue(v-if="enemy.m_StunerMag !== 1" :k="$t('Stuner Mag')", :v="enemy.m_StunerMag", width="33%")
       KeyValue(v-if="enemy.m_StunerAvoid !== 0" :k="$t('Stuner Avoid')", :v="enemy.m_StunerAvoid", width="33%")
+      KeyValue(v-if="battleAI.m_SingleTargetPriorityWhenHateSame === 1" :k="$t('SingleTargetPriorityWhenHateSame')", :v="$t(`HatePriority.${battleAI.m_SingleTargetPriorityWhenHateSame}`)", width="33%")
 
     v-divider
     Ad(:key="`enemy-ad-${id}`")

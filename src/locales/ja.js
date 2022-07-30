@@ -228,6 +228,7 @@ const skill = {
   Charge: 'ﾁｬｰｼﾞ',
   Level: 'レベル',
   'Stun Gauge': 'スタンゲージ',
+  Stun: 'スタン',
 
   'Passive Skill': '自動発動スキル',
   'No Skill': 'スキルはありません',
@@ -433,7 +434,7 @@ const skill = {
     14: '{target}の{status}が {turn} {turnType}{amount}{sign} ({power})',
     15: '自身が付与する{abnomal}の状態異常の付与率を増加 ({amount})',
     16: '自身に{element}属性耐性バフを付与 ({amount})',
-    17: '自身が付与する{buffType}を{amount}ターン延長',
+    17: '自身が付与する{buffType}の{option}を{amount}ターン延長',
   },
 
   'Passive Powers': {
@@ -451,18 +452,22 @@ const skill = {
       'Status Change': '{status}{amount}{sign} ({power})',
     },
     17: {
-      0: {
-        1: 'ステータス変化効果のバフ',
-        2: 'ステータス変化効果のデバフ',
-      },
+      0:'ステータス変化効果',
       1: '状態異常無効',
-      // 2: 'ヘイト',
+      2: '有利属性',
       3: 'ヘイト',
       4: 'リカバリー',
       5: 'クイックドロウ',
       6: 'クリティカルダメージ量変化',
       7: 'がまん',
     },
+  },
+  'Passive Option': {
+    17: {
+      0: 'バフ/デバフ',
+      1: 'バフ',
+      2: 'デバフ',
+    }
   },
 
   'Ability Tree Status Up': '自身の{status}を{amount}増加',
@@ -641,6 +646,12 @@ const enemy = {
   'Charge Max': 'チャージ上限',
   'Full Charge': 'フルチャージ',
   'Stun Coef': 'スタン係数',
+
+  'SingleTargetPriorityWhenHateSame': "ターゲット優先順",
+  'HatePriority': {
+    0: 'ABC',
+    1: 'CBA',
+  },
 
   'AI Conditions': {
     num: 'この条件の実行回数が {num} 回未満',
